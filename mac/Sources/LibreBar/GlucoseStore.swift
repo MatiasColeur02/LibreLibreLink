@@ -14,6 +14,8 @@ final class GlucoseStore {
     }
 
     static let pollInterval: TimeInterval = 60
+    /// En demo se consulta más seguido para que el recorrido automático se vea rápido.
+    static let demoPollInterval: TimeInterval = 15
     /// Cada cuánto se reevalúan la antigüedad de la lectura y las alarmas.
     static let clockInterval: TimeInterval = 30
 
@@ -31,6 +33,8 @@ final class GlucoseStore {
     private(set) var needsAttention: String?
     /// Reloj observable para que la antigüedad de la lectura se recalcule sola.
     private(set) var now = Date()
+    /// Datos inventados por `DemoServer` en lugar de la cuenta real.
+    private(set) var isDemo = false
 
     let notifier = AlarmNotifier()
 
@@ -46,7 +50,7 @@ final class GlucoseStore {
 
     var selectedPatientID: String? {
         didSet {
-            UserDefaults.standard.set(selectedPatientID, forKey: Keys.patient)
+            if !isDemo { UserDefaults.standard.set(selectedPatientID, forKey: Keys.patient) }
             if oldValue != selectedPatientID, !suppressRefresh {
                 current = nil
                 history = []
@@ -72,11 +76,16 @@ final class GlucoseStore {
         settings = UserDefaults.standard.data(forKey: Keys.settings)
             .flatMap { try? JSONDecoder().decode(AlarmSettings.self, from: $0) } ?? AlarmSettings()
         selectedPatientID = UserDefaults.standard.string(forKey: Keys.patient)
-        if let credentials = Keychain.load() {
+        let arguments = ProcessInfo.processInfo.arguments
+        if arguments.contains("--demo") || ProcessInfo.processInfo.environment["LIBREBAR_DEMO"] != nil {
+            startDemo()
+        } else if let credentials = Keychain.load() {
             start(with: makeClient(credentials))
         }
         startClock()
     }
+
+    private var pollInterval: TimeInterval { isDemo ? Self.demoPollInterval : Self.pollInterval }
 
     // MARK: Estado
 
@@ -106,6 +115,11 @@ final class GlucoseStore {
 
     /// Valida las credenciales contra LibreLinkUp; si andan, las guarda y empieza a consultar.
     func signIn(email: String, password: String) async {
+        if isDemo {
+            resetSession()
+            isDemo = false
+            notifier.isDemo = false
+        }
         loginError = nil
         phase = .loading
         let credentials = Credentials(email: email.trimmingCharacters(in: .whitespaces), password: password)
@@ -122,11 +136,53 @@ final class GlucoseStore {
     }
 
     func signOut() {
+        if isDemo { stopDemo(); return }
+        resetSession()
+        Keychain.delete()
+        UserDefaults.standard.removeObject(forKey: Keys.region)
+    }
+
+    // MARK: Demo
+
+    /// Escenario del servidor falso; cambiarlo vuelve a consultar enseguida.
+    var demoScenario: DemoScenario {
+        get { demoScenarioValue }
+        set {
+            demoScenarioValue = newValue
+            DemoServer.scenario = newValue
+            if isDemo {
+                needsAttention = nil
+                loginError = nil
+                start(with: client ?? DemoServer.makeClient())
+            }
+        }
+    }
+
+    private var demoScenarioValue = DemoServer.scenario
+
+    /// Prueba la app sin cuenta. No toca el llavero ni las preferencias de la cuenta real.
+    func startDemo() {
+        resetSession()
+        isDemo = true
+        notifier.isDemo = true
+        withoutRefresh { selectedPatientID = nil }
+        start(with: DemoServer.makeClient())
+    }
+
+    func stopDemo() {
+        resetSession()
+        isDemo = false
+        notifier.isDemo = false
+        withoutRefresh { selectedPatientID = UserDefaults.standard.string(forKey: Keys.patient) }
+        if let credentials = Keychain.load() {
+            start(with: makeClient(credentials))
+        }
+    }
+
+    private func resetSession() {
         pollTask?.cancel()
         pollTask = nil
         client = nil
-        Keychain.delete()
-        UserDefaults.standard.removeObject(forKey: Keys.region)
         patients = []
         current = nil
         history = []
@@ -182,20 +238,20 @@ final class GlucoseStore {
         }
         do {
             let patients = try await client.patients()
-            UserDefaults.standard.set(await client.region.code, forKey: Keys.region)
-            guard !Task.isCancelled else { return Self.pollInterval }
+            if !isDemo { UserDefaults.standard.set(await client.region.code, forKey: Keys.region) }
+            guard !Task.isCancelled else { return pollInterval }
             self.patients = patients
             guard let patient = patients.first(where: { $0.id == selectedPatientID }) ?? patients.first else {
                 needsAttention = "La cuenta LibreLinkUp no sigue a nadie. Aceptá la invitación enviada desde LibreLink."
                 connectionError = nil
                 phase = .ready
-                return Self.pollInterval
+                return pollInterval
             }
             if selectedPatientID != patient.id {
                 withoutRefresh { selectedPatientID = patient.id }
             }
             let graph = try await client.graph(patientID: patient.id)
-            guard !Task.isCancelled else { return Self.pollInterval }
+            guard !Task.isCancelled else { return pollInterval }
             current = graph.current ?? graph.history.last
             history = graph.history
             sensor = graph.sensor
@@ -203,7 +259,7 @@ final class GlucoseStore {
             connectionError = nil
             needsAttention = nil
             phase = .ready
-            return Self.pollInterval
+            return pollInterval
         } catch let error as LibreLinkUpError {
             switch error {
             case .invalidCredentials, .mustAcceptTerms, .mustAcceptPrivacyPolicy, .mustVerifyEmail, .unsupportedLoginStep:
@@ -213,21 +269,21 @@ final class GlucoseStore {
                 needsAttention = error.localizedDescription
                 loginError = error.localizedDescription
                 phase = .needsLogin
-                return Self.pollInterval
+                return pollInterval
             case .rateLimited(let retryAfter):
                 connectionError = error.localizedDescription
                 if phase == .loading { phase = .ready }
-                return max(retryAfter ?? 300, Self.pollInterval)
+                return max(retryAfter ?? 300, pollInterval)
             default:
                 connectionError = error.localizedDescription
                 if phase == .loading { phase = .ready }
-                return Self.pollInterval
+                return pollInterval
             }
         } catch {
-            if Task.isCancelled { return Self.pollInterval }
+            if Task.isCancelled { return pollInterval }
             connectionError = error.localizedDescription
             if phase == .loading { phase = .ready }
-            return Self.pollInterval
+            return pollInterval
         }
     }
 

@@ -11,6 +11,9 @@ struct ContentView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
+            if store.isDemo {
+                DemoBanner(store: store)
+            }
             if showingSettings {
                 SettingsView(store: store)
             } else {
@@ -44,6 +47,38 @@ struct ContentView: View {
         }
         .padding()
         .frame(width: 340)
+    }
+}
+
+/// Avisa que los datos son inventados y deja elegir qué situación simular.
+struct DemoBanner: View {
+    @Bindable var store: GlucoseStore
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Label("Modo demo · datos inventados", systemImage: "theatermasks.fill")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.purple)
+                Spacer()
+                Button("Salir del demo") { store.stopDemo() }
+                    .controlSize(.mini)
+            }
+            Picker("Escenario", selection: $store.demoScenario) {
+                ForEach(DemoScenario.allCases) { scenario in
+                    Text(scenario.label).tag(scenario)
+                    if scenario == .tour { Divider() }
+                }
+            }
+            .controlSize(.small)
+            if store.demoScenario == .tour {
+                Text("Cambia de situación cada \(Int(DemoScenario.tourStep)) s (alta, baja, sin señal, sin conexión…).")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding(8)
+        .background(.purple.opacity(0.10), in: RoundedRectangle(cornerRadius: 8))
     }
 }
 
@@ -113,6 +148,13 @@ struct LoginView: View {
                     .font(.callout)
                     .foregroundStyle(.orange)
                     .fixedSize(horizontal: false, vertical: true)
+            }
+
+            if !store.isDemo {
+                Divider()
+                Button("Probar sin cuenta (datos de demostración)") { store.startDemo() }
+                    .buttonStyle(.link)
+                    .font(.callout)
             }
         }
         .textFieldStyle(.roundedBorder)

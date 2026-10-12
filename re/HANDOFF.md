@@ -44,6 +44,8 @@ pasan; **falta probar contra la cuenta real** (`swift run llu`). La RE de BLE/NF
 queda archivada (sirve solo si algún día aparece un sensor gen1).
 Fase 4 (barra de menú con estado + alarmas) implementada: lógica en
 `LibreKit/Status.swift` (17 tests), app empaquetada con `mac/scripts/make-app.sh`.
+Modo demo (sin cuenta): `LibreKit/DemoServer.swift` (URLProtocol que imita la API, con
+escenarios), `LibreBar --demo` o botón en el login; `llu --demo <escenario>`. 23 tests.
 
 ## 3. Lo que FALTA para decidir (histórico; ya decidido arriba)
 

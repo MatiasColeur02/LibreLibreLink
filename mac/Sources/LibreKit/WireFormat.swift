@@ -98,4 +98,8 @@ enum LibreTimestamp {
     static func parseUTC(_ string: String) -> Date? {
         formatter.date(from: string)
     }
+
+    static func formatUTC(_ date: Date) -> String {
+        formatter.string(from: date)
+    }
 }

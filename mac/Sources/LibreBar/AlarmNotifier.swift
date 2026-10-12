@@ -13,6 +13,8 @@ final class AlarmNotifier {
     }
 
     private(set) var authorization: Authorization = .unavailable
+    /// Marca las notificaciones para no confundirlas con datos reales.
+    var isDemo = false
 
     nonisolated static var isBundled: Bool { Bundle.main.bundleIdentifier != nil }
 
@@ -42,7 +44,7 @@ final class AlarmNotifier {
     func post(_ kind: AlarmKind, reading: GlucoseMeasurement?) {
         guard Self.isBundled else { return }
         let content = UNMutableNotificationContent()
-        content.title = kind.title
+        content.title = isDemo ? "Demo · \(kind.title)" : kind.title
         if let reading {
             let value = GlucoseStatus.displayValue(reading.mgdL)
             content.body = "\(value) mg/dL \(reading.trend?.arrow ?? "") · \(kind.advice)"

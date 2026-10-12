@@ -11,6 +11,24 @@ LibreView; esta app de macOS los lee de la API de **LibreLinkUp** (~1 min de ret
 2. Instalar **LibreLinkUp** en un teléfono, crear la cuenta con ese email, **aceptar la
    invitación** y los términos. Si la app de Mac dice "aceptar términos", es este paso.
 
+## Probar sin cuenta (modo demo)
+
+Para ver la app sin tener LibreLinkUp: un servidor falso (`LibreKit/DemoServer.swift`)
+contesta las peticiones del cliente real, con datos inventados (una curva de un día
+típico + el escenario elegido). Entrar al demo:
+
+- en el panel de inicio de sesión: **Probar sin cuenta (datos de demostración)**, o
+- `swift run LibreBar --demo`, o `open dist/LibreBar.app --args --demo`.
+
+Arriba del panel aparece **Modo demo** con un selector de escenario: día normal, alta,
+baja, muy baja, LO/HI, lectura vieja, sin señal, sin conexión, aceptar términos, sin
+pacientes, sensor por terminar, y **Recorrido automático** (cambia de situación cada
+60 s; consulta cada 15 s). Hay dos pacientes para ver el selector. El demo no toca el
+llavero ni el paciente/región guardados; los **Ajustes** (umbrales, notificaciones) sí son
+los mismos. Las notificaciones del demo dicen "Demo ·". No se recuerda al reiniciar.
+
+`swift run llu --demo high` hace lo mismo por terminal.
+
 ## Correr
 
 ```bash
