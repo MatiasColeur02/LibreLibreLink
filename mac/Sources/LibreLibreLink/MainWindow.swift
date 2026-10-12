@@ -334,6 +334,7 @@ private struct ReportsView: View {
     let store: GlucoseStore
     @State private var days = 14
     @State private var report: Report?
+    @State private var showingImport = false
 
     struct Report {
         let stats: GlucoseStatistics?
@@ -368,7 +369,9 @@ private struct ReportsView: View {
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }
+            Button { showingImport = true } label: { Label("Importar", systemImage: "square.and.arrow.down") }
         }
+        .sheet(isPresented: $showingImport) { ImportSheet(store: store) }
 
         if let report {
             if let stats = report.stats {
@@ -418,6 +421,54 @@ private struct ReportsView: View {
             stats: GlucoseStatistics.compute(readings, period: period, display: store.display),
             pattern: DailyPattern.compute(readings)
         )
+    }
+}
+
+/// Explica qué hace la importación y deja elegir el CSV de LibreView.
+private struct ImportSheet: View {
+    let store: GlucoseStore
+    @Environment(\.dismiss) private var dismiss
+    @State private var choosingFile = false
+    @State private var outcome: Result<String, Error>?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Importar historial de LibreView").font(.headline)
+            switch outcome {
+            case nil:
+                Text("Agrega a los informes las lecturas de un archivo CSV de LibreView (en libreview.com: Descargar datos de glucosa). Las lecturas que ya están no se modifican.")
+                if store.patients.count > 1, let patient = store.patients.first(where: { $0.id == store.selectedPatientID }) {
+                    Text("Se importan para \(patient.displayName).").foregroundStyle(.secondary)
+                }
+            case .success(let message):
+                Label(message, systemImage: "checkmark.circle.fill").foregroundStyle(.green)
+            case .failure(let error):
+                Label(error.localizedDescription, systemImage: "exclamationmark.triangle.fill").foregroundStyle(.orange)
+            }
+            HStack {
+                Spacer()
+                if case .success = outcome {
+                    Button("Listo") { dismiss() }.keyboardShortcut(.defaultAction)
+                } else {
+                    Button("Cancelar") { dismiss() }.keyboardShortcut(.cancelAction)
+                    Button("Elegir archivo…") { choosingFile = true }.keyboardShortcut(.defaultAction)
+                }
+            }
+        }
+        .padding(20)
+        .frame(width: 420)
+        .fixedSize(horizontal: false, vertical: true)
+        .fileImporter(isPresented: $choosingFile, allowedContentTypes: [.commaSeparatedText, .plainText]) { result in
+            outcome = result.flatMap { url in Result { try summary(store.importLibreView(from: url)) } }
+        }
+    }
+
+    private func summary(_ imported: (added: Int, interval: DateInterval?)) -> String {
+        guard let interval = imported.interval else { return String(localized: "No había lecturas nuevas.") }
+        let range = "\(interval.start.formatted(date: .abbreviated, time: .omitted)) – \(interval.end.formatted(date: .abbreviated, time: .omitted))"
+        return imported.added == 0
+            ? String(localized: "No había lecturas nuevas (\(range)).")
+            : String(localized: "Se agregaron \(imported.added) lecturas (\(range)).")
     }
 }
 

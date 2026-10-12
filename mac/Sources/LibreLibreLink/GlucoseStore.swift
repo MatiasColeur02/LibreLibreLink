@@ -122,6 +122,19 @@ final class GlucoseStore {
         return try? database.earliest(patientID: patient)
     }
 
+    /// Agrega al paciente elegido las lecturas de un CSV de LibreView, sin tocar las que ya hay.
+    /// - Returns: lecturas nuevas y el período que cubre el archivo.
+    func importLibreView(from url: URL) throws -> (added: Int, interval: DateInterval?) {
+        guard let database, let patient = selectedPatientID else { throw LibreViewCSVError.noReadings }
+        let accessing = url.startAccessingSecurityScopedResource()
+        defer { if accessing { url.stopAccessingSecurityScopedResource() } }
+        let text = try (try? String(contentsOf: url, encoding: .utf8)) ?? String(contentsOf: url, encoding: .isoLatin1)
+        let result = try LibreViewCSV.parse(text)
+        let added = try database.insert(result.readings, patientID: patient, replacingExisting: false)
+        historyRevision += 1
+        return (added, result.interval)
+    }
+
     /// El demo usa una base en memoria con 14 días inventados; nunca toca el archivo real.
     private func openHistory(demo: Bool) {
         do {

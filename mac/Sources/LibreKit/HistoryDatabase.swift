@@ -48,16 +48,22 @@ public final class HistoryDatabase {
         URL.applicationSupportDirectory.appending(path: "LibreLibreLink/history.sqlite")
     }
 
-    public func insert(_ readings: [GlucoseMeasurement], patientID: String) throws {
-        guard !readings.isEmpty else { return }
+    /// - Parameter replacingExisting: `false` = si ya hay una lectura en ese minuto, se deja (importación).
+    /// - Returns: cuántas lecturas se agregaron o cambiaron.
+    @discardableResult
+    public func insert(_ readings: [GlucoseMeasurement], patientID: String, replacingExisting: Bool = true) throws -> Int {
+        guard !readings.isEmpty else { return 0 }
         try execute("BEGIN")
         do {
+            let onConflict = replacingExisting
+                ? "UPDATE SET mgdl = excluded.mgdl, trend = COALESCE(excluded.trend, readings.trend)"
+                : "NOTHING"
             let statement = try prepare("""
                 INSERT INTO readings (patient, minute, mgdl, trend) VALUES (?, ?, ?, ?)
-                ON CONFLICT (patient, minute) DO UPDATE SET
-                    mgdl = excluded.mgdl, trend = COALESCE(excluded.trend, readings.trend)
+                ON CONFLICT (patient, minute) DO \(onConflict)
                 """)
             defer { sqlite3_finalize(statement) }
+            var changed = 0
             for reading in readings {
                 sqlite3_reset(statement)
                 sqlite3_bind_text(statement, 1, patientID, -1, Self.transient)
@@ -69,8 +75,10 @@ public final class HistoryDatabase {
                     sqlite3_bind_null(statement, 4)
                 }
                 guard sqlite3_step(statement) == SQLITE_DONE else { throw lastError() }
+                changed += Int(sqlite3_changes(db))
             }
             try execute("COMMIT")
+            return changed
         } catch {
             try? execute("ROLLBACK")
             throw error

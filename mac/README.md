@@ -110,7 +110,10 @@ que pinta los gráficos y el tiempo en rango sin cambiar las alarmas.
 
 **Historial:** LibreLinkUp solo da ~12 h, así que LibreLibreLink guarda cada lectura que ve en
 `~/Library/Application Support/LibreLibreLink/history.sqlite` (SQLite, una por minuto y paciente).
-Los informes se llenan con los días mientras la app está abierta. El demo usa una base en
+Los informes se llenan con los días mientras la app está abierta. Para tener meses desde el primer
+día: **Informes ▸ Importar** y elegir el CSV de LibreView (libreview.com ▸ Descargar datos de
+glucosa); se agrega al paciente elegido sin tocar las lecturas ya guardadas
+(`LibreKit/LibreViewCSV.swift`). El demo usa una base en
 memoria con 14 días inventados y no toca ese archivo. Estadísticas ponderadas por tiempo
 (el historial llega cada 5 min y las lecturas en vivo cada 1 min).
 
@@ -119,6 +122,6 @@ Requiere macOS 15.
 ## Pendiente
 
 Libro de registro y notas (insulina, comidas), exportar CSV/PDF, persistir el estado de
-los episodios de alarma entre reinicios, completar huecos con el historial de LibreView.
+los episodios de alarma entre reinicios.
 Las notificaciones usan nivel "time sensitive", pero sin firma de Apple Developer pueden
 quedar silenciadas por Concentración / No Molestar.

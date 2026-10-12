@@ -143,6 +143,16 @@
         }
       }
     },
+    "Agrega a los informes las lecturas de un archivo CSV de LibreView (en libreview.com: Descargar datos de glucosa). Las lecturas que ya están no se modifican.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adds the readings from a LibreView CSV file to your reports (on libreview.com: Download glucose data). Readings already saved are not changed."
+          }
+        }
+      }
+    },
     "Ajustes": {
       "localizations": {
         "en": {
@@ -313,6 +323,16 @@
         }
       }
     },
+    "Cancelar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
     "Cerrar sesión de LibreLinkUp": {
       "localizations": {
         "en": {
@@ -429,6 +449,26 @@
         }
       }
     },
+    "El archivo no es una exportación de glucosa de LibreView.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This file is not a LibreView glucose export."
+          }
+        }
+      }
+    },
+    "El archivo no tiene lecturas de glucosa.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This file has no glucose readings."
+          }
+        }
+      }
+    },
     "El rango objetivo pinta los gráficos y el tiempo en rango; no cambia las alarmas.": {
       "localizations": {
         "en": {
@@ -445,6 +485,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sensor ending soon"
+          }
+        }
+      }
+    },
+    "Elegir archivo…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose File…"
           }
         }
       }
@@ -699,6 +749,26 @@
         }
       }
     },
+    "Importar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import"
+          }
+        }
+      }
+    },
+    "Importar historial de LibreView": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import LibreView history"
+          }
+        }
+      }
+    },
     "Informes": {
       "localizations": {
         "en": {
@@ -879,6 +949,26 @@
         }
       }
     },
+    "No había lecturas nuevas (%@).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No new readings (%@)."
+          }
+        }
+      }
+    },
+    "No había lecturas nuevas.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No new readings."
+          }
+        }
+      }
+    },
     "No llegan lecturas hace más de 20 min.": {
       "localizations": {
         "en": {
@@ -915,6 +1005,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Does not replace LibreLink's official alarms. If you have symptoms, check with a meter. Do not use for dosing decisions."
+          }
+        }
+      }
+    },
+    "No se entienden las fechas del archivo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The dates in this file can't be read."
           }
         }
       }
@@ -1185,6 +1285,32 @@
           "stringUnit": {
             "state": "translated",
             "value": "Exit demo"
+          }
+        }
+      }
+    },
+    "Se agregaron %lld lecturas (%@).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Added %lld readings (%@)."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Se agregaron %1$lld lecturas (%2$@)."
+          }
+        }
+      }
+    },
+    "Se importan para %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imported for %@."
           }
         }
       }
