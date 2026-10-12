@@ -170,11 +170,6 @@ struct ReadingView: View {
                 Text("Sin lecturas todavía.").foregroundStyle(.secondary)
             }
 
-            if !store.history.isEmpty {
-                GlucoseChart(points: store.chartPoints, display: store.display, settings: store.settings)
-                    .frame(height: 150)
-            }
-
             if let sensor = store.sensor {
                 Label(sensorText(sensor), systemImage: "sensor")
                     .font(.caption)

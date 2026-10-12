@@ -171,12 +171,6 @@ final class GlucoseStore {
         )
     }
 
-    /// Historial de LibreLinkUp + la lectura actual si es más nueva.
-    var chartPoints: [GlucoseMeasurement] {
-        guard let current, current.date > (history.last?.date ?? .distantPast) else { return history }
-        return history + [current]
-    }
-
     /// Lectura actual si todavía sirve (no hay pérdida de señal).
     var freshReading: GlucoseMeasurement? {
         guard let current, now.timeIntervalSince(current.date) < GlucoseStatus.signalLossAfter else { return nil }

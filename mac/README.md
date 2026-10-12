@@ -69,8 +69,7 @@ La primera vez, LibreBar pide email y contraseña de LibreLinkUp y los guarda en
 - `Sources/LibreKit` — cliente `LibreLinkUpClient` (login con redirect, header
   `account-id` = SHA-256 del user id, `/llu/connections`, `/llu/connections/{id}/graph`)
   y modelos. Referencia: `pylibrelinkup` 0.11.1.
-- `Sources/LibreBar` — `MenuBarExtra`: valor + flecha, edad de la lectura, gráfico de
-  ~12 h con rango 70–180, selector de paciente, actualización cada 60 s.
+- `Sources/LibreBar` — `MenuBarExtra`: valor + flecha, edad de la lectura (el gráfico está en la ventana), selector de paciente, actualización cada 60 s.
 - `Sources/llu` — CLI de diagnóstico.
 
 ## Ventana (Fase 5)
