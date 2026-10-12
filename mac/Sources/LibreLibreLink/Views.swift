@@ -222,6 +222,9 @@ struct SettingsView: View {
                     Text("Baja: < \(unit.withSymbol(store.settings.lowThreshold))")
                 }
             }
+            Toggle("Baja en camino (~15 min antes, estimado)", isOn: $store.settings.lowSoonEnabled)
+                .disabled(!store.settings.lowEnabled)
+                .padding(.leading, 20)
             Toggle(isOn: $store.settings.highEnabled) {
                 Stepper(value: $store.settings.highThreshold, in: AlarmSettings.highRange, step: 10) {
                     Text("Alta: > \(unit.withSymbol(store.settings.highThreshold))")
@@ -229,6 +232,12 @@ struct SettingsView: View {
             }
             Toggle("Sin señal (20 min sin lecturas)", isOn: $store.settings.signalLossEnabled)
             Toggle("Avisos del sensor (nuevo, listo y fin)", isOn: $store.settings.sensorNoticesEnabled)
+            HStack {
+                Toggle("Leer las alarmas en voz alta", isOn: $store.settings.speakAlarms)
+                if store.settings.speakAlarms {
+                    Button("Probar voz") { store.notifier.speakTest() }.controlSize(.small)
+                }
+            }
             Text("La baja grave (< \(unit.withSymbol(AlarmSettings.urgentLowThreshold))) siempre se muestra y avisa. Las alarmas se repiten cada 5 min mientras dura el problema.")
                 .font(.caption)
                 .foregroundStyle(.secondary)

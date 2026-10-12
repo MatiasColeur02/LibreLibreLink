@@ -1,3 +1,4 @@
+import AVFoundation
 import Foundation
 import LibreKit
 import ServiceManagement
@@ -19,6 +20,7 @@ final class AlarmNotifier {
     nonisolated static var isBundled: Bool { Bundle.main.bundleIdentifier != nil }
 
     private let delegate = ForegroundPresenter()
+    private let synthesizer = AVSpeechSynthesizer()
 
     init() {
         if Self.isBundled { UNUserNotificationCenter.current().delegate = delegate }
@@ -68,6 +70,48 @@ final class AlarmNotifier {
         UNUserNotificationCenter.current().add(request)
     }
 
+    /// Lee la alarma en voz alta, en el idioma de la app ("Glucosa baja, 64, bajando").
+    /// No depende de los permisos de notificación ni de Concentración; sí del volumen.
+    func speak(_ kind: AlarmKind, reading: GlucoseMeasurement?, unit: GlucoseUnit) {
+        var parts = [kind.title]
+        if let reading, kind != .signalLoss {
+            parts.append(Self.spokenValue(reading.mgdL, unit: unit))
+            if let trend = reading.trend, trend != .unknown { parts.append(trend.label.lowercased()) }
+        }
+        speak(parts.joined(separator: ", "))
+    }
+
+    func speakTest() {
+        speak(String(localized: "Así suenan las alarmas."))
+    }
+
+    private func speak(_ text: String) {
+        synthesizer.stopSpeaking(at: .immediate)
+        let utterance = AVSpeechUtterance(string: text)
+        utterance.voice = Self.voice
+        synthesizer.speak(utterance)
+    }
+
+    /// Voz del sistema para el idioma de la app (la de la región del usuario si coincide).
+    /// Nunca una de las "novedosas" (Bubbles, Bad News…), que macOS lista primero.
+    private static let voice: AVSpeechSynthesisVoice? = {
+        let language = Bundle.main.preferredLocalizations.first ?? "es"
+        let regional = Locale.current.identifier(.bcp47)
+        let preferred = (regional.hasPrefix(language) ? [regional] : [])
+            + (language == "es" ? ["es-MX", "es-ES", "es-US"] : ["en-US", "en-GB"])
+        return preferred.lazy.compactMap { AVSpeechSynthesisVoice(language: $0) }.first
+            ?? AVSpeechSynthesisVoice.speechVoices().first {
+                $0.language.hasPrefix(language) && !$0.voiceTraits.contains(.isNoveltyVoice)
+            }
+    }()
+
+    /// "LO"/"HI" no se entienden en voz: "menos de 40" / "más de 500".
+    private static func spokenValue(_ mgdL: Double, unit: GlucoseUnit) -> String {
+        if mgdL < 40 { return String(localized: "menos de \(unit.number(40))") }
+        if mgdL > 500 { return String(localized: "más de \(unit.number(500))") }
+        return unit.number(mgdL)
+    }
+
     func postTest() {
         guard Self.isBundled else { return }
         let content = UNMutableNotificationContent()
@@ -93,6 +137,7 @@ private extension AlarmKind {
         switch self {
         case .urgentLow: String(localized: "Glucosa muy baja")
         case .low: String(localized: "Glucosa baja")
+        case .lowSoon: String(localized: "Baja en camino")
         case .high: String(localized: "Glucosa alta")
         case .signalLoss: String(localized: "Sin señal del sensor")
         }
@@ -101,6 +146,7 @@ private extension AlarmKind {
     var advice: String {
         switch self {
         case .urgentLow, .low, .high: String(localized: "Comprobá con glucómetro.")
+        case .lowSoon: String(localized: "A este ritmo cruza el umbral de baja en menos de 15 min (estimado). Comprobá con glucómetro.")
         case .signalLoss: String(localized: "No llegan lecturas hace más de 20 min.")
         }
     }

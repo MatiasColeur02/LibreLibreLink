@@ -103,6 +103,16 @@
         }
       }
     },
+    "A este ritmo cruza el umbral de baja en menos de 15 min (estimado). Comprobá con glucómetro.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At this rate it will cross the low threshold in under 15 min (estimate). Confirm with a blood glucose meter."
+          }
+        }
+      }
+    },
     "A1c estimada (GMI)": {
       "localizations": {
         "en": {
@@ -253,6 +263,16 @@
         }
       }
     },
+    "Así suenan las alarmas.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This is how alarms sound."
+          }
+        }
+      }
+    },
     "Avisos del sensor (nuevo, listo y fin)": {
       "localizations": {
         "en": {
@@ -269,6 +289,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Low (≈ 64)"
+          }
+        }
+      }
+    },
+    "Baja en camino": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low coming"
+          }
+        }
+      }
+    },
+    "Baja en camino (~15 min antes, estimado)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low coming (~15 min ahead, estimated)"
           }
         }
       }
@@ -293,12 +333,32 @@
         }
       }
     },
+    "Bajando hacia la baja (≈ 88 ↘)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falling toward low (≈ 88 ↘)"
+          }
+        }
+      }
+    },
     "Bajando rápido": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Falling quickly"
+          }
+        }
+      }
+    },
+    "Bajando: a este ritmo cruza el umbral de baja cerca de las %@. Es una estimación; comprobá con glucómetro.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falling: at this rate it crosses the low threshold around %@. This is an estimate; confirm with a blood glucose meter."
           }
         }
       }
@@ -1031,6 +1091,16 @@
         }
       }
     },
+    "Leer las alarmas en voz alta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read alarms aloud"
+          }
+        }
+      }
+    },
     "LibreLibreLink": {
       "localizations": {
         "en": {
@@ -1493,6 +1563,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Try without an account (demo data)"
+          }
+        }
+      }
+    },
+    "Probar voz": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test voice"
           }
         }
       }
@@ -2121,6 +2201,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "macOS is blocking LibreLibreLink notifications: System Settings ▸ Notifications."
+          }
+        }
+      }
+    },
+    "menos de %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "below %@"
+          }
+        }
+      }
+    },
+    "más de %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "above %@"
           }
         }
       }

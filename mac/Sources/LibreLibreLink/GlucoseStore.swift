@@ -179,6 +179,7 @@ final class GlucoseStore {
         }
         return GlucoseStatus.conditions(
             current: current,
+            recent: history,
             sensor: sensor,
             settings: settings,
             fetched: lastRefresh != nil,
@@ -380,7 +381,7 @@ final class GlucoseStore {
 
     private func evaluateAlarms() {
         evaluateSensorNotices()
-        guard settings.notificationsEnabled, phase != .needsLogin else {
+        guard settings.notificationsEnabled || settings.speakAlarms, phase != .needsLogin else {
             alarmEngine = AlarmEngine()
             return
         }
@@ -388,7 +389,8 @@ final class GlucoseStore {
             kind != .signalLoss || settings.signalLossEnabled
         }
         for kind in alarmEngine.update(active: active, now: now) {
-            notifier.post(kind, reading: freshReading, unit: display.unit)
+            if settings.notificationsEnabled { notifier.post(kind, reading: freshReading, unit: display.unit) }
+            if settings.speakAlarms { notifier.speak(kind, reading: freshReading, unit: display.unit) }
         }
     }
 

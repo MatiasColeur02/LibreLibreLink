@@ -29,7 +29,7 @@ struct MenuBarLabel: View {
     private var color: NSColor? {
         guard let worst else { return nil }
         switch worst {
-        case .urgentLow, .low: return .systemRed
+        case .urgentLow, .low, .lowSoon: return .systemRed
         case .high: return .systemOrange
         default: return worst.severity >= .warning ? .systemOrange : nil
         }

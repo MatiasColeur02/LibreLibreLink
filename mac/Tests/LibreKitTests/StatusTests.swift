@@ -137,3 +137,42 @@ private func conditions(
     let decoded = try JSONDecoder().decode(AlarmSettings.self, from: Data(#"{"notificationsEnabled":true,"lowThreshold":80}"#.utf8))
     #expect(decoded.notificationsEnabled && decoded.lowThreshold == 80 && decoded.sensorNoticesEnabled)
 }
+
+// MARK: - Baja en camino
+
+/// Lecturas cada 5 min de los últimos 15 min que terminan en `last` con la pendiente dada.
+private func falling(to last: Double, slope: Double) -> (recent: [GlucoseMeasurement], current: GlucoseMeasurement) {
+    let recent = stride(from: 15.0, to: 0, by: -5).map { reading(last - slope * $0, minutesAgo: $0) }
+    return (recent, reading(last, minutesAgo: 0))
+}
+
+@Test func lowSoonWhenFallingTowardThreshold() throws {
+    let (recent, current) = falling(to: 88, slope: -1.6)
+    let result = GlucoseStatus.conditions(current: current, recent: recent, sensor: nil, settings: AlarmSettings(),
+                                          fetched: true, connectionError: nil, needsAttention: nil, now: now)
+    // (88 − 70) / 1,6 ≈ 11 min.
+    guard case .lowSoon(let crossing) = try #require(result.first) else { Issue.record("\(result)"); return }
+    #expect(abs(crossing.timeIntervalSince(now) / 60 - 11.25) < 0.1)
+    #expect(result.first?.alarm == .lowSoon)
+}
+
+@Test func lowSoonNeedsAClearFallWithinFifteenMinutes() {
+    func check(_ last: Double, _ slope: Double, settings: AlarmSettings = AlarmSettings()) -> [GlucoseCondition] {
+        let (recent, current) = falling(to: last, slope: slope)
+        return GlucoseStatus.conditions(current: current, recent: recent, sensor: nil, settings: settings,
+                                        fetched: true, connectionError: nil, needsAttention: nil, now: now)
+    }
+    #expect(check(74, -0.5).isEmpty)      // cerca pero bajando lento
+    #expect(check(120, -1.5).isEmpty)     // bajando, pero tardaría ~33 min
+    #expect(check(100, 1.5).isEmpty)      // subiendo
+    #expect(check(65, -1.5) == [.low])    // ya está baja: la alarma de baja, no la anticipada
+    var off = AlarmSettings()
+    off.lowSoonEnabled = false
+    #expect(check(88, -1.6, settings: off).isEmpty)
+}
+
+@Test func forecastNeedsEnoughReadings() {
+    let latest = reading(90, minutesAgo: 0)
+    #expect(GlucoseForecast.slope([reading(95, minutesAgo: 5)], latest: latest) == nil)
+    #expect(GlucoseForecast.slope([reading(92, minutesAgo: 2), reading(91, minutesAgo: 1)], latest: latest) == nil)
+}

@@ -21,7 +21,7 @@ típico + el escenario elegido). Entrar al demo:
 - `swift run LibreLibreLink --demo`, o `open dist/LibreLibreLink.app --args --demo`.
 
 Arriba del panel aparece **Modo demo** con un selector de escenario: día normal, alta,
-baja, muy baja, LO/HI, lectura vieja, sin señal, sin conexión, aceptar términos, sin
+bajando hacia la baja, baja, muy baja, LO/HI, lectura vieja, sin señal, sin conexión, aceptar términos, sin
 pacientes, sensor por terminar, sensor nuevo (calentando), y **Recorrido automático** (cambia de situación cada
 60 s; consulta cada 15 s). Hay dos pacientes para ver el selector. El demo no toca el
 llavero ni el paciente/región guardados; los **Ajustes** (umbrales, notificaciones) sí son
@@ -60,6 +60,14 @@ elegí "Permitir siempre".
 restantes del sensor y tiene **Ajustes**: notificaciones (apagadas por defecto), umbrales
 de baja (60–100) y alta (120–400), sin señal, abrir al iniciar sesión. Una notificación
 por episodio, repetida cada 5 min mientras dure.
+
+**Baja en camino** (Ajustes, bajo el umbral de baja; activada): si la glucosa cae al menos
+1 mg/dL/min (recta sobre los últimos 15 min) y a ese ritmo cruzaría el umbral de baja en 15 min o
+menos, se marca en rojo y avisa como una alarma más (`LibreKit/Forecast.swift`). Es una estimación.
+
+**Leer las alarmas en voz alta** (Ajustes; desactivado): dice la alarma con la voz del sistema
+("Glucosa baja, 64, bajando"). Suena aunque Concentración / No Molestar silencie las
+notificaciones (sí depende del volumen) y funciona aunque las notificaciones estén apagadas.
 
 **Avisos del sensor** (Ajustes ▸ Avisos del sensor, activado si las notificaciones lo están): sensor
 nuevo (cambia el número de serie), listo tras los 60 min de calentamiento, termina en 3 días /

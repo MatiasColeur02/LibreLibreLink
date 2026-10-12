@@ -12,7 +12,7 @@ import Testing
         #expect(await client.region.code == "la")
         let graph = try await client.graph(patientID: try #require(patients.first).id)
         let conditions = GlucoseStatus.conditions(
-            current: graph.current, sensor: graph.sensor, settings: AlarmSettings(),
+            current: graph.current, recent: graph.history, sensor: graph.sensor, settings: AlarmSettings(),
             fetched: true, connectionError: nil, needsAttention: nil, now: Date()
         )
         return (graph, conditions)
@@ -38,6 +38,12 @@ import Testing
     func scenarioProducesCondition(scenario: DemoScenario, expected: GlucoseCondition) async throws {
         let (_, conditions) = try await load(scenario)
         #expect(conditions.contains(expected))
+    }
+
+    @Test func lowSoonScenario() async throws {
+        let (_, conditions) = try await load(.lowSoon)
+        #expect(conditions.contains { if case .lowSoon = $0 { true } else { false } })
+        #expect(try await load(.normal).1.allSatisfy { if case .lowSoon = $0 { false } else { true } })
     }
 
     @Test func outOfScaleValues() async throws {

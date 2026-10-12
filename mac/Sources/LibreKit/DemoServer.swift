@@ -6,6 +6,7 @@ public enum DemoScenario: String, CaseIterable, Sendable, Identifiable {
     case tour
     case normal
     case high
+    case lowSoon
     case low
     case urgentLow
     case belowRange
@@ -25,6 +26,7 @@ public enum DemoScenario: String, CaseIterable, Sendable, Identifiable {
         case .tour: String(localized: "Recorrido automático")
         case .normal: String(localized: "Día normal")
         case .high: String(localized: "Alta (≈ 265)")
+        case .lowSoon: String(localized: "Bajando hacia la baja (≈ 88 ↘)")
         case .low: String(localized: "Baja (≈ 64)")
         case .urgentLow: String(localized: "Muy baja (≈ 48)")
         case .belowRange: String(localized: "LO (< 40)")
@@ -40,7 +42,7 @@ public enum DemoScenario: String, CaseIterable, Sendable, Identifiable {
     }
 
     static let tourSteps: [DemoScenario] = [
-        .normal, .high, .normal, .low, .urgentLow, .normal, .stale, .signalLoss, .connectionError, .sensorEnding, .newSensor,
+        .normal, .high, .normal, .lowSoon, .low, .urgentLow, .normal, .stale, .signalLoss, .connectionError, .sensorEnding, .newSensor,
     ]
     /// Duración de cada paso del recorrido.
     public static let tourStep: TimeInterval = 60
@@ -226,6 +228,7 @@ struct Curve {
     private var target: (value: Double, slope: Double)? {
         switch scenario {
         case .high: (265, 1.2)
+        case .lowSoon: (88, -1.6)
         case .low: (64, -1.1)
         case .urgentLow: (48, -2.2)
         case .belowRange: (36, -0.4)
