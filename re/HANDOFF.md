@@ -36,7 +36,16 @@ barra de menú con valor + flecha, gráfico/historial y alarmas. El usuario tien
   Indicio fuerte de gen2 (región LA `2B 0A 3A 08` → 0x3A → gen2, más reportes
   comunitarios), pero **no es prueba**. Clasificación de trabajo: **gen2 (I)**.
 
-## 3. Lo que FALTA para decidir (bloqueante)
+## 2c. Decisión (2026-10-12): camino A — nube LibreLinkUp
+
+El usuario eligió la nube. Prototipo (Fase 3) en `mac/` (Swift package: `LibreKit`,
+`LibreBar` MenuBarExtra, CLI `llu`); ver `mac/README.md`. 7 tests de decodificación
+pasan; **falta probar contra la cuenta real** (`swift run llu`). La RE de BLE/NFC
+queda archivada (sirve solo si algún día aparece un sensor gen1).
+Fase 4 (barra de menú con estado + alarmas) implementada: lógica en
+`LibreKit/Status.swift` (17 tests), app empaquetada con `mac/scripts/make-app.sh`.
+
+## 3. Lo que FALTA para decidir (histórico; ya decidido arriba)
 
 Confirmar `patchInfo[2]` del sensor real. Caminos gratis:
 1. **Serial** (en caja o app LibreLink, sin NFC): prefijo `3MH0…` ⇒ muy probable gen2.

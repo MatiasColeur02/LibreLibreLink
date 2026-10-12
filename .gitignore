@@ -1,2 +1,5 @@
 docs/
 work/
+.build/
+.swiftpm/
+dist/

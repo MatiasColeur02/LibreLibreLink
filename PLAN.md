@@ -32,13 +32,34 @@ separa **observado / inferido / desconocido** y cita Evidence IDs.
    - D. Lógica/UI: alarmas, rangos, textos.
    Resultado: `re/findings.md`.
    **Punto de decisión:** según la generación del sensor, seguir / cambiar alcance / nube.
-3. **Prototipo** — app iOS mínima (Core NFC) + CLI macOS (CoreBluetooth) que registra
-   paquetes; comparar contra LibreLink. Decidir convivencia teléfono ↔ Mac.
-4. **Registro de reconstrucción** — cada pieza con módulo responsable, fixtures
-   anonimizados y test verificador (`build_reconstruction_obligation_ledger`).
-5. **App** — `LibreKit` (Swift package compartido macOS/iOS), MenuBarExtra,
-   Swift Charts, SwiftData, notificaciones, reconexión.
+   **Decisión (2026-10-12):** serial `3MH0M1…` (Argentina) → gen2 inferido → **camino A:
+   nube LibreLinkUp**. La RE de NFC/BLE queda archivada (`re/`).
+3. **Prototipo (nube)** ✅ — `mac/`: `LibreKit` (cliente LibreLinkUp) + `LibreBar`
+   (MenuBarExtra) + CLI `llu`. Pendiente: probar con la cuenta real.
+4. **Barra de menú con estado y alarmas** ✅ (código; falta probar con datos reales) — el ícono de arriba a la derecha muestra
+   la medición actual y, si hay un problema, lo señala sin abrir nada:
+   - Valor + flecha (`123 ↗`); `LO` < 40 y `HI` > 500 (R2).
+   - Estados con ícono y color (solo cuando hay problema; en normal, monocromo):
+     glucosa **muy baja** (< 55, baja grave fija), **baja** (< umbral, def. 70),
+     **alta** (> umbral, def. 240), **sin señal del sensor** (sin lectura nueva
+     ≥ 20 min: el iPhone no sube datos), **sin conexión con LibreLinkUp**
+     (falla la red/API), **lectura vieja** (≥ 10 min), **hay que iniciar sesión /
+     aceptar términos**.
+   - El panel lista los problemas activos y su explicación; el sensor muestra días
+     restantes (de `connection.sensor.a`, 15 días asumidos).
+   - Notificaciones de macOS (R9–R13): desactivadas por defecto; una por episodio,
+     se repite cada 5 min mientras persiste; señal perdida a los 20 min.
+   - Ajustes en el panel: umbrales (baja 60–100 paso 5, alta 120–400 paso 10),
+     activar alarmas, abrir al iniciar sesión.
+   - Empaquetado como `LibreBar.app` (`mac/scripts/make-app.sh`): sin ícono en el
+     Dock, necesario para notificaciones y arranque automático (R16).
+   - Lógica de estado y de episodios en `LibreKit` con tests.
+5. **App completa** — historial persistente (SwiftData), estadísticas (tiempo en
+   rango, promedios, R24), mmol/L (R20), ventana de gráfico grande.
 6. **Verificación** — tests + días de comparación con LibreLink. Lo no verificado
    queda marcado como pendiente.
+
+Archivado (solo si apareciera un sensor gen1): prototipo NFC/BLE y registro de
+reconstrucción (`build_reconstruction_obligation_ledger`).
 
 ⚠️ No reemplaza las alarmas oficiales; no usar para decidir dosis antes de la Fase 6.
