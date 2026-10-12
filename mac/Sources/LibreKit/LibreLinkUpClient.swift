@@ -16,25 +16,26 @@ public enum LibreLinkUpError: Error, Equatable, LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .invalidCredentials(let message):
-            "Email o contraseña incorrectos" + (message.map { " (\($0))" } ?? "")
+            String(localized: "Email o contraseña incorrectos") + (message.map { " (\($0))" } ?? "")
         case .mustAcceptTerms:
-            "Tenés que aceptar los términos de uso en la app LibreLinkUp del teléfono."
+            String(localized: "Tenés que aceptar los términos de uso en la app LibreLinkUp del teléfono.")
         case .mustAcceptPrivacyPolicy:
-            "Tenés que aceptar la política de privacidad en la app LibreLinkUp del teléfono."
+            String(localized: "Tenés que aceptar la política de privacidad en la app LibreLinkUp del teléfono.")
         case .mustVerifyEmail:
-            "Tenés que verificar el email de la cuenta LibreLinkUp."
+            String(localized: "Tenés que verificar el email de la cuenta LibreLinkUp.")
         case .unsupportedLoginStep(let step):
-            "LibreLinkUp pide un paso extra (\(step)); completalo en la app LibreLinkUp."
+            String(localized: "LibreLinkUp pide un paso extra (\(step)); completalo en la app LibreLinkUp.")
         case .badRedirect(let region):
-            "Redirección a una región desconocida: \(region ?? "nil")"
+            String(localized: "Redirección a una región desconocida: \(region ?? "nil")")
         case .tooManyRedirects:
-            "Demasiadas redirecciones de región."
+            String(localized: "Demasiadas redirecciones de región.")
         case .rateLimited(let retryAfter):
-            "Demasiados pedidos a LibreLinkUp" + (retryAfter.map { "; reintentar en \(Int($0)) s" } ?? "")
+            retryAfter.map { String(localized: "Demasiados pedidos a LibreLinkUp; reintentar en \(Int($0)) s") }
+                ?? String(localized: "Demasiados pedidos a LibreLinkUp")
         case .http(let code):
-            "Error HTTP \(code) de LibreLinkUp."
+            String(localized: "Error HTTP \(code) de LibreLinkUp.")
         case .unexpectedResponse:
-            "Respuesta inesperada de LibreLinkUp."
+            String(localized: "Respuesta inesperada de LibreLinkUp.")
         }
     }
 }

@@ -158,7 +158,7 @@ final class GlucoseStore {
     /// Problemas activos, del más grave al más leve.
     var conditions: [GlucoseCondition] {
         if phase == .needsLogin {
-            return [.needsAttention(needsAttention ?? "Iniciá sesión con tu cuenta de LibreLinkUp.")]
+            return [.needsAttention(needsAttention ?? String(localized: "Iniciá sesión con tu cuenta de LibreLinkUp."))]
         }
         return GlucoseStatus.conditions(
             current: current,
@@ -311,7 +311,7 @@ final class GlucoseStore {
             guard !Task.isCancelled else { return pollInterval }
             self.patients = patients
             guard let patient = patients.first(where: { $0.id == selectedPatientID }) ?? patients.first else {
-                needsAttention = "La cuenta LibreLinkUp no sigue a nadie. Aceptá la invitación enviada desde LibreLink."
+                needsAttention = String(localized: "La cuenta LibreLinkUp no sigue a nadie. Aceptá la invitación enviada desde LibreLink.")
                 connectionError = nil
                 phase = .ready
                 return pollInterval

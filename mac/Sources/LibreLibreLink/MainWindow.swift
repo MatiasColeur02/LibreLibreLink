@@ -12,9 +12,14 @@ struct MainWindow: View {
     @State private var tab: Tab = .today
 
     enum Tab: String, CaseIterable, Identifiable {
-        case today = "Hoy"
-        case reports = "Informes"
+        case today, reports
         var id: String { rawValue }
+        var title: LocalizedStringKey {
+            switch self {
+            case .today: "Hoy"
+            case .reports: "Informes"
+            }
+        }
     }
 
     var body: some View {
@@ -62,7 +67,7 @@ struct MainWindow: View {
         .toolbar {
             ToolbarItem(placement: .principal) {
                 Picker("Sección", selection: $tab) {
-                    ForEach(Tab.allCases) { Text($0.rawValue).tag($0) }
+                    ForEach(Tab.allCases) { Text($0.title).tag($0) }
                 }
                 .pickerStyle(.segmented)
                 .fixedSize()
@@ -107,7 +112,7 @@ private struct TodayView: View {
                     StatTile(
                         title: "En rango hoy",
                         value: stats.map { percent($0.zoneFractions[.inTarget] ?? 0) } ?? "–",
-                        detail: "\(store.display.unit.number(store.display.targetLow))–\(store.display.unit.withSymbol(store.display.targetHigh))",
+                        detail: rangeLabel(store.display),
                         tint: .green
                     )
                     StatTile(
@@ -162,14 +167,14 @@ private struct CurrentReadingCard: View {
 
     private func subtitle(_ reading: GlucoseMeasurement) -> String {
         let minutes = Int(store.now.timeIntervalSince(reading.date) / 60)
-        let age = minutes < 1 ? "recién" : "hace \(minutes) min"
+        let age = minutes < 1 ? String(localized: "recién") : String(localized: "hace \(minutes) min")
         let time = reading.date.formatted(date: .omitted, time: .shortened)
         return [reading.trend?.label, "\(age) (\(time))"].compactMap { $0 }.joined(separator: " · ")
     }
 }
 
 private struct StatTile: View {
-    let title: String
+    let title: LocalizedStringKey
     let value: String
     var detail: String?
     var tint: Color = .primary
@@ -201,12 +206,12 @@ private struct SensorTile: View {
                 if let sensor {
                     let total = GlucoseStatus.sensorLifetime
                     let remaining = max(0, sensor.expectedEnd.timeIntervalSince(now))
-                    Text(remaining > 0 ? "Termina en \(Self.duration(remaining))" : "Sensor terminado")
+                    Text(remaining > 0 ? String(localized: "Termina en \(Self.duration(remaining))") : String(localized: "Sensor terminado"))
                         .font(.title3.weight(.semibold))
                         .foregroundStyle(remaining < 86_400 ? .orange : .primary)
                     ProgressView(value: total - remaining, total: total)
                         .tint(remaining < 86_400 ? .orange : .accentColor)
-                    Text("\(sensor.expectedEnd.formatted(date: .abbreviated, time: .shortened)) · \(sensor.serial)")
+                    Text(verbatim: "\(sensor.expectedEnd.formatted(date: .abbreviated, time: .shortened)) · \(sensor.serial)")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 } else {
@@ -219,7 +224,7 @@ private struct SensorTile: View {
     static func duration(_ seconds: TimeInterval) -> String {
         let days = Int(seconds / 86_400)
         let hours = Int(seconds.truncatingRemainder(dividingBy: 86_400) / 3600)
-        return days > 0 ? "\(days) d \(hours) h" : "\(hours) h"
+        return days > 0 ? String(localized: "\(days) d \(hours) h") : String(localized: "\(hours) h")
     }
 }
 
@@ -230,11 +235,16 @@ private struct DailyGraphCard: View {
     @State private var day = Calendar.current.startOfDay(for: Date())
 
     enum Span: String, CaseIterable, Identifiable {
-        case sixHours = "6 h"
-        case twelveHours = "12 h"
-        case day = "24 h"
-        case calendarDay = "Por día"
+        case sixHours, twelveHours, day, calendarDay
         var id: String { rawValue }
+        var title: LocalizedStringKey {
+            switch self {
+            case .sixHours: "6 h"
+            case .twelveHours: "12 h"
+            case .day: "24 h"
+            case .calendarDay: "Por día"
+            }
+        }
     }
 
     var body: some View {
@@ -257,7 +267,7 @@ private struct DailyGraphCard: View {
                         .disabled(calendar.isDateInToday(day))
                 }
                 Picker("Período", selection: $span) {
-                    ForEach(Span.allCases) { Text($0.rawValue).tag($0) }
+                    ForEach(Span.allCases) { Text($0.title).tag($0) }
                 }
                 .pickerStyle(.segmented)
                 .labelsHidden()
@@ -301,7 +311,7 @@ private struct Legend: View {
     var body: some View {
         HStack(spacing: 16) {
             item(Rectangle().fill(.green.opacity(0.25)).frame(width: 14, height: 10),
-                 "Rango objetivo \(display.unit.number(display.targetLow))–\(display.unit.withSymbol(display.targetHigh))")
+                 "Rango objetivo \(rangeLabel(display))")
             if settings.lowEnabled { item(dash(.red), "Alarma de baja") }
             if settings.highEnabled { item(dash(.orange), "Alarma de alta") }
         }
@@ -313,7 +323,7 @@ private struct Legend: View {
         Rectangle().fill(color.opacity(0.6)).frame(width: 14, height: 1.5)
     }
 
-    private func item(_ swatch: some View, _ text: String) -> some View {
+    private func item(_ swatch: some View, _ text: LocalizedStringKey) -> some View {
         HStack(spacing: 5) { swatch; Text(text) }
     }
 }
@@ -366,12 +376,12 @@ private struct ReportsView: View {
                     StatTile(title: "Glucosa promedio", value: unit.number(stats.mean), detail: unit.symbol,
                              tint: store.display.color(for: stats.mean))
                     StatTile(title: "A1c estimada (GMI)", value: stats.gmi.formatted(.number.precision(.fractionLength(1))) + " %",
-                             detail: "Aproximación; no reemplaza el análisis")
+                             detail: String(localized: "Aproximación; no reemplaza el análisis"))
                     StatTile(title: "Variabilidad (CV)", value: percent(stats.coefficientOfVariation / 100),
-                             detail: stats.coefficientOfVariation <= 36 ? "Estable (≤ 36 %)" : "Alta (> 36 %)",
+                             detail: stats.coefficientOfVariation <= 36 ? String(localized: "Estable (≤ 36 %)") : String(localized: "Alta (> 36 %)"),
                              tint: stats.coefficientOfVariation <= 36 ? .primary : .orange)
                     StatTile(title: "Uso del sensor", value: percent(stats.coverage),
-                             detail: "del tiempo con lecturas")
+                             detail: String(localized: "del tiempo con lecturas"))
                 }
                 .fixedSize(horizontal: false, vertical: true)
 
@@ -443,13 +453,13 @@ private struct TimeInRangeCard: View {
                                     .foregroundStyle(zone.color)
                                 Text(zone.label).font(.callout)
                             }
-                            Text("\(rangeText(zone)) · \(perDay(fraction))")
+                            Text(verbatim: "\(rangeText(zone)) · \(perDay(fraction))")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }
                     Divider()
-                    Label("\(stats.lowEvents) episodio\(stats.lowEvents == 1 ? "" : "s") de baja", systemImage: "arrow.down.circle")
+                    Label("Episodios de baja: \(stats.lowEvents)", systemImage: "arrow.down.circle")
                         .font(.callout)
                         .foregroundStyle(stats.lowEvents > 0 ? .red : .secondary)
                     Text("< \(display.unit.withSymbol(GlucoseStatistics.lowEventThreshold)) durante 15 min o más")
@@ -464,14 +474,16 @@ private struct TimeInRangeCard: View {
         let unit = display.unit
         switch zone {
         case .above: return "> \(unit.withSymbol(display.targetHigh))"
-        case .inTarget: return "\(unit.number(display.targetLow))–\(unit.withSymbol(display.targetHigh))"
+        case .inTarget: return rangeLabel(display)
         case .below: return "< \(unit.withSymbol(display.targetLow))"
         }
     }
 
     private func perDay(_ fraction: Double) -> String {
         let minutes = Int((fraction * 24 * 60).rounded())
-        return minutes >= 60 ? "\(minutes / 60) h \(minutes % 60) min/día" : "\(minutes) min/día"
+        return minutes >= 60
+            ? String(localized: "\(minutes / 60) h \(minutes % 60) min/día")
+            : String(localized: "\(minutes) min/día")
     }
 }
 
@@ -520,7 +532,7 @@ private struct DailyPatternCard: View {
                     AxisMarks(values: Array(stride(from: 0, through: 24 * 60, by: 180))) { value in
                         AxisGridLine()
                         AxisValueLabel {
-                            if let minute = value.as(Int.self) { Text("\(minute / 60) h") }
+                            if let minute = value.as(Int.self) { Text(verbatim: "\(minute / 60) h") }
                         }
                     }
                 }
@@ -545,9 +557,14 @@ private struct DailyPatternCard: View {
         }
     }
 
-    private func swatch(_ shape: some View, _ text: String) -> some View {
+    private func swatch(_ shape: some View, _ text: LocalizedStringKey) -> some View {
         HStack(spacing: 5) { shape; Text(text) }
     }
+}
+
+/// "70–180 mg/dL" en la unidad elegida.
+private func rangeLabel(_ display: DisplaySettings) -> String {
+    "\(display.unit.number(display.targetLow))–\(display.unit.withSymbol(display.targetHigh))"
 }
 
 private func percent(_ fraction: Double) -> String {

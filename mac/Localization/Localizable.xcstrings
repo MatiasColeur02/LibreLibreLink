@@ -1,0 +1,1590 @@
+{
+  "sourceLanguage": "es",
+  "strings": {
+    "%lld d %lld h": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld d %lld h"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld d %2$lld h"
+          }
+        }
+      }
+    },
+    "%lld días": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld days"
+          }
+        }
+      }
+    },
+    "%lld h": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld h"
+          }
+        }
+      }
+    },
+    "%lld h %lld min/día": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld h %lld min/day"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld h %2$lld min/día"
+          }
+        }
+      }
+    },
+    "%lld min/día": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min/day"
+          }
+        }
+      }
+    },
+    "12 h": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "12 h"
+          }
+        }
+      }
+    },
+    "24 h": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 h"
+          }
+        }
+      }
+    },
+    "6 h": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6 h"
+          }
+        }
+      }
+    },
+    "< %@ durante 15 min o más": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "< %@ for 15 min or longer"
+          }
+        }
+      }
+    },
+    "A1c estimada (GMI)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estimated A1c (GMI)"
+          }
+        }
+      }
+    },
+    "Abrir al iniciar sesión": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open at login"
+          }
+        }
+      }
+    },
+    "Abrir ventana": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open window"
+          }
+        }
+      }
+    },
+    "Actualizar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh"
+          }
+        }
+      }
+    },
+    "Ajustes": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        }
+      }
+    },
+    "Alarma de alta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "High alarm"
+          }
+        }
+      }
+    },
+    "Alarma de baja": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low alarm"
+          }
+        }
+      }
+    },
+    "Alarmas": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alarms"
+          }
+        }
+      }
+    },
+    "Alta (> 36 %)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "High (> 36%)"
+          }
+        }
+      }
+    },
+    "Alta (≈ 265)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "High (≈ 265)"
+          }
+        }
+      }
+    },
+    "Alta: > %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "High: > %@"
+          }
+        }
+      }
+    },
+    "Alto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "High"
+          }
+        }
+      }
+    },
+    "Aproximación; no reemplaza el análisis": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estimate; not a substitute for a lab test"
+          }
+        }
+      }
+    },
+    "Así se ven las alarmas.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This is how alarms look."
+          }
+        }
+      }
+    },
+    "Baja (≈ 64)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low (≈ 64)"
+          }
+        }
+      }
+    },
+    "Baja: < %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low: < %@"
+          }
+        }
+      }
+    },
+    "Bajando": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falling"
+          }
+        }
+      }
+    },
+    "Bajando rápido": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falling quickly"
+          }
+        }
+      }
+    },
+    "Bajo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low"
+          }
+        }
+      }
+    },
+    "Banda": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Band"
+          }
+        }
+      }
+    },
+    "Cambia de situación cada %lld s (alta, baja, sin señal, sin conexión…).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Switches situation every %lld s (high, low, signal loss, offline…)."
+          }
+        }
+      }
+    },
+    "Cerrar sesión de LibreLinkUp": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign out of LibreLinkUp"
+          }
+        }
+      }
+    },
+    "Comprobá con glucómetro.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirm with a blood glucose meter."
+          }
+        }
+      }
+    },
+    "Conectando con LibreLinkUp…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connecting to LibreLinkUp…"
+          }
+        }
+      }
+    },
+    "Contraseña": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Password"
+          }
+        }
+      }
+    },
+    "Cuenta de LibreLinkUp": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LibreLinkUp account"
+          }
+        }
+      }
+    },
+    "Datos disponibles para %lld de %lld días": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data available for %lld of %lld days"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datos disponibles para %1$lld de %2$lld días"
+          }
+        }
+      }
+    },
+    "Demasiadas redirecciones de región.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too many region redirects."
+          }
+        }
+      }
+    },
+    "Demasiados pedidos a LibreLinkUp": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too many requests to LibreLinkUp"
+          }
+        }
+      }
+    },
+    "Demasiados pedidos a LibreLinkUp; reintentar en %lld s": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too many requests to LibreLinkUp; retrying in %lld s"
+          }
+        }
+      }
+    },
+    "Demo · %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo · %@"
+          }
+        }
+      }
+    },
+    "Día normal": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal day"
+          }
+        }
+      }
+    },
+    "El rango objetivo pinta los gráficos y el tiempo en rango; no cambia las alarmas.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The target range colors the graphs and time in range; it does not change the alarms."
+          }
+        }
+      }
+    },
+    "El sensor termina pronto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sensor ending soon"
+          }
+        }
+      }
+    },
+    "Email": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Email"
+          }
+        }
+      }
+    },
+    "Email o contraseña incorrectos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Incorrect email or password"
+          }
+        }
+      }
+    },
+    "En rango": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In range"
+          }
+        }
+      }
+    },
+    "En rango hoy": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In range today"
+          }
+        }
+      }
+    },
+    "Episodios de baja: %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low events: %lld"
+          }
+        }
+      }
+    },
+    "Error HTTP %lld de LibreLinkUp.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LibreLinkUp HTTP error %lld."
+          }
+        }
+      }
+    },
+    "Error del historial: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "History error: %@"
+          }
+        }
+      }
+    },
+    "Es muy importante elegir la misma unidad que usa tu medidor.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It is very important to pick the same unit your meter uses."
+          }
+        }
+      }
+    },
+    "Escenario": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scenario"
+          }
+        }
+      }
+    },
+    "Estable": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Steady"
+          }
+        }
+      }
+    },
+    "Estable (≤ 36 %)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stable (≤ 36%)"
+          }
+        }
+      }
+    },
+    "Faltan datos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not enough data"
+          }
+        }
+      }
+    },
+    "General": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "General"
+          }
+        }
+      }
+    },
+    "Glucosa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glucose"
+          }
+        }
+      }
+    },
+    "Glucosa actual": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current glucose"
+          }
+        }
+      }
+    },
+    "Glucosa alta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "High glucose"
+          }
+        }
+      }
+    },
+    "Glucosa baja": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low glucose"
+          }
+        }
+      }
+    },
+    "Glucosa muy baja": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Urgent low glucose"
+          }
+        }
+      }
+    },
+    "Glucosa promedio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Average glucose"
+          }
+        }
+      }
+    },
+    "Gráfico diario": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daily graph"
+          }
+        }
+      }
+    },
+    "HI (> 500)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HI (> 500)"
+          }
+        }
+      }
+    },
+    "Hacen falta al menos %lld días con lecturas.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At least %lld days with readings are needed."
+          }
+        }
+      }
+    },
+    "Hay que aceptar términos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terms must be accepted"
+          }
+        }
+      }
+    },
+    "Hora": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time"
+          }
+        }
+      }
+    },
+    "Hoy": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
+          }
+        }
+      }
+    },
+    "Informes": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reports"
+          }
+        }
+      }
+    },
+    "Iniciar sesión": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in"
+          }
+        }
+      }
+    },
+    "Iniciá sesión con tu cuenta de LibreLinkUp.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in with your LibreLinkUp account."
+          }
+        }
+      }
+    },
+    "Iniciá sesión de LibreLinkUp desde el ícono de la barra de menú.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to LibreLinkUp from the menu bar icon."
+          }
+        }
+      }
+    },
+    "LO (< 40)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LO (< 40)"
+          }
+        }
+      }
+    },
+    "La baja grave (< %@) siempre se muestra y avisa. Las alarmas se repiten cada 5 min mientras dura el problema.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Urgent low (< %@) is always shown and alerted. Alarms repeat every 5 min while the problem lasts."
+          }
+        }
+      }
+    },
+    "La cuenta LibreLinkUp no sigue a nadie. Aceptá la invitación enviada desde LibreLink.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This LibreLinkUp account isn't following anyone. Accept the invitation sent from LibreLink."
+          }
+        }
+      }
+    },
+    "La última lectura tiene más de 10 min.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The last reading is more than 10 min old."
+          }
+        }
+      }
+    },
+    "Las notificaciones y el inicio automático requieren abrir LibreLibreLink.app (scripts/make-app.sh), no `swift run`.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications and open at login require running LibreLibreLink.app (scripts/make-app.sh), not `swift run`."
+          }
+        }
+      }
+    },
+    "Lectura desactualizada": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading out of date"
+          }
+        }
+      }
+    },
+    "Lectura vieja (13 min)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Old reading (13 min)"
+          }
+        }
+      }
+    },
+    "LibreLibreLink": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LibreLibreLink"
+          }
+        }
+      }
+    },
+    "LibreLibreLink guarda las lecturas mientras está abierta. Los informes se llenan con los días.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LibreLibreLink saves readings while it is open. Reports fill in over the days."
+          }
+        }
+      }
+    },
+    "LibreLinkUp pide un paso extra (%@); completalo en la app LibreLinkUp.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LibreLinkUp requires an extra step (%@); complete it in the LibreLinkUp app."
+          }
+        }
+      }
+    },
+    "Listo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        }
+      }
+    },
+    "Mediana": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Median"
+          }
+        }
+      }
+    },
+    "Modo demo · datos inventados": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo mode · made-up data"
+          }
+        }
+      }
+    },
+    "Muy baja (≈ 48)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Urgent low (≈ 48)"
+          }
+        }
+      }
+    },
+    "No llegan lecturas hace más de 20 min.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No readings for more than 20 min."
+          }
+        }
+      }
+    },
+    "No llegan lecturas nuevas hace más de 20 min. ¿El iPhone está cerca del sensor, con LibreLink abierta e internet?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No new readings for more than 20 min. Is the iPhone near the sensor, with LibreLink open and online?"
+          }
+        }
+      }
+    },
+    "No reemplaza las alarmas oficiales de LibreLink. Ante síntomas, medí con glucómetro.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Does not replace LibreLink's official alarms. If you have symptoms, check with a meter."
+          }
+        }
+      }
+    },
+    "No reemplaza las alarmas oficiales de LibreLink. Ante síntomas, medí con glucómetro. No usar para decidir dosis.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Does not replace LibreLink's official alarms. If you have symptoms, check with a meter. Do not use for dosing decisions."
+          }
+        }
+      }
+    },
+    "Notificaciones de alarma": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alarm notifications"
+          }
+        }
+      }
+    },
+    "P10": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "P10"
+          }
+        }
+      }
+    },
+    "P25": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "P25"
+          }
+        }
+      }
+    },
+    "P75": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "P75"
+          }
+        }
+      }
+    },
+    "P90": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "P90"
+          }
+        }
+      }
+    },
+    "Paciente": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patient"
+          }
+        }
+      }
+    },
+    "Patrones diarios": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daily patterns"
+          }
+        }
+      }
+    },
+    "Percentil 10–90": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10th–90th percentile"
+          }
+        }
+      }
+    },
+    "Percentil 25–75": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25th–75th percentile"
+          }
+        }
+      }
+    },
+    "Período": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Period"
+          }
+        }
+      }
+    },
+    "Por debajo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Below"
+          }
+        }
+      }
+    },
+    "Por debajo de %lld mg/dL. Comprobá con glucómetro y tratá ya.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Below %lld mg/dL. Confirm with a meter and treat now."
+          }
+        }
+      }
+    },
+    "Por debajo del umbral de baja. Comprobá con glucómetro.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Below the low threshold. Confirm with a meter."
+          }
+        }
+      }
+    },
+    "Por día": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "By day"
+          }
+        }
+      }
+    },
+    "Por encima": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Above"
+          }
+        }
+      }
+    },
+    "Por encima del umbral de alta. Comprobá con glucómetro.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Above the high threshold. Confirm with a meter."
+          }
+        }
+      }
+    },
+    "Probar notificación": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test notification"
+          }
+        }
+      }
+    },
+    "Probar sin cuenta (datos de demostración)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try without an account (demo data)"
+          }
+        }
+      }
+    },
+    "Promedio de hoy": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's average"
+          }
+        }
+      }
+    },
+    "Rango objetivo %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Target range %@"
+          }
+        }
+      }
+    },
+    "Rango objetivo desde %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Target range from %@"
+          }
+        }
+      }
+    },
+    "Recorrido automático": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatic tour"
+          }
+        }
+      }
+    },
+    "Redirección a una región desconocida: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Redirected to an unknown region: %@"
+          }
+        }
+      }
+    },
+    "Respuesta inesperada de LibreLinkUp.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unexpected response from LibreLinkUp."
+          }
+        }
+      }
+    },
+    "Revisar la cuenta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check your account"
+          }
+        }
+      }
+    },
+    "Salir": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quit"
+          }
+        }
+      }
+    },
+    "Salir del demo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exit demo"
+          }
+        }
+      }
+    },
+    "Sección": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Section"
+          }
+        }
+      }
+    },
+    "Sensor": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sensor"
+          }
+        }
+      }
+    },
+    "Sensor por terminar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sensor ending"
+          }
+        }
+      }
+    },
+    "Sensor terminado": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sensor ended"
+          }
+        }
+      }
+    },
+    "Sensor: termina en %lld d %lld h (%@)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sensor: ends in %lld d %lld h (%@)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Sensor: termina en %1$lld d %2$lld h (%3$@)"
+          }
+        }
+      }
+    },
+    "Sin conexión (HTTP 503)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Offline (HTTP 503)"
+          }
+        }
+      }
+    },
+    "Sin conexión con LibreLinkUp": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Can't reach LibreLinkUp"
+          }
+        }
+      }
+    },
+    "Sin datos del sensor": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No sensor data"
+          }
+        }
+      }
+    },
+    "Sin lecturas en este período": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No readings in this period"
+          }
+        }
+      }
+    },
+    "Sin lecturas todavía.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No readings yet."
+          }
+        }
+      }
+    },
+    "Sin pacientes que seguir": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No patients to follow"
+          }
+        }
+      }
+    },
+    "Sin sesión": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signed out"
+          }
+        }
+      }
+    },
+    "Sin señal (20 min sin lecturas)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signal loss (20 min without readings)"
+          }
+        }
+      }
+    },
+    "Sin señal (28 min)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signal loss (28 min)"
+          }
+        }
+      }
+    },
+    "Sin señal del sensor": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sensor signal loss"
+          }
+        }
+      }
+    },
+    "Subiendo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rising"
+          }
+        }
+      }
+    },
+    "Subiendo rápido": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rising quickly"
+          }
+        }
+      }
+    },
+    "Tendencia no disponible": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trend not available"
+          }
+        }
+      }
+    },
+    "Tenés que aceptar la política de privacidad en la app LibreLinkUp del teléfono.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You need to accept the privacy policy in the LibreLinkUp app on your phone."
+          }
+        }
+      }
+    },
+    "Tenés que aceptar los términos de uso en la app LibreLinkUp del teléfono.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You need to accept the terms of use in the LibreLinkUp app on your phone."
+          }
+        }
+      }
+    },
+    "Tenés que verificar el email de la cuenta LibreLinkUp.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You need to verify the LibreLinkUp account email."
+          }
+        }
+      }
+    },
+    "Termina %@. Tené uno de repuesto.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ends %@. Keep a spare one handy."
+          }
+        }
+      }
+    },
+    "Termina en %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ends in %@"
+          }
+        }
+      }
+    },
+    "Tiempo en rango": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time in range"
+          }
+        }
+      }
+    },
+    "Todavía no hay historial": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No history yet"
+          }
+        }
+      }
+    },
+    "Tramo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Segment"
+          }
+        }
+      }
+    },
+    "Umbral alto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "High threshold"
+          }
+        }
+      }
+    },
+    "Umbral bajo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low threshold"
+          }
+        }
+      }
+    },
+    "Unidad": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unit"
+          }
+        }
+      }
+    },
+    "Uso del sensor": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sensor usage"
+          }
+        }
+      }
+    },
+    "Usá la cuenta de seguidor invitada desde LibreLink (Menú ▸ Compartir ▸ Conectar a LibreLinkUp).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use the follower account invited from LibreLink (Menu ▸ Share ▸ Connect to LibreLinkUp)."
+          }
+        }
+      }
+    },
+    "Variabilidad (CV)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Variability (CV)"
+          }
+        }
+      }
+    },
+    "Visualización": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Display"
+          }
+        }
+      }
+    },
+    "Ya pasaron los 15 días. Reemplazalo y activalo con LibreLink.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The 15 days are over. Replace it and start the new one with LibreLink."
+          }
+        }
+      }
+    },
+    "del tiempo con lecturas": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "of the time with readings"
+          }
+        }
+      }
+    },
+    "hace %lld min": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min ago"
+          }
+        }
+      }
+    },
+    "hasta %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "to %@"
+          }
+        }
+      }
+    },
+    "macOS tiene bloqueadas las notificaciones de LibreLibreLink: Ajustes del Sistema ▸ Notificaciones.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS is blocking LibreLibreLink notifications: System Settings ▸ Notifications."
+          }
+        }
+      }
+    },
+    "recién": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "just now"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

@@ -16,9 +16,9 @@ extension GlucoseZone {
 
     var label: String {
         switch self {
-        case .below: "Por debajo"
-        case .inTarget: "En rango"
-        case .above: "Por encima"
+        case .below: String(localized: "Por debajo")
+        case .inTarget: String(localized: "En rango")
+        case .above: String(localized: "Por encima")
         }
     }
 }
@@ -29,7 +29,7 @@ extension DisplaySettings {
 
 /// Tarjeta de la ventana: fondo de control con borde sutil.
 struct Card<Content: View>: View {
-    var title: String?
+    var title: LocalizedStringKey?
     @ViewBuilder var content: Content
 
     var body: some View {
@@ -118,7 +118,7 @@ struct GlucoseChart: View {
                     .foregroundStyle(.secondary.opacity(0.4))
                     .annotation(position: .top, spacing: 4, overflowResolution: .init(x: .fit(to: .chart), y: .disabled)) {
                         VStack(spacing: 1) {
-                            Text("\(display.unit.reading(point.mgdL)) \(display.unit.symbol)")
+                            Text(verbatim: "\(display.unit.reading(point.mgdL)) \(display.unit.symbol)")
                                 .font(.callout.weight(.semibold))
                                 .foregroundStyle(display.color(for: point.mgdL))
                             Text(point.date.formatted(date: .omitted, time: .shortened))

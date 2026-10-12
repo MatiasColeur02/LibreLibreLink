@@ -182,18 +182,18 @@ struct ReadingView: View {
 
     private func subtitle(for measurement: GlucoseMeasurement) -> String {
         let minutes = Int(store.now.timeIntervalSince(measurement.date) / 60)
-        let age = minutes < 1 ? "recién" : "hace \(minutes) min"
+        let age = minutes < 1 ? String(localized: "recién") : String(localized: "hace \(minutes) min")
         let trend = measurement.trend?.label ?? ""
         return [trend, age].filter { !$0.isEmpty }.joined(separator: " · ")
     }
 
     private func sensorText(_ sensor: SensorInfo) -> String {
         let end = sensor.expectedEnd
-        if end <= store.now { return "Sensor terminado" }
+        if end <= store.now { return String(localized: "Sensor terminado") }
         let remaining = end.timeIntervalSince(store.now)
         let days = Int(remaining / 86_400)
         let hours = Int(remaining.truncatingRemainder(dividingBy: 86_400) / 3600)
-        return "Sensor: termina en \(days) d \(hours) h (\(end.formatted(date: .abbreviated, time: .shortened)))"
+        return String(localized: "Sensor: termina en \(days) d \(hours) h (\(end.formatted(date: .abbreviated, time: .shortened)))")
     }
 }
 
@@ -285,7 +285,7 @@ struct SettingsView: View {
         }
     }
 
-    private func hint(_ text: String) -> some View {
+    private func hint(_ text: LocalizedStringKey) -> some View {
         Label(text, systemImage: "exclamationmark.triangle")
             .font(.caption)
             .foregroundStyle(.orange)

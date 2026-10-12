@@ -21,19 +21,19 @@ public enum DemoScenario: String, CaseIterable, Sendable, Identifiable {
 
     public var label: String {
         switch self {
-        case .tour: "Recorrido automático"
-        case .normal: "Día normal"
-        case .high: "Alta (≈ 265)"
-        case .low: "Baja (≈ 64)"
-        case .urgentLow: "Muy baja (≈ 48)"
-        case .belowRange: "LO (< 40)"
-        case .aboveRange: "HI (> 500)"
-        case .stale: "Lectura vieja (13 min)"
-        case .signalLoss: "Sin señal (28 min)"
-        case .connectionError: "Sin conexión (HTTP 503)"
-        case .mustAcceptTerms: "Hay que aceptar términos"
-        case .noPatients: "Sin pacientes que seguir"
-        case .sensorEnding: "Sensor por terminar"
+        case .tour: String(localized: "Recorrido automático")
+        case .normal: String(localized: "Día normal")
+        case .high: String(localized: "Alta (≈ 265)")
+        case .low: String(localized: "Baja (≈ 64)")
+        case .urgentLow: String(localized: "Muy baja (≈ 48)")
+        case .belowRange: String(localized: "LO (< 40)")
+        case .aboveRange: String(localized: "HI (> 500)")
+        case .stale: String(localized: "Lectura vieja (13 min)")
+        case .signalLoss: String(localized: "Sin señal (28 min)")
+        case .connectionError: String(localized: "Sin conexión (HTTP 503)")
+        case .mustAcceptTerms: String(localized: "Hay que aceptar términos")
+        case .noPatients: String(localized: "Sin pacientes que seguir")
+        case .sensorEnding: String(localized: "Sensor por terminar")
         }
     }
 

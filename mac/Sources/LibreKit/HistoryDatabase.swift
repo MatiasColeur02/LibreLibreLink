@@ -6,7 +6,7 @@ public enum HistoryDatabaseError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .sqlite(let message): "Error del historial: \(message)"
+        case .sqlite(let message): String(localized: "Error del historial: \(message)")
         }
     }
 }

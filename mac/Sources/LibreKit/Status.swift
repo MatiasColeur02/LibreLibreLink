@@ -49,30 +49,30 @@ public enum GlucoseCondition: Hashable, Sendable {
 
     public var title: String {
         switch self {
-        case .urgentLow: "Glucosa muy baja"
-        case .low: "Glucosa baja"
-        case .high: "Glucosa alta"
-        case .signalLoss: "Sin señal del sensor"
-        case .stale: "Lectura desactualizada"
-        case .connectionError: "Sin conexión con LibreLinkUp"
-        case .needsAttention: "Revisar la cuenta"
-        case .sensorExpiringSoon: "El sensor termina pronto"
-        case .sensorExpired: "Sensor terminado"
+        case .urgentLow: String(localized: "Glucosa muy baja")
+        case .low: String(localized: "Glucosa baja")
+        case .high: String(localized: "Glucosa alta")
+        case .signalLoss: String(localized: "Sin señal del sensor")
+        case .stale: String(localized: "Lectura desactualizada")
+        case .connectionError: String(localized: "Sin conexión con LibreLinkUp")
+        case .needsAttention: String(localized: "Revisar la cuenta")
+        case .sensorExpiringSoon: String(localized: "El sensor termina pronto")
+        case .sensorExpired: String(localized: "Sensor terminado")
         }
     }
 
     public var detail: String {
         switch self {
-        case .urgentLow: "Por debajo de \(Int(AlarmSettings.urgentLowThreshold)) mg/dL. Comprobá con glucómetro y tratá ya."
-        case .low: "Por debajo del umbral de baja. Comprobá con glucómetro."
-        case .high: "Por encima del umbral de alta. Comprobá con glucómetro."
-        case .signalLoss: "No llegan lecturas nuevas hace más de 20 min. ¿El iPhone está cerca del sensor, con LibreLink abierta e internet?"
-        case .stale: "La última lectura tiene más de 10 min."
+        case .urgentLow: String(localized: "Por debajo de \(Int(AlarmSettings.urgentLowThreshold)) mg/dL. Comprobá con glucómetro y tratá ya.")
+        case .low: String(localized: "Por debajo del umbral de baja. Comprobá con glucómetro.")
+        case .high: String(localized: "Por encima del umbral de alta. Comprobá con glucómetro.")
+        case .signalLoss: String(localized: "No llegan lecturas nuevas hace más de 20 min. ¿El iPhone está cerca del sensor, con LibreLink abierta e internet?")
+        case .stale: String(localized: "La última lectura tiene más de 10 min.")
         case .connectionError(let message): message
         case .needsAttention(let message): message
         case .sensorExpiringSoon(let end):
-            "Termina \(end.formatted(.relative(presentation: .named))). Tené uno de repuesto."
-        case .sensorExpired: "Ya pasaron los 15 días. Reemplazalo y activalo con LibreLink."
+            String(localized: "Termina \(end.formatted(.relative(presentation: .named))). Tené uno de repuesto.")
+        case .sensorExpired: String(localized: "Ya pasaron los 15 días. Reemplazalo y activalo con LibreLink.")
         }
     }
 

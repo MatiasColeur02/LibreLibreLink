@@ -44,7 +44,7 @@ final class AlarmNotifier {
     func post(_ kind: AlarmKind, reading: GlucoseMeasurement?, unit: GlucoseUnit) {
         guard Self.isBundled else { return }
         let content = UNMutableNotificationContent()
-        content.title = isDemo ? "Demo · \(kind.title)" : kind.title
+        content.title = isDemo ? String(localized: "Demo · \(kind.title)") : kind.title
         if let reading {
             let value = unit.reading(reading.mgdL)
             content.body = "\(value) \(unit.symbol) \(reading.trend?.arrow ?? "") · \(kind.advice)"
@@ -62,7 +62,7 @@ final class AlarmNotifier {
         guard Self.isBundled else { return }
         let content = UNMutableNotificationContent()
         content.title = "LibreLibreLink"
-        content.body = "Así se ven las alarmas."
+        content.body = String(localized: "Así se ven las alarmas.")
         content.sound = .default
         UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: "test", content: content, trigger: nil))
     }
@@ -81,17 +81,17 @@ private final class ForegroundPresenter: NSObject, UNUserNotificationCenterDeleg
 private extension AlarmKind {
     var title: String {
         switch self {
-        case .urgentLow: "Glucosa muy baja"
-        case .low: "Glucosa baja"
-        case .high: "Glucosa alta"
-        case .signalLoss: "Sin señal del sensor"
+        case .urgentLow: String(localized: "Glucosa muy baja")
+        case .low: String(localized: "Glucosa baja")
+        case .high: String(localized: "Glucosa alta")
+        case .signalLoss: String(localized: "Sin señal del sensor")
         }
     }
 
     var advice: String {
         switch self {
-        case .urgentLow, .low, .high: "Comprobá con glucómetro."
-        case .signalLoss: "No llegan lecturas hace más de 20 min."
+        case .urgentLow, .low, .high: String(localized: "Comprobá con glucómetro.")
+        case .signalLoss: String(localized: "No llegan lecturas hace más de 20 min.")
         }
     }
 }

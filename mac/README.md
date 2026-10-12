@@ -64,6 +64,26 @@ por episodio, repetida cada 5 min mientras dure.
 La primera vez, LibreLibreLink pide email y contraseña de LibreLinkUp y los guarda en el
 **llavero** de macOS. La región (Argentina → `LA`) se detecta sola por redirección.
 
+## Idiomas (inglés y español)
+
+La app sigue el idioma de macOS: español si el sistema está en español, inglés en
+cualquier otro caso. Para probar el otro idioma sin cambiar el sistema:
+`open dist/LibreLibreLink.app --args --demo -AppleLanguages "(en)"`.
+
+Se usa un **String Catalog** de Apple (`Localization/Localizable.xcstrings`, se puede abrir
+en Xcode). El español es el idioma base: los textos del código son las claves. Al
+agregar o cambiar textos:
+
+```bash
+scripts/sync-strings.sh             # extrae los textos del código al catálogo (como Xcode)
+python3 scripts/translations_en.py  # aplica el inglés; avisa si falta alguna traducción
+scripts/make-app.sh                 # compila el catálogo dentro de la .app
+```
+
+En la UI, los literales (`Text("…")`, `Button("…")`) se traducen solos; los textos armados
+en código usan `String(localized:)`, y lo que no se traduce (valores, unidades), `Text(verbatim:)`.
+Con `swift run` no hay bundle, así que se ve siempre en español.
+
 ## Estructura
 
 - `Sources/LibreKit` — cliente `LibreLinkUpClient` (login con redirect, header

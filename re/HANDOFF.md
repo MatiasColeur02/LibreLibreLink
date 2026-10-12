@@ -48,6 +48,8 @@ Modo demo (sin cuenta): `LibreKit/DemoServer.swift` (URLProtocol que imita la AP
 escenarios), `LibreLibreLink --demo` o botón en el login; `llu --demo <escenario>`.
 Fase 5 hecha: ventana Hoy/Informes, historial SQLite (`LibreKit/HistoryDatabase.swift`),
 estadísticas (`Statistics.swift`), unidades/rango objetivo (`Display.swift`). 32 tests.
+i18n: String Catalog `mac/Localization/Localizable.xcstrings` (base es, + en), sigue el idioma
+del sistema; flujo en `mac/README.md` (sync-strings.sh → translations_en.py → make-app.sh).
 Paleta real de LibreLink extraída del APK (verde #8FCB3A, etc.) pero el usuario eligió
 mantener los colores propios de LibreLibreLink.
 

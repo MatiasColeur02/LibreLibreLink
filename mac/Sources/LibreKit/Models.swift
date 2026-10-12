@@ -22,12 +22,12 @@ public enum Trend: Int, Sendable, Codable, CaseIterable {
 
     public var label: String {
         switch self {
-        case .unknown: "Tendencia no disponible"
-        case .fallingQuickly: "Bajando rápido"
-        case .falling: "Bajando"
-        case .stable: "Estable"
-        case .rising: "Subiendo"
-        case .risingQuickly: "Subiendo rápido"
+        case .unknown: String(localized: "Tendencia no disponible")
+        case .fallingQuickly: String(localized: "Bajando rápido")
+        case .falling: String(localized: "Bajando")
+        case .stable: String(localized: "Estable")
+        case .rising: String(localized: "Subiendo")
+        case .risingQuickly: String(localized: "Subiendo rápido")
         }
     }
 }
