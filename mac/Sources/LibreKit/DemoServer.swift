@@ -97,6 +97,36 @@ public enum DemoServer {
         }
     }
 
+    /// Anotaciones inventadas que coinciden con las comidas de la curva: carbohidratos e
+    /// insulina en cada comida, insulina lenta a la noche, un pinchazo a la mañana y algo
+    /// de ejercicio. Para los días de `backfill` y el de hoy hasta `now`.
+    public static func logEntries(patientID: String, days: Int, now: Date = Date()) -> [LogEntry] {
+        let patient = patients.first { $0.id == patientID } ?? patients[0]
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: now)
+        var entries: [LogEntry] = []
+        for offset in 0...days {
+            let start = calendar.date(byAdding: .day, value: -offset, to: today)!
+            let day = Int((start.timeIntervalSince1970 / 86_400).rounded())
+            func at(_ hour: Double) -> Date { start.addingTimeInterval((hour - patient.phaseHours) * 3600) }
+            for (hour, rise, key) in [(8.0, 62.0, 1.0), (13.5, 78.0, 2.0), (21.0, 70.0, 3.0)] {
+                let date = at(hour + (Curve.random(day, key) - 0.5) * 1.5)
+                let carbs = (rise * (0.6 + 0.9 * Curve.random(day, key + 10)) * 0.8 / 5).rounded() * 5
+                entries.append(LogEntry(date: date, kind: .carbs, value: carbs))
+                entries.append(LogEntry(date: date.addingTimeInterval(-5 * 60), kind: .rapidInsulin, value: (carbs / 12).rounded()))
+            }
+            entries.append(LogEntry(date: at(22.5), kind: .longInsulin, value: 18))
+            let fingerstick = at(7.5)
+            let error = 1 + (Curve.random(day, 20) - 0.4) * 0.2
+            entries.append(LogEntry(date: fingerstick, kind: .fingerstick,
+                                    value: (Curve.typicalDay(fingerstick, phaseHours: patient.phaseHours) * error).rounded()))
+            if Curve.random(day, 30) < 0.4 {
+                entries.append(LogEntry(date: at(18), kind: .exercise, value: 45, note: String(localized: "Caminata")))
+            }
+        }
+        return entries.filter { $0.date <= now }.sorted { $0.date < $1.date }
+    }
+
     // MARK: Respuestas
 
     struct Response {
@@ -290,7 +320,7 @@ struct Curve {
     }
 
     /// Pseudoaleatorio estable en [0, 1) para un día y una clave.
-    private static func random(_ day: Int, _ key: Double) -> Double {
+    static func random(_ day: Int, _ key: Double) -> Double {
         let x = sin(Double(day) * 12.9898 + key * 78.233) * 43_758.5453
         return x - x.rounded(.down)
     }

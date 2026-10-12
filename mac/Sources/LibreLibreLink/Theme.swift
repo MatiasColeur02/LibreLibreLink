@@ -57,6 +57,8 @@ struct GlucoseChart: View {
     var hourStride = 3
     /// Con el puntero encima muestra el valor y la hora.
     var interactive = false
+    /// Anotaciones del registro: íconos arriba del gráfico; los pinchazos, en su valor.
+    var entries: [LogEntry] = []
 
     @State private var hovered: Date?
 
@@ -113,6 +115,18 @@ struct GlucoseChart: View {
                     .foregroundStyle(display.color(for: item.point.mgdL))
             }
 
+            ForEach(entries) { entry in
+                if entry.kind == .fingerstick, let value = entry.value {
+                    PointMark(x: .value("Hora", entry.date), y: .value("Glucosa", min(value, maxValue)))
+                        .symbol { Image(systemName: entry.kind.symbol).font(.caption).foregroundStyle(entry.kind.color) }
+                } else {
+                    // Insulina un renglón más abajo para que no tape la comida de al lado.
+                    let lane = entry.kind == .rapidInsulin || entry.kind == .longInsulin ? 1.0 : 0.0
+                    PointMark(x: .value("Hora", entry.date), y: .value("Glucosa", maxValue - (maxValue - 40) * (0.04 + 0.07 * lane)))
+                        .symbol { Image(systemName: entry.kind.symbol).font(.caption).foregroundStyle(entry.kind.color) }
+                }
+            }
+
             if interactive, let point = hoveredPoint {
                 RuleMark(x: .value("Hora", point.date))
                     .foregroundStyle(.secondary.opacity(0.4))
@@ -124,6 +138,11 @@ struct GlucoseChart: View {
                             Text(point.date.formatted(date: .omitted, time: .shortened))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
+                            ForEach(entries.filter { abs($0.date.timeIntervalSince(point.date)) <= 10 * 60 }) { entry in
+                                Label(entry.summary(unit: display.unit), systemImage: entry.kind.symbol)
+                                    .font(.caption)
+                                    .foregroundStyle(entry.kind.color)
+                            }
                         }
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)

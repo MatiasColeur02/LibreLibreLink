@@ -3,7 +3,7 @@ import Charts
 import LibreKit
 import SwiftUI
 
-/// Ventana grande: "Hoy" (lectura + gráfico diario) e "Informes" (estadísticas del período).
+/// Ventana grande: "Hoy" (lectura + gráfico diario), "Registro" (anotaciones) e "Informes" (estadísticas del período).
 /// Mientras está abierta la app aparece en el Dock.
 struct MainWindow: View {
     static let id = "main"
@@ -12,11 +12,12 @@ struct MainWindow: View {
     @State private var tab: Tab = .today
 
     enum Tab: String, CaseIterable, Identifiable {
-        case today, reports
+        case today, logbook, reports
         var id: String { rawValue }
         var title: LocalizedStringKey {
             switch self {
             case .today: "Hoy"
+            case .logbook: "Registro"
             case .reports: "Informes"
             }
         }
@@ -51,6 +52,7 @@ struct MainWindow: View {
                 case .ready:
                     switch tab {
                     case .today: TodayView(store: store)
+                    case .logbook: LogbookView(store: store)
                     case .reports: ReportsView(store: store)
                     }
                 }
@@ -173,7 +175,7 @@ private struct CurrentReadingCard: View {
     }
 }
 
-private struct StatTile: View {
+struct StatTile: View {
     let title: LocalizedStringKey
     let value: String
     var detail: String?
@@ -257,6 +259,7 @@ private struct DailyGraphCard: View {
         let interval = interval
         let _ = store.historyRevision
         let points = store.storedReadings(in: interval)
+        let entries = store.logEntries(in: interval)
         let calendar = Calendar.current
 
         Card {
@@ -289,7 +292,8 @@ private struct DailyGraphCard: View {
                     settings: store.settings,
                     domain: interval.start...interval.end,
                     hourStride: span == .sixHours ? 1 : span == .twelveHours ? 2 : 3,
-                    interactive: true
+                    interactive: true,
+                    entries: entries
                 )
                 .frame(height: 300)
             }
@@ -653,10 +657,10 @@ private struct DailyPatternCard: View {
 }
 
 /// "70–180 mg/dL" en la unidad elegida.
-private func rangeLabel(_ display: DisplaySettings) -> String {
+func rangeLabel(_ display: DisplaySettings) -> String {
     "\(display.unit.number(display.targetLow))–\(display.unit.withSymbol(display.targetHigh))"
 }
 
-private func percent(_ fraction: Double) -> String {
+func percent(_ fraction: Double) -> String {
     fraction.formatted(.percent.precision(.fractionLength(0)))
 }

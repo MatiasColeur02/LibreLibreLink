@@ -142,6 +142,31 @@ final class GlucoseStore {
         return (added, result.interval)
     }
 
+    // MARK: Registro
+
+    /// Anotaciones del paciente elegido.
+    func logEntries(in interval: DateInterval) -> [LogEntry] {
+        guard let database, let patient = selectedPatientID else { return [] }
+        return (try? database.entries(patientID: patient, in: interval)) ?? []
+    }
+
+    func saveLogEntry(_ entry: LogEntry) throws {
+        guard let database, let patient = selectedPatientID else { return }
+        try database.save(entry, patientID: patient)
+        historyRevision += 1
+    }
+
+    func deleteLogEntry(_ entry: LogEntry) {
+        guard let database else { return }
+        do {
+            try database.deleteEntry(id: entry.id)
+            historyError = nil
+        } catch {
+            historyError = error.localizedDescription
+        }
+        historyRevision += 1
+    }
+
     /// El demo usa una base en memoria con 14 días inventados; nunca toca el archivo real.
     private func openHistory(demo: Bool) {
         do {
@@ -149,6 +174,9 @@ final class GlucoseStore {
             if demo {
                 for patient in ["demo-1", "demo-2"] {
                     try database.insert(DemoServer.backfill(patientID: patient, days: 14), patientID: patient)
+                    for entry in DemoServer.logEntries(patientID: patient, days: 14) {
+                        try database.save(entry, patientID: patient)
+                    }
                 }
             }
             self.database = database

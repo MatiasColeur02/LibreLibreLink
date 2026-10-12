@@ -11,7 +11,7 @@ public enum HistoryDatabaseError: Error, LocalizedError {
     }
 }
 
-/// Historial persistente de lecturas por paciente (SQLite). LibreLinkUp solo devuelve
+/// Historial persistente de lecturas y anotaciones por paciente (SQLite). LibreLinkUp solo devuelve
 /// ~12 h; acá se acumula todo lo que la app va viendo. Una lectura por minuto: si llega
 /// otra en el mismo minuto, se queda la última (y se conserva la tendencia si la nueva no trae).
 /// No es seguro entre hilos: usarlo desde un solo actor.
@@ -38,6 +38,15 @@ public final class HistoryDatabase {
                 trend INTEGER,
                 PRIMARY KEY (patient, minute)
             ) WITHOUT ROWID;
+            CREATE TABLE IF NOT EXISTS entries (
+                id TEXT PRIMARY KEY,
+                patient TEXT NOT NULL,
+                date REAL NOT NULL,
+                kind TEXT NOT NULL,
+                value REAL,
+                note TEXT NOT NULL DEFAULT ''
+            );
+            CREATE INDEX IF NOT EXISTS entries_by_date ON entries (patient, date);
             """)
     }
 
@@ -113,6 +122,55 @@ public final class HistoryDatabase {
         sqlite3_bind_text(statement, 1, patientID, -1, Self.transient)
         guard sqlite3_step(statement) == SQLITE_ROW, sqlite3_column_type(statement, 0) != SQLITE_NULL else { return nil }
         return Date(timeIntervalSince1970: TimeInterval(sqlite3_column_int64(statement, 0)) * 60)
+    }
+
+    // MARK: Registro
+
+    /// Agrega la anotación o la reemplaza si ya existe (mismo `id`).
+    public func save(_ entry: LogEntry, patientID: String) throws {
+        let statement = try prepare("""
+            INSERT OR REPLACE INTO entries (id, patient, date, kind, value, note) VALUES (?, ?, ?, ?, ?, ?)
+            """)
+        defer { sqlite3_finalize(statement) }
+        sqlite3_bind_text(statement, 1, entry.id.uuidString, -1, Self.transient)
+        sqlite3_bind_text(statement, 2, patientID, -1, Self.transient)
+        sqlite3_bind_double(statement, 3, entry.date.timeIntervalSince1970)
+        sqlite3_bind_text(statement, 4, entry.kind.rawValue, -1, Self.transient)
+        if let value = entry.value { sqlite3_bind_double(statement, 5, value) } else { sqlite3_bind_null(statement, 5) }
+        sqlite3_bind_text(statement, 6, entry.note, -1, Self.transient)
+        guard sqlite3_step(statement) == SQLITE_DONE else { throw lastError() }
+    }
+
+    public func deleteEntry(id: UUID) throws {
+        let statement = try prepare("DELETE FROM entries WHERE id = ?")
+        defer { sqlite3_finalize(statement) }
+        sqlite3_bind_text(statement, 1, id.uuidString, -1, Self.transient)
+        guard sqlite3_step(statement) == SQLITE_DONE else { throw lastError() }
+    }
+
+    /// Anotaciones del intervalo, ordenadas por fecha.
+    public func entries(patientID: String, in interval: DateInterval) throws -> [LogEntry] {
+        let statement = try prepare("""
+            SELECT id, date, kind, value, note FROM entries
+            WHERE patient = ? AND date >= ? AND date <= ? ORDER BY date
+            """)
+        defer { sqlite3_finalize(statement) }
+        sqlite3_bind_text(statement, 1, patientID, -1, Self.transient)
+        sqlite3_bind_double(statement, 2, interval.start.timeIntervalSince1970)
+        sqlite3_bind_double(statement, 3, interval.end.timeIntervalSince1970)
+        var result: [LogEntry] = []
+        while sqlite3_step(statement) == SQLITE_ROW {
+            guard let id = UUID(uuidString: String(cString: sqlite3_column_text(statement, 0))),
+                  let kind = LogKind(rawValue: String(cString: sqlite3_column_text(statement, 2))) else { continue }
+            result.append(LogEntry(
+                id: id,
+                date: Date(timeIntervalSince1970: sqlite3_column_double(statement, 1)),
+                kind: kind,
+                value: sqlite3_column_type(statement, 3) == SQLITE_NULL ? nil : sqlite3_column_double(statement, 3),
+                note: String(cString: sqlite3_column_text(statement, 4))
+            ))
+        }
+        return result
     }
 
     // MARK: SQLite

@@ -1,6 +1,62 @@
 {
   "sourceLanguage": "es",
   "strings": {
+    "%@ %@ a los %@ · %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ %2$@ after %3$@ · %4$@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ %2$@ a los %3$@ · %4$@"
+          }
+        }
+      }
+    },
+    "%@ U de insulina lenta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ U long-acting insulin"
+          }
+        }
+      }
+    },
+    "%@ U de insulina rápida": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ U rapid-acting insulin"
+          }
+        }
+      }
+    },
+    "%@ g de carbohidratos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ g carbs"
+          }
+        }
+      }
+    },
+    "%@ min de ejercicio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ min exercise"
+          }
+        }
+      }
+    },
     "%lld d %lld h": {
       "localizations": {
         "en": {
@@ -37,6 +93,22 @@
         }
       }
     },
+    "%lld h %lld min": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld h %lld min"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld h %2$lld min"
+          }
+        }
+      }
+    },
     "%lld h %lld min/día": {
       "localizations": {
         "en": {
@@ -53,12 +125,32 @@
         }
       }
     },
+    "%lld min": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min"
+          }
+        }
+      }
+    },
     "%lld min/día": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld min/day"
+          }
+        }
+      }
+    },
+    "%lld pinchazos. Ante síntomas o diferencias grandes, guiate por el glucómetro.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld fingersticks. If you have symptoms or the difference is large, go by the meter."
           }
         }
       }
@@ -233,6 +325,16 @@
         }
       }
     },
+    "Almuerzo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lunch"
+          }
+        }
+      }
+    },
     "Alta (> 36 %)": {
       "localizations": {
         "en": {
@@ -269,6 +371,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "High"
+          }
+        }
+      }
+    },
+    "Anotaciones": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entries"
+          }
+        }
+      }
+    },
+    "Anotar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log"
+          }
+        }
+      }
+    },
+    "Anotá comidas, insulina, ejercicio, pinchazos o notas. Aparecen en el gráfico de Hoy.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log meals, insulin, exercise, fingersticks or notes. They show up on the Today chart."
           }
         }
       }
@@ -449,6 +581,16 @@
         }
       }
     },
+    "Caminata": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Walk"
+          }
+        }
+      }
+    },
     "Cancelar": {
       "localizations": {
         "en": {
@@ -459,12 +601,52 @@
         }
       }
     },
+    "Cantidad": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amount"
+          }
+        }
+      }
+    },
+    "Cena": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dinner"
+          }
+        }
+      }
+    },
     "Cerrar sesión de LibreLinkUp": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Sign out of LibreLinkUp"
+          }
+        }
+      }
+    },
+    "Comida": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meal"
+          }
+        }
+      }
+    },
+    "Comidas": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meals"
           }
         }
       }
@@ -565,12 +747,78 @@
         }
       }
     },
+    "Desayuno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Breakfast"
+          }
+        }
+      }
+    },
+    "Después de comer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After meals"
+          }
+        }
+      }
+    },
+    "Diferencia media %@ · %@ dentro de ±%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mean difference %1$@ · %2$@ within ±%3$@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Diferencia media %1$@ · %2$@ dentro de ±%3$@"
+          }
+        }
+      }
+    },
     "Día normal": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Normal day"
+          }
+        }
+      }
+    },
+    "Editar anotación": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit Entry"
+          }
+        }
+      }
+    },
+    "Editar…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit…"
+          }
+        }
+      }
+    },
+    "Ejercicio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise"
           }
         }
       }
@@ -601,6 +849,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "The target range colors the graphs and time in range; it does not change the alarms."
+          }
+        }
+      }
+    },
+    "El sensor marca menos, en promedio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The sensor reads lower on average"
+          }
+        }
+      }
+    },
+    "El sensor marca más, en promedio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The sensor reads higher on average"
           }
         }
       }
@@ -651,6 +919,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choose File…"
+          }
+        }
+      }
+    },
+    "Eliminar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
           }
         }
       }
@@ -805,6 +1083,16 @@
         }
       }
     },
+    "Fecha y hora": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date and time"
+          }
+        }
+      }
+    },
     "Generado el %@ con LibreLibreLink (datos de LibreLinkUp). No es un dispositivo médico; confirmá con el médico antes de cambiar el tratamiento. Rangos y metas: consenso internacional de tiempo en rango (2019).": {
       "localizations": {
         "en": {
@@ -885,12 +1173,52 @@
         }
       }
     },
+    "Glucómetro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meter"
+          }
+        }
+      }
+    },
+    "Glucómetro %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meter %@"
+          }
+        }
+      }
+    },
+    "Glucómetro vs sensor": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meter vs sensor"
+          }
+        }
+      }
+    },
     "Gráfico diario": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Daily graph"
+          }
+        }
+      }
+    },
+    "Guardar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
           }
         }
       }
@@ -1037,6 +1365,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sign in to LibreLinkUp from the menu bar icon."
+          }
+        }
+      }
+    },
+    "Insulina lenta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Long-acting insulin"
+          }
+        }
+      }
+    },
+    "Insulina rápida": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rapid-acting insulin"
           }
         }
       }
@@ -1258,6 +1606,16 @@
         }
       }
     },
+    "Merienda": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afternoon snack"
+          }
+        }
+      }
+    },
     "Meta: < %@": {
       "localizations": {
         "en": {
@@ -1438,6 +1796,26 @@
         }
       }
     },
+    "Nota": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Note"
+          }
+        }
+      }
+    },
+    "Nota (opcional)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Note (optional)"
+          }
+        }
+      }
+    },
     "Notificaciones de alarma": {
       "localizations": {
         "en": {
@@ -1464,6 +1842,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Notifications and voice are off: nothing will alert you."
+          }
+        }
+      }
+    },
+    "Nueva anotación": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New Entry"
           }
         }
       }
@@ -1618,6 +2006,16 @@
         }
       }
     },
+    "Pico a los": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peak after"
+          }
+        }
+      }
+    },
     "Por debajo": {
       "localizations": {
         "en": {
@@ -1718,6 +2116,16 @@
         }
       }
     },
+    "Promedios desde la glucosa al comer, en las 3 h siguientes.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Averages from the glucose at mealtime, over the next 3 h."
+          }
+        }
+      }
+    },
     "Rango %@–%@": {
       "localizations": {
         "en": {
@@ -1770,6 +2178,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Redirected to an unknown region: %@"
+          }
+        }
+      }
+    },
+    "Registro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Logbook"
           }
         }
       }
@@ -1946,6 +2364,16 @@
         }
       }
     },
+    "Sin anotaciones": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No entries"
+          }
+        }
+      }
+    },
     "Sin conexión (HTTP 503)": {
       "localizations": {
         "en": {
@@ -2052,6 +2480,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sensor signal loss"
+          }
+        }
+      }
+    },
+    "Subida": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rise"
           }
         }
       }
@@ -2206,6 +2644,16 @@
         }
       }
     },
+    "Tipo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type"
+          }
+        }
+      }
+    },
     "Todavía no hay historial": {
       "localizations": {
         "en": {
@@ -2222,6 +2670,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Segment"
+          }
+        }
+      }
+    },
+    "U": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "U"
           }
         }
       }
@@ -2306,6 +2764,16 @@
         }
       }
     },
+    "Vuelve al rango": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back in range"
+          }
+        }
+      }
+    },
     "Ya pasaron los 15 días. Reemplazalo y activalo con LibreLink.": {
       "localizations": {
         "en": {
@@ -2322,6 +2790,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "of the time with readings"
+          }
+        }
+      }
+    },
+    "g de carbohidratos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "g carbs"
           }
         }
       }
@@ -2387,6 +2865,16 @@
         }
       }
     },
+    "min": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "min"
+          }
+        }
+      }
+    },
     "más de %@": {
       "localizations": {
         "en": {
@@ -2397,12 +2885,52 @@
         }
       }
     },
+    "no salió": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "stayed in range"
+          }
+        }
+      }
+    },
+    "no volvió al rango en 5 h": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "not back in range within 5 h"
+          }
+        }
+      }
+    },
     "recién": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "just now"
+          }
+        }
+      }
+    },
+    "sin salir del rango": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "stayed in range"
+          }
+        }
+      }
+    },
+    "vuelve al rango en %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "back in range in %@"
           }
         }
       }

@@ -119,7 +119,17 @@ Desde el panel, **Abrir ventana** (mientras está abierta, LibreLibreLink aparec
 
 - **Hoy**: glucosa actual grande, tiempo en rango y promedio del día, días restantes del
   sensor, y **Gráfico diario** (6 h / 12 h / 24 h / por día, con el valor y la hora al pasar
-  el puntero).
+  el puntero). Las anotaciones del registro aparecen como íconos arriba del gráfico (los
+  pinchazos, en su valor).
+- **Registro** (7/14/30/90 días): **Anotar** comida (g de carbohidratos), insulina rápida o
+  lenta (U), ejercicio (min), glucómetro o una nota; tocar una anotación la edita y el menú
+  contextual la elimina. Con los datos del sensor muestra:
+  - **Después de comer**, por desayuno / almuerzo / merienda / cena: subida desde la glucosa
+    al comer, a los cuántos minutos llega el pico (en las 3 h siguientes) y cuánto tarda en
+    volver al rango (hasta 5 h).
+  - **Glucómetro vs sensor**: diferencia media (sensor − glucómetro), MARD y % dentro de
+    15/15 (±15 mg/dL debajo de 100, ±15 % arriba). Sirve para la verificación de la Fase 6.
+  Se guarda en la misma base SQLite (tabla `entries`; lógica en `LibreKit/Logbook.swift`).
 - **Informes** (7/14/30/90 días): glucosa promedio, A1c estimada (GMI), variabilidad (CV),
   uso del sensor, **Tiempo en rango** (por debajo / en rango / por encima, y episodios de
   baja < 70 durante ≥ 15 min) y **Patrones diarios** (mediana y percentiles 25–75 y 10–90;
@@ -145,7 +155,7 @@ Requiere macOS 15.
 
 ## Pendiente
 
-Libro de registro y notas (insulina, comidas), exportar CSV, persistir el estado de
+Anotar desde la barra de menú, registro en el PDF, exportar CSV, persistir el estado de
 los episodios de alarma entre reinicios.
 Las notificaciones usan nivel "time sensitive", pero sin firma de Apple Developer pueden
 quedar silenciadas por Concentración / No Molestar.
