@@ -539,6 +539,16 @@
         }
       }
     },
+    "Episodios de baja": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low episodes"
+          }
+        }
+      }
+    },
     "Episodios de baja: %lld": {
       "localizations": {
         "en": {
@@ -609,12 +619,42 @@
         }
       }
     },
+    "Estadísticas": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Statistics"
+          }
+        }
+      }
+    },
+    "Exportar PDF": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export PDF"
+          }
+        }
+      }
+    },
     "Faltan datos": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Not enough data"
+          }
+        }
+      }
+    },
+    "Generado el %@ con LibreLibreLink (datos de LibreLinkUp). No es un dispositivo médico; confirmá con el médico antes de cambiar el tratamiento. Rangos y metas: consenso internacional de tiempo en rango (2019).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Generated on %@ with LibreLibreLink (LibreLinkUp data). Not a medical device; check with your doctor before changing treatment. Ranges and goals: international consensus on time in range (2019)."
           }
         }
       }
@@ -765,6 +805,42 @@
           "stringUnit": {
             "state": "translated",
             "value": "Import LibreView history"
+          }
+        }
+      }
+    },
+    "Indicador de manejo de glucosa (GMI)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glucose management indicator (GMI)"
+          }
+        }
+      }
+    },
+    "Informe de glucosa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glucose report"
+          }
+        }
+      }
+    },
+    "Informe glucosa %@ a %@.pdf": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glucose report %@ to %@.pdf"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Informe glucosa %1$@ a %2$@.pdf"
           }
         }
       }
@@ -929,6 +1005,56 @@
         }
       }
     },
+    "Meta: < %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal: < %@"
+          }
+        }
+      }
+    },
+    "Meta: < %@ (con muy alto)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal: < %@ (incl. very high)"
+          }
+        }
+      }
+    },
+    "Meta: < %@ (con muy bajo)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal: < %@ (incl. very low)"
+          }
+        }
+      }
+    },
+    "Meta: > %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal: > %@"
+          }
+        }
+      }
+    },
+    "Meta: ≤ 36 %": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal: ≤ 36%"
+          }
+        }
+      }
+    },
     "Modo demo · datos inventados": {
       "localizations": {
         "en": {
@@ -939,12 +1065,32 @@
         }
       }
     },
+    "Muy alto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Very high"
+          }
+        }
+      }
+    },
     "Muy baja (≈ 48)": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Urgent low (≈ 48)"
+          }
+        }
+      }
+    },
+    "Muy bajo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Very low"
           }
         }
       }
@@ -1019,6 +1165,16 @@
         }
       }
     },
+    "No se pudo exportar el PDF": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't export the PDF"
+          }
+        }
+      }
+    },
     "Notificaciones de alarma": {
       "localizations": {
         "en": {
@@ -1049,6 +1205,16 @@
         }
       }
     },
+    "P5": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "P5"
+          }
+        }
+      }
+    },
     "P75": {
       "localizations": {
         "en": {
@@ -1065,6 +1231,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "P90"
+          }
+        }
+      }
+    },
+    "P95": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "P95"
           }
         }
       }
@@ -1105,6 +1281,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "25th–75th percentile"
+          }
+        }
+      }
+    },
+    "Percentil 5–95": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5th–95th percentile"
+          }
+        }
+      }
+    },
+    "Perfil ambulatorio de glucosa (AGP)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ambulatory glucose profile (AGP)"
+          }
+        }
+      }
+    },
+    "Perfiles diarios": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daily profiles"
           }
         }
       }
@@ -1205,6 +1411,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Today's average"
+          }
+        }
+      }
+    },
+    "Rango %@–%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Range %@–%@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Rango %1$@–%2$@"
           }
         }
       }
@@ -1551,12 +1773,32 @@
         }
       }
     },
+    "Tiempo con sensor activo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time CGM active"
+          }
+        }
+      }
+    },
     "Tiempo en rango": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Time in range"
+          }
+        }
+      }
+    },
+    "Tiempo en rangos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time in ranges"
           }
         }
       }

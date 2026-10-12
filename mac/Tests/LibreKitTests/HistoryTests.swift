@@ -66,7 +66,7 @@ private func series(_ values: [Double], every minutes: Double = 5, from start: D
     let readings = DemoServer.backfill(patientID: "demo-1", days: 7, now: t0)
     let pattern = DailyPattern.compute(readings)
     #expect(pattern.count == 49)
-    #expect(pattern.allSatisfy { $0.p10 <= $0.p25 && $0.p25 <= $0.p50 && $0.p50 <= $0.p75 && $0.p75 <= $0.p90 })
+    #expect(pattern.allSatisfy { $0.p5 <= $0.p10 && $0.p10 <= $0.p25 && $0.p25 <= $0.p50 && $0.p50 <= $0.p75 && $0.p75 <= $0.p90 && $0.p90 <= $0.p95 })
     let stats = GlucoseStatistics.compute(readings, period: DateInterval(start: t0.addingTimeInterval(-8 * 86_400), end: t0),
                                           display: DisplaySettings())
     #expect((stats?.daysWithData ?? 0) >= 7)
@@ -93,4 +93,17 @@ private func series(_ values: [Double], every minutes: Double = 5, from start: D
     try HistoryDatabase(url: url).insert(series([100, 110]), patientID: "p")
     let reopened = try HistoryDatabase(url: url)
     #expect(try reopened.readings(patientID: "p", in: DateInterval(start: t0, duration: 3600)).count == 2)
+}
+
+@Test func consensusBandsUseFixedLimits() throws {
+    // Una hora en cada valor; los límites del consenso no dependen del rango objetivo.
+    var display = DisplaySettings()
+    display.targetLow = 90
+    let values: [Double] = [50, 60, 180, 181, 300]
+    let readings = values.enumerated().flatMap { i, v in series(Array(repeating: v, count: 12), from: t0.addingTimeInterval(Double(i) * 3600)) }
+    let stats = try #require(GlucoseStatistics.compute(readings, period: DateInterval(start: t0, duration: 5 * 3600), display: display))
+    for band in GlucoseBand.allCases {
+        #expect(abs((stats.bandFractions[band] ?? 0) - 0.2) < 0.01)
+    }
+    #expect(GlucoseBand(53.9) == .veryLow && GlucoseBand(54) == .low && GlucoseBand(70) == .target && GlucoseBand(250) == .high)
 }

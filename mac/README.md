@@ -103,6 +103,9 @@ Desde el panel, **Abrir ventana** (mientras está abierta, LibreLibreLink aparec
   uso del sensor, **Tiempo en rango** (por debajo / en rango / por encima, y episodios de
   baja < 70 durante ≥ 15 min) y **Patrones diarios** (mediana y percentiles 25–75 y 10–90;
   hacen falta ≥ 5 días).
+- **Exportar PDF** (en Informes): informe AGP de una página para el médico, del período elegido:
+  estadísticas, tiempo en los 5 rangos del consenso internacional (< 54, 54–69, 70–180, 181–250,
+  > 250, con sus metas), perfil AGP (percentiles 5–95) y los últimos 14 días. Se abre al guardarlo.
 
 Los colores son los del panel: verde en rango, naranja por encima, rojo por debajo.
 En **Ajustes ▸ Visualización**: unidad (mg/dL o mmol/L) y rango objetivo (def. 70–180),
@@ -121,7 +124,7 @@ Requiere macOS 15.
 
 ## Pendiente
 
-Libro de registro y notas (insulina, comidas), exportar CSV/PDF, persistir el estado de
+Libro de registro y notas (insulina, comidas), exportar CSV, persistir el estado de
 los episodios de alarma entre reinicios.
 Las notificaciones usan nivel "time sensitive", pero sin firma de Apple Developer pueden
 quedar silenciadas por Concentración / No Molestar.

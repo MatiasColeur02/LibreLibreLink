@@ -335,8 +335,11 @@ private struct ReportsView: View {
     @State private var days = 14
     @State private var report: Report?
     @State private var showingImport = false
+    @State private var exportError: String?
 
     struct Report {
+        let period: DateInterval
+        let readings: [GlucoseMeasurement]
         let stats: GlucoseStatistics?
         let pattern: [DailyPatternPoint]
     }
@@ -370,8 +373,14 @@ private struct ReportsView: View {
                     .foregroundStyle(.secondary)
             }
             Button { showingImport = true } label: { Label("Importar", systemImage: "square.and.arrow.down") }
+            Button { exportPDF() } label: { Label("Exportar PDF", systemImage: "doc.richtext") }
+                .disabled(report?.stats == nil)
         }
         .sheet(isPresented: $showingImport) { ImportSheet(store: store) }
+        .alert("No se pudo exportar el PDF", isPresented: Binding(get: { exportError != nil }, set: { if !$0 { exportError = nil } })) {
+        } message: {
+            Text(verbatim: exportError ?? "")
+        }
 
         if let report {
             if let stats = report.stats {
@@ -409,6 +418,28 @@ private struct ReportsView: View {
         }
     }
 
+    /// Guarda el informe AGP del período elegido y lo abre.
+    private func exportPDF() {
+        guard let report, let stats = report.stats else { return }
+        let agp = AGPReport(
+            patient: store.patients.first { $0.id == store.selectedPatientID }?.displayName,
+            period: report.period,
+            readings: report.readings,
+            stats: stats,
+            display: store.display
+        )
+        let panel = NSSavePanel()
+        panel.allowedContentTypes = [.pdf]
+        panel.nameFieldStringValue = agp.fileName
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        do {
+            try agp.pdf().write(to: url)
+            NSWorkspace.shared.open(url)
+        } catch {
+            exportError = error.localizedDescription
+        }
+    }
+
     private var key: Key {
         Key(days: days, patient: store.selectedPatientID, revision: store.historyRevision, display: store.display)
     }
@@ -418,6 +449,8 @@ private struct ReportsView: View {
         let period = DateInterval(start: end.addingTimeInterval(-Double(days) * 86_400), end: end)
         let readings = store.storedReadings(in: period)
         return Report(
+            period: period,
+            readings: readings,
             stats: GlucoseStatistics.compute(readings, period: period, display: store.display),
             pattern: DailyPattern.compute(readings)
         )
