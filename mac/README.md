@@ -22,7 +22,7 @@ típico + el escenario elegido). Entrar al demo:
 
 Arriba del panel aparece **Modo demo** con un selector de escenario: día normal, alta,
 baja, muy baja, LO/HI, lectura vieja, sin señal, sin conexión, aceptar términos, sin
-pacientes, sensor por terminar, y **Recorrido automático** (cambia de situación cada
+pacientes, sensor por terminar, sensor nuevo (calentando), y **Recorrido automático** (cambia de situación cada
 60 s; consulta cada 15 s). Hay dos pacientes para ver el selector. El demo no toca el
 llavero ni el paciente/región guardados; los **Ajustes** (umbrales, notificaciones) sí son
 los mismos. Las notificaciones del demo dicen "Demo ·". No se recuerda al reiniciar.
@@ -60,6 +60,12 @@ elegí "Permitir siempre".
 restantes del sensor y tiene **Ajustes**: notificaciones (apagadas por defecto), umbrales
 de baja (60–100) y alta (120–400), sin señal, abrir al iniciar sesión. Una notificación
 por episodio, repetida cada 5 min mientras dure.
+
+**Avisos del sensor** (Ajustes ▸ Avisos del sensor, activado si las notificaciones lo están): sensor
+nuevo (cambia el número de serie), listo tras los 60 min de calentamiento, termina en 3 días /
+1 día / 1 hora y terminado. Cada uno sale una sola vez por sensor (se recuerda al reiniciar; si
+pasaron varios con la app cerrada, solo el más reciente). Durante el calentamiento la barra y el
+panel muestran "Sensor calentando" en lugar de "Sin señal".
 
 La primera vez, LibreLibreLink pide email y contraseña de LibreLinkUp y los guarda en el
 **llavero** de macOS. La región (Argentina → `LA`) se detecta sola por redirección.

@@ -188,6 +188,9 @@ struct ReadingView: View {
     }
 
     private func sensorText(_ sensor: SensorInfo) -> String {
+        if sensor.isWarmingUp(at: store.now) {
+            return String(localized: "Sensor: calentando, listo a las \(sensor.readyAt.formatted(date: .omitted, time: .shortened))")
+        }
         let end = sensor.expectedEnd
         if end <= store.now { return String(localized: "Sensor terminado") }
         let remaining = end.timeIntervalSince(store.now)
@@ -225,6 +228,7 @@ struct SettingsView: View {
                 }
             }
             Toggle("Sin señal (20 min sin lecturas)", isOn: $store.settings.signalLossEnabled)
+            Toggle("Avisos del sensor (nuevo, listo y fin)", isOn: $store.settings.sensorNoticesEnabled)
             Text("La baja grave (< \(unit.withSymbol(AlarmSettings.urgentLowThreshold))) siempre se muestra y avisa. Las alarmas se repiten cada 5 min mientras dura el problema.")
                 .font(.caption)
                 .foregroundStyle(.secondary)

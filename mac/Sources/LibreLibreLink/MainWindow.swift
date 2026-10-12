@@ -203,7 +203,13 @@ private struct SensorTile: View {
         Card {
             VStack(alignment: .leading, spacing: 6) {
                 Label("Sensor", systemImage: "sensor").font(.caption).foregroundStyle(.secondary)
-                if let sensor {
+                if let sensor, sensor.isWarmingUp(at: now) {
+                    Text("Calentando").font(.title3.weight(.semibold))
+                    ProgressView(value: now.timeIntervalSince(sensor.activation), total: GlucoseStatus.sensorWarmup)
+                    Text("Listo a las \(sensor.readyAt.formatted(date: .omitted, time: .shortened)) · \(sensor.serial)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } else if let sensor {
                     let total = GlucoseStatus.sensorLifetime
                     let remaining = max(0, sensor.expectedEnd.timeIntervalSince(now))
                     Text(remaining > 0 ? String(localized: "Termina en \(Self.duration(remaining))") : String(localized: "Sensor terminado"))

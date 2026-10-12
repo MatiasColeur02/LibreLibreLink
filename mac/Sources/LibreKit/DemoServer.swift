@@ -16,6 +16,7 @@ public enum DemoScenario: String, CaseIterable, Sendable, Identifiable {
     case mustAcceptTerms
     case noPatients
     case sensorEnding
+    case newSensor
 
     public var id: String { rawValue }
 
@@ -34,11 +35,12 @@ public enum DemoScenario: String, CaseIterable, Sendable, Identifiable {
         case .mustAcceptTerms: String(localized: "Hay que aceptar términos")
         case .noPatients: String(localized: "Sin pacientes que seguir")
         case .sensorEnding: String(localized: "Sensor por terminar")
+        case .newSensor: String(localized: "Sensor nuevo (calentando)")
         }
     }
 
     static let tourSteps: [DemoScenario] = [
-        .normal, .high, .normal, .low, .urgentLow, .normal, .stale, .signalLoss, .connectionError, .sensorEnding,
+        .normal, .high, .normal, .low, .urgentLow, .normal, .stale, .signalLoss, .connectionError, .sensorEnding, .newSensor,
     ]
     /// Duración de cada paso del recorrido.
     public static let tourStep: TimeInterval = 60
@@ -170,14 +172,18 @@ public enum DemoServer {
             t -= step
         }
 
-        let activationAgo: TimeInterval = scenario == .sensorEnding
-            ? GlucoseStatus.sensorLifetime - 9 * 3600
-            : 6 * 86_400 + 7 * 3600
+        let activationAgo: TimeInterval = switch scenario {
+        case .sensorEnding: GlucoseStatus.sensorLifetime - 9 * 3600
+        case .newSensor: 20 * 60
+        default: 6 * 86_400 + 7 * 3600
+        }
+        // Un sensor nuevo tiene otro número de serie (así la app lo detecta como cambio).
+        let serial = scenario == .newSensor ? "3MH0NEW\(patient.id.suffix(1))" : "3MH0DEMO\(patient.id.suffix(1))"
         return ["status": 0, "data": [
             "connection": [
                 "patientId": patient.id,
                 "glucoseMeasurement": measurement(curve.value(at: last), at: last, trend: curve.trend),
-                "sensor": ["sn": "3MH0DEMO\(patient.id.suffix(1))", "a": (now.timeIntervalSince1970 - activationAgo).rounded(), "pt": 4],
+                "sensor": ["sn": serial, "a": (now.timeIntervalSince1970 - activationAgo).rounded(), "pt": 4],
             ],
             "graphData": Array(history.reversed()),
         ]]
@@ -209,6 +215,8 @@ struct Curve {
         let delay: TimeInterval = switch scenario {
         case .stale: 13 * 60
         case .signalLoss: 28 * 60
+        // Última lectura del sensor anterior, antes de activar el nuevo.
+        case .newSensor: 25 * 60
         default: 0
         }
         return Date(timeIntervalSince1970: minute - delay)

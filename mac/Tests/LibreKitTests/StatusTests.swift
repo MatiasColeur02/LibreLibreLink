@@ -94,3 +94,46 @@ private func conditions(
     #expect(graph.sensor?.activation == now)
     #expect(graph.current == nil)
 }
+
+// MARK: - Sensor
+
+@Test func warmingUpReplacesSignalLoss() {
+    let sensor = SensorInfo(serial: "NEW", activation: now.addingTimeInterval(-20 * 60))
+    // Última lectura del sensor anterior, de antes de activar el nuevo.
+    #expect(conditions(reading(120, minutesAgo: 25), sensor: sensor) == [.sensorWarmingUp(sensor.readyAt)])
+    #expect(conditions(nil, sensor: sensor) == [.sensorWarmingUp(sensor.readyAt)])
+    // Si ya llegan lecturas del sensor nuevo, se juzgan normalmente.
+    #expect(conditions(reading(50, minutesAgo: 1), sensor: sensor) == [.urgentLow])
+    let ready = SensorInfo(serial: "NEW", activation: now.addingTimeInterval(-61 * 60))
+    #expect(conditions(reading(120, minutesAgo: 26), sensor: ready) == [.signalLoss])
+}
+
+@Test func sensorNoticesOncePerSensor() {
+    let day: TimeInterval = 86_400
+    let sensor = SensorInfo(serial: "A", activation: now.addingTimeInterval(-10 * day))
+    var engine = SensorNoticeEngine()
+    // El primer sensor se adopta en silencio, sin repetir lo que ya pasó.
+    #expect(engine.update(sensor: sensor, now: now) == nil)
+    #expect(engine.update(sensor: sensor, now: now.addingTimeInterval(2.5 * day)) == .endsIn3Days)
+    #expect(engine.update(sensor: sensor, now: now.addingTimeInterval(2.6 * day)) == nil)
+    // Si la app estuvo cerrada y pasaron dos avisos, solo el más reciente.
+    #expect(engine.update(sensor: sensor, now: now.addingTimeInterval(5 * day - 1800)) == .endsIn1Hour)
+    #expect(engine.update(sensor: sensor, now: now.addingTimeInterval(5 * day)) == .ended)
+
+    let next = SensorInfo(serial: "B", activation: now.addingTimeInterval(5 * day + 600))
+    #expect(engine.update(sensor: next, now: next.activation.addingTimeInterval(60)) == .newSensor)
+    #expect(engine.update(sensor: next, now: next.readyAt.addingTimeInterval(60)) == .ready)
+}
+
+@Test func lateReadyNoticeIsSkipped() {
+    let sensor = SensorInfo(serial: "B", activation: now)
+    var engine = SensorNoticeEngine()
+    _ = engine.update(sensor: SensorInfo(serial: "A", activation: now.addingTimeInterval(-15 * 86_400)), now: now)
+    #expect(engine.update(sensor: sensor, now: now.addingTimeInterval(60)) == .newSensor)
+    #expect(engine.update(sensor: sensor, now: now.addingTimeInterval(5 * 3600)) == nil)
+}
+
+@Test func alarmSettingsDecodeMissingKeys() throws {
+    let decoded = try JSONDecoder().decode(AlarmSettings.self, from: Data(#"{"notificationsEnabled":true,"lowThreshold":80}"#.utf8))
+    #expect(decoded.notificationsEnabled && decoded.lowThreshold == 80 && decoded.sensorNoticesEnabled)
+}

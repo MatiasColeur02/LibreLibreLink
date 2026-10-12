@@ -79,6 +79,8 @@ final class GlucoseStore {
     @ObservationIgnored private var pollTask: Task<Void, Never>?
     @ObservationIgnored private var clockTask: Task<Void, Never>?
     @ObservationIgnored private var alarmEngine = AlarmEngine()
+    /// Avisos del sensor ya mostrados, por paciente. Se guardan (salvo en demo) para no repetirlos al reiniciar.
+    @ObservationIgnored private var sensorNotices: [String: SensorNoticeEngine] = [:]
     @ObservationIgnored private var suppressRefresh = false
     @ObservationIgnored private var database: HistoryDatabase?
 
@@ -87,6 +89,7 @@ final class GlucoseStore {
         static let region = "region"
         static let settings = "alarmSettings"
         static let display = "displaySettings"
+        static let sensorNotices = "sensorNotices"
     }
 
     init() {
@@ -95,6 +98,7 @@ final class GlucoseStore {
         display = UserDefaults.standard.data(forKey: Keys.display)
             .flatMap { try? JSONDecoder().decode(DisplaySettings.self, from: $0) } ?? DisplaySettings()
         selectedPatientID = UserDefaults.standard.string(forKey: Keys.patient)
+        sensorNotices = Self.savedSensorNotices()
         let arguments = ProcessInfo.processInfo.arguments
         if arguments.contains("--demo") || ProcessInfo.processInfo.environment["LIBREBAR_DEMO"] != nil {
             startDemo()
@@ -245,6 +249,7 @@ final class GlucoseStore {
         resetSession()
         isDemo = true
         notifier.isDemo = true
+        sensorNotices = [:]
         openHistory(demo: true)
         withoutRefresh { selectedPatientID = nil }
         start(with: DemoServer.makeClient())
@@ -254,6 +259,7 @@ final class GlucoseStore {
         resetSession()
         isDemo = false
         notifier.isDemo = false
+        sensorNotices = Self.savedSensorNotices()
         openHistory(demo: false)
         withoutRefresh { selectedPatientID = UserDefaults.standard.string(forKey: Keys.patient) }
         if let credentials = Keychain.load() {
@@ -373,6 +379,7 @@ final class GlucoseStore {
     // MARK: Alarmas
 
     private func evaluateAlarms() {
+        evaluateSensorNotices()
         guard settings.notificationsEnabled, phase != .needsLogin else {
             alarmEngine = AlarmEngine()
             return
@@ -383,6 +390,26 @@ final class GlucoseStore {
         for kind in alarmEngine.update(active: active, now: now) {
             notifier.post(kind, reading: freshReading, unit: display.unit)
         }
+    }
+
+    /// Corre siempre (para seguir el sensor), pero solo notifica si los avisos están activados.
+    private func evaluateSensorNotices() {
+        guard let patient = selectedPatientID, let sensor else { return }
+        var engine = sensorNotices[patient] ?? SensorNoticeEngine()
+        let notice = engine.update(sensor: sensor, now: now)
+        guard engine != sensorNotices[patient] else { return }
+        sensorNotices[patient] = engine
+        if !isDemo, let data = try? JSONEncoder().encode(sensorNotices) {
+            UserDefaults.standard.set(data, forKey: Keys.sensorNotices)
+        }
+        if let notice, settings.notificationsEnabled, settings.sensorNoticesEnabled {
+            notifier.post(notice, sensor: sensor)
+        }
+    }
+
+    private static func savedSensorNotices() -> [String: SensorNoticeEngine] {
+        UserDefaults.standard.data(forKey: Keys.sensorNotices)
+            .flatMap { try? JSONDecoder().decode([String: SensorNoticeEngine].self, from: $0) } ?? [:]
     }
 
     private func withoutRefresh(_ body: () -> Void) {

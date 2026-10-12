@@ -71,6 +71,11 @@ public struct SensorInfo: Sendable, Hashable, Codable {
 
     /// Fin esperado asumiendo vida de Libre 2 Plus (15 días).
     public var expectedEnd: Date { activation.addingTimeInterval(GlucoseStatus.sensorLifetime) }
+
+    /// Fin del calentamiento: las lecturas empiezan 60 min después de activarlo.
+    public var readyAt: Date { activation.addingTimeInterval(GlucoseStatus.sensorWarmup) }
+
+    public func isWarmingUp(at now: Date) -> Bool { now >= activation && now < readyAt }
 }
 
 public struct GraphResult: Sendable {

@@ -58,6 +58,16 @@ final class AlarmNotifier {
         UNUserNotificationCenter.current().add(request)
     }
 
+    func post(_ notice: SensorNotice, sensor: SensorInfo) {
+        guard Self.isBundled else { return }
+        let content = UNMutableNotificationContent()
+        content.title = isDemo ? String(localized: "Demo · \(notice.title)") : notice.title
+        content.body = notice.body(sensor)
+        content.sound = .default
+        let request = UNNotificationRequest(identifier: "sensor.\(notice.rawValue)", content: content, trigger: nil)
+        UNUserNotificationCenter.current().add(request)
+    }
+
     func postTest() {
         guard Self.isBundled else { return }
         let content = UNMutableNotificationContent()
@@ -92,6 +102,34 @@ private extension AlarmKind {
         switch self {
         case .urgentLow, .low, .high: String(localized: "Comprobá con glucómetro.")
         case .signalLoss: String(localized: "No llegan lecturas hace más de 20 min.")
+        }
+    }
+}
+
+private extension SensorNotice {
+    var title: String {
+        switch self {
+        case .newSensor: String(localized: "Sensor nuevo")
+        case .ready: String(localized: "Sensor listo")
+        case .endsIn3Days: String(localized: "El sensor termina en 3 días")
+        case .endsIn1Day: String(localized: "El sensor termina en 1 día")
+        case .endsIn1Hour: String(localized: "El sensor termina en 1 hora")
+        case .ended: String(localized: "Sensor terminado")
+        }
+    }
+
+    func body(_ sensor: SensorInfo) -> String {
+        let end = sensor.expectedEnd.formatted(date: .abbreviated, time: .shortened)
+        switch self {
+        case .newSensor:
+            let ready = sensor.readyAt.formatted(date: .omitted, time: .shortened)
+            return sensor.readyAt > Date()
+                ? String(localized: "Calentando: las lecturas empiezan a las \(ready). Termina el \(end).")
+                : String(localized: "Termina el \(end).")
+        case .ready: return String(localized: "Terminó el calentamiento; ya deberían llegar lecturas.")
+        case .endsIn3Days, .endsIn1Day: return String(localized: "Termina el \(end). Tené uno de repuesto.")
+        case .endsIn1Hour: return String(localized: "Termina a las \(sensor.expectedEnd.formatted(date: .omitted, time: .shortened)).")
+        case .ended: return String(localized: "Ya pasaron los 15 días. Reemplazalo y activalo con LibreLink.")
         }
     }
 }

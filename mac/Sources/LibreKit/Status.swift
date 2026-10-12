@@ -9,6 +9,8 @@ public struct AlarmSettings: Codable, Sendable, Equatable {
     public var highEnabled = true
     public var highThreshold = 240.0
     public var signalLossEnabled = true
+    /// Avisos del sensor: nuevo, listo, termina en 3 días / 1 día / 1 hora, terminado.
+    public var sensorNoticesEnabled = true
 
     public static let lowRange = 60.0...100.0
     public static let highRange = 120.0...400.0
@@ -16,6 +18,19 @@ public struct AlarmSettings: Codable, Sendable, Equatable {
     public static let urgentLowThreshold = 55.0
 
     public init() {}
+
+    // Tolera claves faltantes para poder agregar ajustes sin perder los guardados.
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        let defaults = AlarmSettings()
+        notificationsEnabled = try c.decodeIfPresent(Bool.self, forKey: .notificationsEnabled) ?? defaults.notificationsEnabled
+        lowEnabled = try c.decodeIfPresent(Bool.self, forKey: .lowEnabled) ?? defaults.lowEnabled
+        lowThreshold = try c.decodeIfPresent(Double.self, forKey: .lowThreshold) ?? defaults.lowThreshold
+        highEnabled = try c.decodeIfPresent(Bool.self, forKey: .highEnabled) ?? defaults.highEnabled
+        highThreshold = try c.decodeIfPresent(Double.self, forKey: .highThreshold) ?? defaults.highThreshold
+        signalLossEnabled = try c.decodeIfPresent(Bool.self, forKey: .signalLossEnabled) ?? defaults.signalLossEnabled
+        sensorNoticesEnabled = try c.decodeIfPresent(Bool.self, forKey: .sensorNoticesEnabled) ?? defaults.sensorNoticesEnabled
+    }
 }
 
 /// Problema visible en la barra de menú y en el panel.
@@ -31,6 +46,8 @@ public enum GlucoseCondition: Hashable, Sendable {
     case connectionError(String)
     /// Hace falta iniciar sesión o aceptar algo en LibreLinkUp.
     case needsAttention(String)
+    /// Sensor nuevo en sus primeros 60 min: todavía no hay lecturas (listo a esa hora).
+    case sensorWarmingUp(Date)
     case sensorExpiringSoon(Date)
     case sensorExpired
 
@@ -43,7 +60,7 @@ public enum GlucoseCondition: Hashable, Sendable {
         switch self {
         case .urgentLow: .critical
         case .low, .high, .signalLoss, .connectionError, .needsAttention, .sensorExpired: .warning
-        case .stale, .sensorExpiringSoon: .info
+        case .stale, .sensorWarmingUp, .sensorExpiringSoon: .info
         }
     }
 
@@ -56,6 +73,7 @@ public enum GlucoseCondition: Hashable, Sendable {
         case .stale: String(localized: "Lectura desactualizada")
         case .connectionError: String(localized: "Sin conexión con LibreLinkUp")
         case .needsAttention: String(localized: "Revisar la cuenta")
+        case .sensorWarmingUp: String(localized: "Sensor calentando")
         case .sensorExpiringSoon: String(localized: "El sensor termina pronto")
         case .sensorExpired: String(localized: "Sensor terminado")
         }
@@ -70,6 +88,8 @@ public enum GlucoseCondition: Hashable, Sendable {
         case .stale: String(localized: "La última lectura tiene más de 10 min.")
         case .connectionError(let message): message
         case .needsAttention(let message): message
+        case .sensorWarmingUp(let ready):
+            String(localized: "Las lecturas empiezan a las \(ready.formatted(date: .omitted, time: .shortened)).")
         case .sensorExpiringSoon(let end):
             String(localized: "Termina \(end.formatted(.relative(presentation: .named))). Tené uno de repuesto.")
         case .sensorExpired: String(localized: "Ya pasaron los 15 días. Reemplazalo y activalo con LibreLink.")
@@ -86,6 +106,7 @@ public enum GlucoseCondition: Hashable, Sendable {
         case .stale: "clock"
         case .connectionError: "wifi.slash"
         case .needsAttention: "person.crop.circle.badge.exclamationmark"
+        case .sensorWarmingUp: "timer"
         case .sensorExpiringSoon: "hourglass"
         case .sensorExpired: "sensor.fill"
         }
@@ -108,6 +129,8 @@ public enum GlucoseStatus {
     public static let signalLossAfter: TimeInterval = 20 * 60
     /// Libre 2 Plus: 15 días (I: no se lee de la API).
     public static let sensorLifetime: TimeInterval = 15 * 24 * 3600
+    /// Calentamiento tras activar el sensor (guía p. 28).
+    public static let sensorWarmup: TimeInterval = 60 * 60
 
     /// Problemas activos, del más grave al más leve.
     /// - Parameters:
@@ -126,7 +149,10 @@ public enum GlucoseStatus {
         if let needsAttention { result.append(.needsAttention(needsAttention)) }
         if let connectionError { result.append(.connectionError(connectionError)) }
 
-        if let current {
+        // Durante el calentamiento no hay lecturas del sensor nuevo: no es "sin señal".
+        if let sensor, sensor.isWarmingUp(at: now), current.map({ $0.date < sensor.activation }) ?? true {
+            result.append(.sensorWarmingUp(sensor.readyAt))
+        } else if let current {
             let age = now.timeIntervalSince(current.date)
             if age >= signalLossAfter {
                 result.append(.signalLoss)

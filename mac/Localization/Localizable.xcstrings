@@ -253,6 +253,16 @@
         }
       }
     },
+    "Avisos del sensor (nuevo, listo y fin)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sensor notices (new, ready and end)"
+          }
+        }
+      }
+    },
     "Baja (≈ 64)": {
       "localizations": {
         "en": {
@@ -309,6 +319,32 @@
           "stringUnit": {
             "state": "translated",
             "value": "Band"
+          }
+        }
+      }
+    },
+    "Calentando": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warming up"
+          }
+        }
+      }
+    },
+    "Calentando: las lecturas empiezan a las %@. Termina el %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warming up: readings start at %@. Ends %@."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Calentando: las lecturas empiezan a las %1$@. Termina el %2$@."
           }
         }
       }
@@ -475,6 +511,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "The target range colors the graphs and time in range; it does not change the alarms."
+          }
+        }
+      }
+    },
+    "El sensor termina en 1 día": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sensor ends in 1 day"
+          }
+        }
+      }
+    },
+    "El sensor termina en 1 hora": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sensor ends in 1 hour"
+          }
+        }
+      }
+    },
+    "El sensor termina en 3 días": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sensor ends in 3 days"
           }
         }
       }
@@ -925,6 +991,16 @@
         }
       }
     },
+    "Las lecturas empiezan a las %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Readings start at %@."
+          }
+        }
+      }
+    },
     "Las notificaciones y el inicio automático requieren abrir LibreLibreLink.app (scripts/make-app.sh), no `swift run`.": {
       "localizations": {
         "en": {
@@ -991,6 +1067,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Done"
+          }
+        }
+      }
+    },
+    "Listo a las %@ · %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ready at %@ · %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Listo a las %1$@ · %2$@"
           }
         }
       }
@@ -1557,6 +1649,46 @@
         }
       }
     },
+    "Sensor calentando": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sensor warming up"
+          }
+        }
+      }
+    },
+    "Sensor listo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sensor ready"
+          }
+        }
+      }
+    },
+    "Sensor nuevo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New sensor"
+          }
+        }
+      }
+    },
+    "Sensor nuevo (calentando)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New sensor (warming up)"
+          }
+        }
+      }
+    },
     "Sensor por terminar": {
       "localizations": {
         "en": {
@@ -1573,6 +1705,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sensor ended"
+          }
+        }
+      }
+    },
+    "Sensor: calentando, listo a las %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sensor: warming up, ready at %@"
           }
         }
       }
@@ -1763,12 +1905,52 @@
         }
       }
     },
+    "Termina a las %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ends at %@."
+          }
+        }
+      }
+    },
+    "Termina el %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ends %@."
+          }
+        }
+      }
+    },
+    "Termina el %@. Tené uno de repuesto.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ends %@. Keep a spare one handy."
+          }
+        }
+      }
+    },
     "Termina en %@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Ends in %@"
+          }
+        }
+      }
+    },
+    "Terminó el calentamiento; ya deberían llegar lecturas.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warm-up is over; readings should start arriving."
           }
         }
       }
