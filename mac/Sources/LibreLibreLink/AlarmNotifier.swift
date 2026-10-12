@@ -3,7 +3,7 @@ import LibreKit
 import ServiceManagement
 import UserNotifications
 
-/// Notificaciones de macOS para las alarmas. Requieren correr como `LibreBar.app`
+/// Notificaciones de macOS para las alarmas. Requieren correr como `LibreLibreLink.app`
 /// (con `swift run` no hay bundle y `UNUserNotificationCenter` no está disponible).
 @MainActor
 @Observable
@@ -61,14 +61,14 @@ final class AlarmNotifier {
     func postTest() {
         guard Self.isBundled else { return }
         let content = UNMutableNotificationContent()
-        content.title = "LibreBar"
+        content.title = "LibreLibreLink"
         content.body = "Así se ven las alarmas."
         content.sound = .default
         UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: "test", content: content, trigger: nil))
     }
 }
 
-/// Muestra el banner aunque el panel de LibreBar esté abierto (app activa).
+/// Muestra el banner aunque el panel de LibreLibreLink esté abierto (app activa).
 private final class ForegroundPresenter: NSObject, UNUserNotificationCenterDelegate {
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
@@ -96,7 +96,7 @@ private extension AlarmKind {
     }
 }
 
-/// Abrir al iniciar sesión (R16). Solo funciona como `LibreBar.app`.
+/// Abrir al iniciar sesión (R16). Solo funciona como `LibreLibreLink.app`.
 enum LaunchAtLogin {
     static var isEnabled: Bool {
         AlarmNotifier.isBundled && SMAppService.mainApp.status == .enabled

@@ -81,7 +81,7 @@ struct MainWindow: View {
                 Button { store.refreshNow() } label: { Label("Actualizar", systemImage: "arrow.clockwise") }
             }
         }
-        .navigationTitle("LibreBar")
+        .navigationTitle("LibreLibreLink")
         .onAppear {
             NSApp.setActivationPolicy(.regular)
             NSApp.activate()
@@ -387,7 +387,7 @@ private struct ReportsView: View {
                     ContentUnavailableView(
                         "Todavía no hay historial",
                         systemImage: "clock.arrow.circlepath",
-                        description: Text("LibreBar guarda las lecturas mientras está abierta. Los informes se llenan con los días.")
+                        description: Text("LibreLibreLink guarda las lecturas mientras está abierta. Los informes se llenan con los días.")
                     )
                 }
             }

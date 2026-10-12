@@ -43,9 +43,9 @@ public final class HistoryDatabase {
 
     deinit { sqlite3_close(db) }
 
-    /// Archivo por defecto: ~/Library/Application Support/LibreBar/history.sqlite
+    /// Archivo por defecto: ~/Library/Application Support/LibreLibreLink/history.sqlite
     public static var defaultURL: URL {
-        URL.applicationSupportDirectory.appending(path: "LibreBar/history.sqlite")
+        URL.applicationSupportDirectory.appending(path: "LibreLibreLink/history.sqlite")
     }
 
     public func insert(_ readings: [GlucoseMeasurement], patientID: String) throws {

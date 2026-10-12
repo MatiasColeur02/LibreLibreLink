@@ -2,7 +2,7 @@ import AppKit
 import SwiftUI
 
 @main
-struct LibreBarApp: App {
+struct LibreLibreLinkApp: App {
     @State private var store = GlucoseStore()
 
     init() {
@@ -18,7 +18,7 @@ struct LibreBarApp: App {
         }
         .menuBarExtraStyle(.window)
 
-        Window("LibreBar", id: MainWindow.id) {
+        Window("LibreLibreLink", id: MainWindow.id) {
             MainWindow(store: store)
         }
         .defaultSize(width: 980, height: 760)

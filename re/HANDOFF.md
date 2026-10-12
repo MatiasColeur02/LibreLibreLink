@@ -39,17 +39,17 @@ barra de menú con valor + flecha, gráfico/historial y alarmas. El usuario tien
 ## 2c. Decisión (2026-10-12): camino A — nube LibreLinkUp
 
 El usuario eligió la nube. Prototipo (Fase 3) en `mac/` (Swift package: `LibreKit`,
-`LibreBar` MenuBarExtra, CLI `llu`); ver `mac/README.md`. 7 tests de decodificación
+`LibreLibreLink` MenuBarExtra, CLI `llu`); ver `mac/README.md`. 7 tests de decodificación
 pasan; **falta probar contra la cuenta real** (`swift run llu`). La RE de BLE/NFC
 queda archivada (sirve solo si algún día aparece un sensor gen1).
 Fase 4 (barra de menú con estado + alarmas) implementada: lógica en
 `LibreKit/Status.swift` (17 tests), app empaquetada con `mac/scripts/make-app.sh`.
 Modo demo (sin cuenta): `LibreKit/DemoServer.swift` (URLProtocol que imita la API, con
-escenarios), `LibreBar --demo` o botón en el login; `llu --demo <escenario>`.
+escenarios), `LibreLibreLink --demo` o botón en el login; `llu --demo <escenario>`.
 Fase 5 hecha: ventana Hoy/Informes, historial SQLite (`LibreKit/HistoryDatabase.swift`),
 estadísticas (`Statistics.swift`), unidades/rango objetivo (`Display.swift`). 32 tests.
 Paleta real de LibreLink extraída del APK (verde #8FCB3A, etc.) pero el usuario eligió
-mantener los colores propios de LibreBar.
+mantener los colores propios de LibreLibreLink.
 
 ## 3. Lo que FALTA para decidir (histórico; ya decidido arriba)
 

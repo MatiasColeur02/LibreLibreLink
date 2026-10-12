@@ -1,25 +1,25 @@
 #!/bin/bash
-# Compila LibreBar en release y arma dist/LibreBar.app (firma ad-hoc).
+# Compila LibreLibreLink en release y arma dist/LibreLibreLink.app (firma ad-hoc).
 # Uso: scripts/make-app.sh [--install]   (--install la copia a ~/Applications)
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-swift build -c release --product LibreBar
-BIN="$(swift build -c release --show-bin-path)/LibreBar"
+swift build -c release --product LibreLibreLink
+BIN="$(swift build -c release --show-bin-path)/LibreLibreLink"
 
-APP=dist/LibreBar.app
+APP=dist/LibreLibreLink.app
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS"
-cp "$BIN" "$APP/Contents/MacOS/LibreBar"
+cp "$BIN" "$APP/Contents/MacOS/LibreLibreLink"
 
 cat > "$APP/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CFBundleIdentifier</key><string>local.librelibrelink.LibreBar</string>
-    <key>CFBundleName</key><string>LibreBar</string>
-    <key>CFBundleExecutable</key><string>LibreBar</string>
+    <key>CFBundleIdentifier</key><string>local.librelibrelink.LibreLibreLink</string>
+    <key>CFBundleName</key><string>LibreLibreLink</string>
+    <key>CFBundleExecutable</key><string>LibreLibreLink</string>
     <key>CFBundlePackageType</key><string>APPL</string>
     <key>CFBundleShortVersionString</key><string>0.3</string>
     <key>CFBundleVersion</key><string>3</string>
@@ -35,7 +35,7 @@ echo "Listo: $APP"
 
 if [[ "${1:-}" == "--install" ]]; then
     mkdir -p ~/Applications
-    rm -rf ~/Applications/LibreBar.app
+    rm -rf ~/Applications/LibreLibreLink.app
     cp -R "$APP" ~/Applications/
-    echo "Instalada en ~/Applications/LibreBar.app"
+    echo "Instalada en ~/Applications/LibreLibreLink.app"
 fi

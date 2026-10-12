@@ -34,7 +34,7 @@ separa **observado / inferido / desconocido** y cita Evidence IDs.
    **Punto de decisión:** según la generación del sensor, seguir / cambiar alcance / nube.
    **Decisión (2026-10-12):** serial `3MH0M1…` (Argentina) → gen2 inferido → **camino A:
    nube LibreLinkUp**. La RE de NFC/BLE queda archivada (`re/`).
-3. **Prototipo (nube)** ✅ — `mac/`: `LibreKit` (cliente LibreLinkUp) + `LibreBar`
+3. **Prototipo (nube)** ✅ — `mac/`: `LibreKit` (cliente LibreLinkUp) + `LibreLibreLink`
    (MenuBarExtra) + CLI `llu`. Pendiente: probar con la cuenta real.
 4. **Barra de menú con estado y alarmas** ✅ (código; falta probar con datos reales) — el ícono de arriba a la derecha muestra
    la medición actual y, si hay un problema, lo señala sin abrir nada:
@@ -51,13 +51,13 @@ separa **observado / inferido / desconocido** y cita Evidence IDs.
      se repite cada 5 min mientras persiste; señal perdida a los 20 min.
    - Ajustes en el panel: umbrales (baja 60–100 paso 5, alta 120–400 paso 10),
      activar alarmas, abrir al iniciar sesión.
-   - Empaquetado como `LibreBar.app` (`mac/scripts/make-app.sh`): sin ícono en el
+   - Empaquetado como `LibreLibreLink.app` (`mac/scripts/make-app.sh`): sin ícono en el
      Dock, necesario para notificaciones y arranque automático (R16).
    - Lógica de estado y de episodios en `LibreKit` con tests.
 5. **App completa** ✅ (código; probado con el modo demo) — ventana "Hoy" + "Informes":
    historial persistente (SQLite en lugar de SwiftData: más simple y testeable),
    tiempo en rango, promedio, GMI, CV, uso del sensor, episodios de baja, patrones
-   diarios (R24), mmol/L (R20), rango objetivo (R21). Colores: los del panel de LibreBar.
+   diarios (R24), mmol/L (R20), rango objetivo (R21). Colores: los del panel de LibreLibreLink.
    Modo demo (`--demo`) con escenarios para probar sin cuenta.
 6. **Verificación** — tests + días de comparación con LibreLink. Lo no verificado
    queda marcado como pendiente.

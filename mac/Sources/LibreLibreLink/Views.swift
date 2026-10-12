@@ -33,6 +33,8 @@ struct ContentView: View {
                 if store.phase == .ready, !showingSettings {
                     Button("Actualizar") { store.refreshNow() }
                     Button("Abrir ventana") {
+                        // Esconder el panel de la barra (es la ventana activa al tocar el botón).
+                        NSApp.keyWindow?.close()
                         openWindow(id: MainWindow.id)
                         NSApp.activate()
                     }
@@ -271,9 +273,9 @@ struct SettingsView: View {
     @ViewBuilder private var notificationStatus: some View {
         switch store.notifier.authorization {
         case .unavailable:
-            hint("Las notificaciones y el inicio automático requieren abrir LibreBar.app (scripts/make-app.sh), no `swift run`.")
+            hint("Las notificaciones y el inicio automático requieren abrir LibreLibreLink.app (scripts/make-app.sh), no `swift run`.")
         case .denied:
-            hint("macOS tiene bloqueadas las notificaciones de LibreBar: Ajustes del Sistema ▸ Notificaciones.")
+            hint("macOS tiene bloqueadas las notificaciones de LibreLibreLink: Ajustes del Sistema ▸ Notificaciones.")
         case .notDetermined:
             EmptyView()
         case .allowed:

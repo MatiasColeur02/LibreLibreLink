@@ -1,4 +1,4 @@
-# LibreBar — glucosa en la barra de menú (vía LibreLinkUp)
+# LibreLibreLink — glucosa en la barra de menú (vía LibreLinkUp)
 
 Camino A (ver `re/HANDOFF.md`): el iPhone sigue con LibreLink, que sube los datos a
 LibreView; esta app de macOS los lee de la API de **LibreLinkUp** (~1 min de retraso).
@@ -18,7 +18,7 @@ contesta las peticiones del cliente real, con datos inventados (una curva de un 
 típico + el escenario elegido). Entrar al demo:
 
 - en el panel de inicio de sesión: **Probar sin cuenta (datos de demostración)**, o
-- `swift run LibreBar --demo`, o `open dist/LibreBar.app --args --demo`.
+- `swift run LibreLibreLink --demo`, o `open dist/LibreLibreLink.app --args --demo`.
 
 Arriba del panel aparece **Modo demo** con un selector de escenario: día normal, alta,
 baja, muy baja, LO/HI, lectura vieja, sin señal, sin conexión, aceptar términos, sin
@@ -35,11 +35,11 @@ los mismos. Las notificaciones del demo dicen "Demo ·". No se recuerda al reini
 cd mac
 swift test                                       # tests de LibreKit (fixtures)
 LLU_EMAIL=... LLU_PASSWORD=... swift run llu    # prueba rápida por terminal
-swift run LibreBar                               # app de barra de menú (sin notificaciones)
-scripts/make-app.sh --install                    # arma LibreBar.app y la copia a ~/Applications
+swift run LibreLibreLink                               # app de barra de menú (sin notificaciones)
+scripts/make-app.sh --install                    # arma LibreLibreLink.app y la copia a ~/Applications
 ```
 
-Para alarmas y "Abrir al iniciar sesión" hay que usar **`LibreBar.app`**; con `swift run`
+Para alarmas y "Abrir al iniciar sesión" hay que usar **`LibreLibreLink.app`**; con `swift run`
 macOS no permite notificaciones. Si la app pide acceso al llavero la primera vez,
 elegí "Permitir siempre".
 
@@ -61,7 +61,7 @@ restantes del sensor y tiene **Ajustes**: notificaciones (apagadas por defecto),
 de baja (60–100) y alta (120–400), sin señal, abrir al iniciar sesión. Una notificación
 por episodio, repetida cada 5 min mientras dure.
 
-La primera vez, LibreBar pide email y contraseña de LibreLinkUp y los guarda en el
+La primera vez, LibreLibreLink pide email y contraseña de LibreLinkUp y los guarda en el
 **llavero** de macOS. La región (Argentina → `LA`) se detecta sola por redirección.
 
 ## Estructura
@@ -69,12 +69,12 @@ La primera vez, LibreBar pide email y contraseña de LibreLinkUp y los guarda en
 - `Sources/LibreKit` — cliente `LibreLinkUpClient` (login con redirect, header
   `account-id` = SHA-256 del user id, `/llu/connections`, `/llu/connections/{id}/graph`)
   y modelos. Referencia: `pylibrelinkup` 0.11.1.
-- `Sources/LibreBar` — `MenuBarExtra`: valor + flecha, edad de la lectura (el gráfico está en la ventana), selector de paciente, actualización cada 60 s.
+- `Sources/LibreLibreLink` — `MenuBarExtra`: valor + flecha, edad de la lectura (el gráfico está en la ventana), selector de paciente, actualización cada 60 s.
 - `Sources/llu` — CLI de diagnóstico.
 
 ## Ventana (Fase 5)
 
-Desde el panel, **Abrir ventana** (mientras está abierta, LibreBar aparece en el Dock):
+Desde el panel, **Abrir ventana** (mientras está abierta, LibreLibreLink aparece en el Dock):
 
 - **Hoy**: glucosa actual grande, tiempo en rango y promedio del día, días restantes del
   sensor, y **Gráfico diario** (6 h / 12 h / 24 h / por día, con el valor y la hora al pasar
@@ -88,8 +88,8 @@ Los colores son los del panel: verde en rango, naranja por encima, rojo por deba
 En **Ajustes ▸ Visualización**: unidad (mg/dL o mmol/L) y rango objetivo (def. 70–180),
 que pinta los gráficos y el tiempo en rango sin cambiar las alarmas.
 
-**Historial:** LibreLinkUp solo da ~12 h, así que LibreBar guarda cada lectura que ve en
-`~/Library/Application Support/LibreBar/history.sqlite` (SQLite, una por minuto y paciente).
+**Historial:** LibreLinkUp solo da ~12 h, así que LibreLibreLink guarda cada lectura que ve en
+`~/Library/Application Support/LibreLibreLink/history.sqlite` (SQLite, una por minuto y paciente).
 Los informes se llenan con los días mientras la app está abierta. El demo usa una base en
 memoria con 14 días inventados y no toca ese archivo. Estadísticas ponderadas por tiempo
 (el historial llega cada 5 min y las lecturas en vivo cada 1 min).
