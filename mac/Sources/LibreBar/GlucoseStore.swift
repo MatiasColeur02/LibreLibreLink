@@ -48,6 +48,21 @@ final class GlucoseStore {
         }
     }
 
+    /// Unidad y rango objetivo (solo visualización; no cambia las alarmas).
+    var display: DisplaySettings {
+        didSet {
+            guard display != oldValue else { return }
+            if let data = try? JSONEncoder().encode(display) {
+                UserDefaults.standard.set(data, forKey: Keys.display)
+            }
+        }
+    }
+
+    /// Cambia cada vez que se agregan lecturas al historial (para recalcular informes).
+    private(set) var historyRevision = 0
+    /// Error al abrir o escribir el historial persistente.
+    private(set) var historyError: String?
+
     var selectedPatientID: String? {
         didSet {
             if !isDemo { UserDefaults.standard.set(selectedPatientID, forKey: Keys.patient) }
@@ -65,24 +80,75 @@ final class GlucoseStore {
     @ObservationIgnored private var clockTask: Task<Void, Never>?
     @ObservationIgnored private var alarmEngine = AlarmEngine()
     @ObservationIgnored private var suppressRefresh = false
+    @ObservationIgnored private var database: HistoryDatabase?
 
     private enum Keys {
         static let patient = "selectedPatientID"
         static let region = "region"
         static let settings = "alarmSettings"
+        static let display = "displaySettings"
     }
 
     init() {
         settings = UserDefaults.standard.data(forKey: Keys.settings)
             .flatMap { try? JSONDecoder().decode(AlarmSettings.self, from: $0) } ?? AlarmSettings()
+        display = UserDefaults.standard.data(forKey: Keys.display)
+            .flatMap { try? JSONDecoder().decode(DisplaySettings.self, from: $0) } ?? DisplaySettings()
         selectedPatientID = UserDefaults.standard.string(forKey: Keys.patient)
         let arguments = ProcessInfo.processInfo.arguments
         if arguments.contains("--demo") || ProcessInfo.processInfo.environment["LIBREBAR_DEMO"] != nil {
             startDemo()
-        } else if let credentials = Keychain.load() {
-            start(with: makeClient(credentials))
+        } else {
+            openHistory(demo: false)
+            if let credentials = Keychain.load() {
+                start(with: makeClient(credentials))
+            }
         }
         startClock()
+    }
+
+    // MARK: Historial
+
+    /// Lecturas guardadas del paciente elegido.
+    func storedReadings(in interval: DateInterval) -> [GlucoseMeasurement] {
+        guard let database, let patient = selectedPatientID else { return [] }
+        return (try? database.readings(patientID: patient, in: interval)) ?? []
+    }
+
+    /// Desde cuándo hay historial del paciente elegido.
+    var historyStart: Date? {
+        _ = historyRevision
+        guard let database, let patient = selectedPatientID else { return nil }
+        return try? database.earliest(patientID: patient)
+    }
+
+    /// El demo usa una base en memoria con 14 días inventados; nunca toca el archivo real.
+    private func openHistory(demo: Bool) {
+        do {
+            let database = try HistoryDatabase(url: demo ? nil : HistoryDatabase.defaultURL)
+            if demo {
+                for patient in ["demo-1", "demo-2"] {
+                    try database.insert(DemoServer.backfill(patientID: patient, days: 14), patientID: patient)
+                }
+            }
+            self.database = database
+            historyError = nil
+        } catch {
+            database = nil
+            historyError = error.localizedDescription
+        }
+        historyRevision += 1
+    }
+
+    private func record(_ graph: GraphResult, patientID: String) {
+        guard let database else { return }
+        do {
+            try database.insert(graph.history + (graph.current.map { [$0] } ?? []), patientID: patientID)
+            historyError = nil
+        } catch {
+            historyError = error.localizedDescription
+        }
+        historyRevision += 1
     }
 
     private var pollInterval: TimeInterval { isDemo ? Self.demoPollInterval : Self.pollInterval }
@@ -105,6 +171,12 @@ final class GlucoseStore {
         )
     }
 
+    /// Historial de LibreLinkUp + la lectura actual si es más nueva.
+    var chartPoints: [GlucoseMeasurement] {
+        guard let current, current.date > (history.last?.date ?? .distantPast) else { return history }
+        return history + [current]
+    }
+
     /// Lectura actual si todavía sirve (no hay pérdida de señal).
     var freshReading: GlucoseMeasurement? {
         guard let current, now.timeIntervalSince(current.date) < GlucoseStatus.signalLossAfter else { return nil }
@@ -119,6 +191,7 @@ final class GlucoseStore {
             resetSession()
             isDemo = false
             notifier.isDemo = false
+            openHistory(demo: false)
         }
         loginError = nil
         phase = .loading
@@ -165,6 +238,7 @@ final class GlucoseStore {
         resetSession()
         isDemo = true
         notifier.isDemo = true
+        openHistory(demo: true)
         withoutRefresh { selectedPatientID = nil }
         start(with: DemoServer.makeClient())
     }
@@ -173,6 +247,7 @@ final class GlucoseStore {
         resetSession()
         isDemo = false
         notifier.isDemo = false
+        openHistory(demo: false)
         withoutRefresh { selectedPatientID = UserDefaults.standard.string(forKey: Keys.patient) }
         if let credentials = Keychain.load() {
             start(with: makeClient(credentials))
@@ -254,6 +329,7 @@ final class GlucoseStore {
             guard !Task.isCancelled else { return pollInterval }
             current = graph.current ?? graph.history.last
             history = graph.history
+            record(graph, patientID: patient.id)
             sensor = graph.sensor
             lastRefresh = Date()
             connectionError = nil
@@ -298,7 +374,7 @@ final class GlucoseStore {
             kind != .signalLoss || settings.signalLossEnabled
         }
         for kind in alarmEngine.update(active: active, now: now) {
-            notifier.post(kind, reading: freshReading)
+            notifier.post(kind, reading: freshReading, unit: display.unit)
         }
     }
 

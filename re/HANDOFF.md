@@ -45,7 +45,11 @@ queda archivada (sirve solo si algún día aparece un sensor gen1).
 Fase 4 (barra de menú con estado + alarmas) implementada: lógica en
 `LibreKit/Status.swift` (17 tests), app empaquetada con `mac/scripts/make-app.sh`.
 Modo demo (sin cuenta): `LibreKit/DemoServer.swift` (URLProtocol que imita la API, con
-escenarios), `LibreBar --demo` o botón en el login; `llu --demo <escenario>`. 23 tests.
+escenarios), `LibreBar --demo` o botón en el login; `llu --demo <escenario>`.
+Fase 5 hecha: ventana Hoy/Informes, historial SQLite (`LibreKit/HistoryDatabase.swift`),
+estadísticas (`Statistics.swift`), unidades/rango objetivo (`Display.swift`). 32 tests.
+Paleta real de LibreLink extraída del APK (verde #8FCB3A, etc.) pero el usuario eligió
+mantener los colores propios de LibreBar.
 
 ## 3. Lo que FALTA para decidir (histórico; ya decidido arriba)
 

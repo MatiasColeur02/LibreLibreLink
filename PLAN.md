@@ -54,8 +54,11 @@ separa **observado / inferido / desconocido** y cita Evidence IDs.
    - Empaquetado como `LibreBar.app` (`mac/scripts/make-app.sh`): sin ícono en el
      Dock, necesario para notificaciones y arranque automático (R16).
    - Lógica de estado y de episodios en `LibreKit` con tests.
-5. **App completa** — historial persistente (SwiftData), estadísticas (tiempo en
-   rango, promedios, R24), mmol/L (R20), ventana de gráfico grande.
+5. **App completa** ✅ (código; probado con el modo demo) — ventana "Hoy" + "Informes":
+   historial persistente (SQLite en lugar de SwiftData: más simple y testeable),
+   tiempo en rango, promedio, GMI, CV, uso del sensor, episodios de baja, patrones
+   diarios (R24), mmol/L (R20), rango objetivo (R21). Colores: los del panel de LibreBar.
+   Modo demo (`--demo`) con escenarios para probar sin cuenta.
 6. **Verificación** — tests + días de comparación con LibreLink. Lo no verificado
    queda marcado como pendiente.
 

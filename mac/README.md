@@ -73,8 +73,33 @@ La primera vez, LibreBar pide email y contraseña de LibreLinkUp y los guarda en
   ~12 h con rango 70–180, selector de paciente, actualización cada 60 s.
 - `Sources/llu` — CLI de diagnóstico.
 
-## Pendiente (Fase 5)
+## Ventana (Fase 5)
 
-Historial persistente (SwiftData), estadísticas (tiempo en rango), mmol/L, persistir el
-estado de los episodios entre reinicios. Las notificaciones usan nivel "time sensitive",
-pero sin firma de Apple Developer pueden quedar silenciadas por Concentración / No Molestar.
+Desde el panel, **Abrir ventana** (mientras está abierta, LibreBar aparece en el Dock):
+
+- **Hoy**: glucosa actual grande, tiempo en rango y promedio del día, días restantes del
+  sensor, y **Gráfico diario** (6 h / 12 h / 24 h / por día, con el valor y la hora al pasar
+  el puntero).
+- **Informes** (7/14/30/90 días): glucosa promedio, A1c estimada (GMI), variabilidad (CV),
+  uso del sensor, **Tiempo en rango** (por debajo / en rango / por encima, y episodios de
+  baja < 70 durante ≥ 15 min) y **Patrones diarios** (mediana y percentiles 25–75 y 10–90;
+  hacen falta ≥ 5 días).
+
+Los colores son los del panel: verde en rango, naranja por encima, rojo por debajo.
+En **Ajustes ▸ Visualización**: unidad (mg/dL o mmol/L) y rango objetivo (def. 70–180),
+que pinta los gráficos y el tiempo en rango sin cambiar las alarmas.
+
+**Historial:** LibreLinkUp solo da ~12 h, así que LibreBar guarda cada lectura que ve en
+`~/Library/Application Support/LibreBar/history.sqlite` (SQLite, una por minuto y paciente).
+Los informes se llenan con los días mientras la app está abierta. El demo usa una base en
+memoria con 14 días inventados y no toca ese archivo. Estadísticas ponderadas por tiempo
+(el historial llega cada 5 min y las lecturas en vivo cada 1 min).
+
+Requiere macOS 15.
+
+## Pendiente
+
+Libro de registro y notas (insulina, comidas), exportar CSV/PDF, persistir el estado de
+los episodios de alarma entre reinicios, completar huecos con el historial de LibreView.
+Las notificaciones usan nivel "time sensitive", pero sin firma de Apple Developer pueden
+quedar silenciadas por Concentración / No Molestar.

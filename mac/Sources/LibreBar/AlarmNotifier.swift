@@ -41,13 +41,13 @@ final class AlarmNotifier {
         await refreshAuthorization()
     }
 
-    func post(_ kind: AlarmKind, reading: GlucoseMeasurement?) {
+    func post(_ kind: AlarmKind, reading: GlucoseMeasurement?, unit: GlucoseUnit) {
         guard Self.isBundled else { return }
         let content = UNMutableNotificationContent()
         content.title = isDemo ? "Demo · \(kind.title)" : kind.title
         if let reading {
-            let value = GlucoseStatus.displayValue(reading.mgdL)
-            content.body = "\(value) mg/dL \(reading.trend?.arrow ?? "") · \(kind.advice)"
+            let value = unit.reading(reading.mgdL)
+            content.body = "\(value) \(unit.symbol) \(reading.trend?.arrow ?? "") · \(kind.advice)"
         } else {
             content.body = kind.advice
         }

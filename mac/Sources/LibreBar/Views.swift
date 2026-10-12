@@ -2,12 +2,10 @@ import Charts
 import LibreKit
 import SwiftUI
 
-/// Rango objetivo que se pinta en el gráfico (por defecto de LibreLink).
-private let targetRange = 70.0...180.0
-
 struct ContentView: View {
     let store: GlucoseStore
     @State private var showingSettings = false
+    @Environment(\.openWindow) private var openWindow
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -34,6 +32,10 @@ struct ContentView: View {
                 Button(showingSettings ? "Listo" : "Ajustes") { showingSettings.toggle() }
                 if store.phase == .ready, !showingSettings {
                     Button("Actualizar") { store.refreshNow() }
+                    Button("Abrir ventana") {
+                        openWindow(id: MainWindow.id)
+                        NSApp.activate()
+                    }
                 }
                 Spacer()
                 Button("Salir") { NSApplication.shared.terminate(nil) }
@@ -79,43 +81,6 @@ struct DemoBanner: View {
         }
         .padding(8)
         .background(.purple.opacity(0.10), in: RoundedRectangle(cornerRadius: 8))
-    }
-}
-
-/// Lista de problemas activos con su explicación.
-struct ProblemsView: View {
-    let conditions: [GlucoseCondition]
-
-    var body: some View {
-        if !conditions.isEmpty {
-            VStack(alignment: .leading, spacing: 6) {
-                ForEach(conditions, id: \.self) { condition in
-                    HStack(alignment: .top, spacing: 8) {
-                        Image(systemName: condition.symbolName)
-                            .foregroundStyle(tint(condition))
-                            .frame(width: 18)
-                        VStack(alignment: .leading, spacing: 1) {
-                            Text(condition.title).font(.callout.weight(.semibold))
-                            Text(condition.detail)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
-                    }
-                }
-            }
-            .padding(8)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(tint(conditions[0]).opacity(0.12), in: RoundedRectangle(cornerRadius: 8))
-        }
-    }
-
-    private func tint(_ condition: GlucoseCondition) -> Color {
-        switch condition {
-        case .urgentLow, .low: .red
-        case .high: .orange
-        default: condition.severity >= .warning ? .orange : .secondary
-        }
     }
 }
 
@@ -187,12 +152,12 @@ struct ReadingView: View {
             if let current = store.current {
                 let fresh = store.freshReading != nil
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
-                    Text(GlucoseStatus.displayValue(current.mgdL))
+                    Text(store.display.unit.reading(current.mgdL))
                         .font(.system(size: 44, weight: .semibold, design: .rounded))
                         .monospacedDigit()
-                        .foregroundStyle(fresh ? color(for: current.mgdL) : .secondary)
+                        .foregroundStyle(fresh ? store.display.color(for: current.mgdL) : .secondary)
                         .strikethrough(!fresh)
-                    Text("mg/dL").foregroundStyle(.secondary)
+                    Text(store.display.unit.symbol).foregroundStyle(.secondary)
                     Text(current.trend?.arrow ?? "")
                         .font(.system(size: 32, weight: .semibold))
                         .foregroundStyle(fresh ? .primary : .secondary)
@@ -206,7 +171,7 @@ struct ReadingView: View {
             }
 
             if !store.history.isEmpty {
-                GlucoseChart(history: store.history, current: store.current, settings: store.settings)
+                GlucoseChart(points: store.chartPoints, display: store.display, settings: store.settings)
                     .frame(height: 150)
             }
 
@@ -235,60 +200,12 @@ struct ReadingView: View {
     }
 }
 
-struct GlucoseChart: View {
-    let history: [GlucoseMeasurement]
-    let current: GlucoseMeasurement?
-    let settings: AlarmSettings
-
-    private var points: [GlucoseMeasurement] {
-        guard let current, current.date > (history.last?.date ?? .distantPast) else { return history }
-        return history + [current]
-    }
-
-    var body: some View {
-        let maxValue = min(350, max(250, (points.map(\.mgdL).max() ?? 0) + 20))
-        Chart {
-            RectangleMark(
-                xStart: nil, xEnd: nil,
-                yStart: .value("Bajo", targetRange.lowerBound),
-                yEnd: .value("Alto", targetRange.upperBound)
-            )
-            .foregroundStyle(.green.opacity(0.12))
-
-            if settings.lowEnabled {
-                RuleMark(y: .value("Umbral bajo", settings.lowThreshold))
-                    .foregroundStyle(.red.opacity(0.5))
-                    .lineStyle(StrokeStyle(lineWidth: 1, dash: [3, 3]))
-            }
-            if settings.highEnabled, settings.highThreshold <= maxValue {
-                RuleMark(y: .value("Umbral alto", settings.highThreshold))
-                    .foregroundStyle(.orange.opacity(0.5))
-                    .lineStyle(StrokeStyle(lineWidth: 1, dash: [3, 3]))
-            }
-
-            ForEach(points, id: \.date) { point in
-                LineMark(x: .value("Hora", point.date), y: .value("mg/dL", min(point.mgdL, maxValue)))
-                    .foregroundStyle(.secondary)
-                    .interpolationMethod(.monotone)
-                PointMark(x: .value("Hora", point.date), y: .value("mg/dL", min(point.mgdL, maxValue)))
-                    .symbolSize(12)
-                    .foregroundStyle(color(for: point.mgdL))
-            }
-        }
-        .chartYScale(domain: 40...maxValue)
-        .chartXAxis {
-            AxisMarks(values: .stride(by: .hour, count: 3)) {
-                AxisGridLine()
-                AxisValueLabel(format: .dateTime.hour())
-            }
-        }
-    }
-}
-
 struct SettingsView: View {
     @Bindable var store: GlucoseStore
     @State private var launchAtLogin = LaunchAtLogin.isEnabled
     @State private var launchError: String?
+
+    private var unit: GlucoseUnit { store.display.unit }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -302,16 +219,36 @@ struct SettingsView: View {
 
             Toggle(isOn: $store.settings.lowEnabled) {
                 Stepper(value: $store.settings.lowThreshold, in: AlarmSettings.lowRange, step: 5) {
-                    Text("Baja: < \(Int(store.settings.lowThreshold)) mg/dL")
+                    Text("Baja: < \(unit.withSymbol(store.settings.lowThreshold))")
                 }
             }
             Toggle(isOn: $store.settings.highEnabled) {
                 Stepper(value: $store.settings.highThreshold, in: AlarmSettings.highRange, step: 10) {
-                    Text("Alta: > \(Int(store.settings.highThreshold)) mg/dL")
+                    Text("Alta: > \(unit.withSymbol(store.settings.highThreshold))")
                 }
             }
             Toggle("Sin señal (20 min sin lecturas)", isOn: $store.settings.signalLossEnabled)
-            Text("La baja grave (< \(Int(AlarmSettings.urgentLowThreshold)) mg/dL) siempre se muestra y avisa. Las alarmas se repiten cada 5 min mientras dura el problema.")
+            Text("La baja grave (< \(unit.withSymbol(AlarmSettings.urgentLowThreshold))) siempre se muestra y avisa. Las alarmas se repiten cada 5 min mientras dura el problema.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Divider()
+            Text("Visualización").font(.headline)
+            Picker("Unidad", selection: $store.display.unit) {
+                ForEach(GlucoseUnit.allCases) { Text($0.symbol).tag($0) }
+            }
+            .pickerStyle(.segmented)
+            Text("Es muy importante elegir la misma unidad que usa tu medidor.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Stepper(value: $store.display.targetLow, in: DisplaySettings.targetLowRange, step: 5) {
+                Text("Rango objetivo desde \(unit.withSymbol(store.display.targetLow))")
+            }
+            Stepper(value: $store.display.targetHigh, in: DisplaySettings.targetHighRange, step: 10) {
+                Text("hasta \(unit.withSymbol(store.display.targetHigh))")
+            }
+            Text("El rango objetivo pinta los gráficos y el tiempo en rango; no cambia las alarmas.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -357,10 +294,4 @@ struct SettingsView: View {
             .foregroundStyle(.orange)
             .fixedSize(horizontal: false, vertical: true)
     }
-}
-
-private func color(for mgdL: Double) -> Color {
-    if mgdL < targetRange.lowerBound { return .red }
-    if mgdL > targetRange.upperBound { return .orange }
-    return .green
 }

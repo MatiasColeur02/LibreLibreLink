@@ -17,7 +17,7 @@ struct MenuBarLabel: View {
     private var text: String {
         if store.phase == .needsLogin { return "LibreLink" }
         guard let reading = store.freshReading else { return "––" }
-        return "\(GlucoseStatus.displayValue(reading.mgdL)) \(reading.trend?.arrow ?? "")"
+        return "\(store.display.unit.reading(reading.mgdL)) \(reading.trend?.arrow ?? "")"
             .trimmingCharacters(in: .whitespaces)
     }
 

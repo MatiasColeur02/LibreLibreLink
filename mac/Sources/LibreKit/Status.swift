@@ -160,9 +160,7 @@ public enum GlucoseStatus {
 
     /// Texto del valor: "LO" < 40 y "HI" > 500 (R2).
     public static func displayValue(_ mgdL: Double) -> String {
-        if mgdL < 40 { return "LO" }
-        if mgdL > 500 { return "HI" }
-        return "\(Int(mgdL.rounded()))"
+        GlucoseUnit.mgdL.reading(mgdL)
     }
 }
 

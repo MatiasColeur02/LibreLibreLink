@@ -17,5 +17,11 @@ struct LibreBarApp: App {
             MenuBarLabel(store: store)
         }
         .menuBarExtraStyle(.window)
+
+        Window("LibreBar", id: MainWindow.id) {
+            MainWindow(store: store)
+        }
+        .defaultSize(width: 980, height: 760)
+        .defaultLaunchBehavior(.suppressed)
     }
 }

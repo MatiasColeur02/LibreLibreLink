@@ -79,6 +79,20 @@ public enum DemoServer {
         LibreLinkUpClient(email: email, password: password, region: .global, session: session)
     }
 
+    /// Días anteriores inventados (cada 5 min), hasta donde empieza el historial de 12 h
+    /// que devuelve el servidor. Sirve para llenar el historial persistente en el demo.
+    public static func backfill(patientID: String, days: Int, now: Date = Date()) -> [GlucoseMeasurement] {
+        let patient = patients.first { $0.id == patientID } ?? patients[0]
+        let curve = Curve(scenario: .normal, phaseHours: patient.phaseHours, now: now)
+        let step: TimeInterval = 5 * 60
+        let end = ((now.timeIntervalSince1970 - 12 * 3600) / step).rounded(.down) * step
+        let start = end - Double(days) * 86_400
+        return stride(from: start, to: end, by: step).map {
+            let date = Date(timeIntervalSince1970: $0)
+            return GlucoseMeasurement(date: date, mgdL: curve.value(at: date).rounded(), trend: nil)
+        }
+    }
+
     // MARK: Respuestas
 
     struct Response {
@@ -235,22 +249,39 @@ struct Curve {
         return natural * (1 - w) + line * w
     }
 
-    /// Hora local con picos posprandiales y un poco de ruido determinista.
+    /// Hora local con picos posprandiales y un poco de ruido determinista. Cada día
+    /// varía (horario y tamaño de las comidas, alguna baja nocturna) para que los
+    /// informes de varios días tengan algo que mostrar.
     static func typicalDay(_ date: Date, phaseHours: Double) -> Double {
         let calendar = Calendar.current
-        let start = calendar.startOfDay(for: date)
-        let hour = date.timeIntervalSince(start) / 3600 + phaseHours
-        func meal(at mealHour: Double, rise: Double) -> Double {
-            // Pico ~55 min después de comer; cuenta también la comida del día anterior.
-            [mealHour, mealHour - 24, mealHour + 24].reduce(0) { sum, h in
-                let x = (hour - h) / 0.9
-                return x > 0 ? sum + rise * x * exp(1 - x) : sum
+        let today = calendar.startOfDay(for: date)
+        let hour = date.timeIntervalSince(today) / 3600 + phaseHours
+        let todayIndex = Int((today.timeIntervalSince1970 / 86_400).rounded())
+
+        var value = 102.0
+        // El día anterior también cuenta (la cena de ayer sigue bajando de madrugada).
+        for offset in [-1, 0, 1] {
+            let day = todayIndex + offset
+            let h = hour - Double(offset) * 24
+            func meal(at mealHour: Double, rise: Double, key: Double) -> Double {
+                let shifted = mealHour + (random(day, key) - 0.5) * 1.5
+                let x = (h - shifted) / 0.9
+                return x > 0 ? rise * (0.6 + 0.9 * random(day, key + 10)) * x * exp(1 - x) : 0
             }
+            value += meal(at: 8, rise: 62, key: 1) + meal(at: 13.5, rise: 78, key: 2) + meal(at: 21, rise: 70, key: 3)
+            // Baja nocturna uno de cada cuatro días, más leve el resto.
+            let depth = random(day, 4) < 0.25 ? 48.0 : 12.0
+            value -= depth * exp(-pow((h - 3.5 - random(day, 5)) / 1.3, 2))
         }
         let t = date.timeIntervalSince1970 / 60
-        let noise = 4 * sin(t / 7.3) + 3 * sin(t / 2.9 + 1.7) + 2 * sin(t / 17.1 + 0.4)
-        let night = -12 * exp(-pow((hour.truncatingRemainder(dividingBy: 24) - 3.5) / 1.5, 2))
-        return 102 + meal(at: 8, rise: 62) + meal(at: 13.5, rise: 78) + meal(at: 21, rise: 70) + night + noise
+        value += 4 * sin(t / 7.3) + 3 * sin(t / 2.9 + 1.7) + 2 * sin(t / 17.1 + 0.4)
+        return max(value, 42)
+    }
+
+    /// Pseudoaleatorio estable en [0, 1) para un día y una clave.
+    private static func random(_ day: Int, _ key: Double) -> Double {
+        let x = sin(Double(day) * 12.9898 + key * 78.233) * 43_758.5453
+        return x - x.rounded(.down)
     }
 }
 
