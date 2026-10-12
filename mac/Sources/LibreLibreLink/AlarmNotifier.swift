@@ -1,4 +1,6 @@
+import AppKit
 import AVFoundation
+import CoreAudio
 import Foundation
 import LibreKit
 import ServiceManagement
@@ -9,11 +11,11 @@ import UserNotifications
 @MainActor
 @Observable
 final class AlarmNotifier {
-    enum Authorization: Equatable {
-        case unavailable, notDetermined, denied, allowed
-    }
-
-    private(set) var authorization: Authorization = .unavailable
+    private(set) var authorization: NotificationPermission = .unavailable
+    /// Lo que el usuario eligió en Ajustes del Sistema ▸ Notificaciones ▸ LibreLibreLink.
+    private(set) var bannersEnabled = true
+    private(set) var soundEnabled = true
+    private(set) var timeSensitiveEnabled = true
     /// Marca las notificaciones para no confundirlas con datos reales.
     var isDemo = false
 
@@ -35,6 +37,19 @@ final class AlarmNotifier {
         case .denied: .denied
         default: .allowed
         }
+        bannersEnabled = settings.alertStyle != .none
+        soundEnabled = settings.soundSetting != .disabled
+        timeSensitiveEnabled = settings.timeSensitiveSetting != .disabled
+    }
+
+    /// Ajustes del Sistema ▸ Notificaciones, en la página de LibreLibreLink.
+    static func openNotificationSettings() {
+        let id = Bundle.main.bundleIdentifier ?? ""
+        NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.Notifications-Settings.extension?id=\(id)")!)
+    }
+
+    static func openSoundSettings() {
+        NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.Sound-Settings.extension")!)
     }
 
     func requestAuthorization() async {
@@ -177,6 +192,35 @@ private extension SensorNotice {
         case .endsIn1Hour: return String(localized: "Termina a las \(sensor.expectedEnd.formatted(date: .omitted, time: .shortened)).")
         case .ended: return String(localized: "Ya pasaron los 15 días. Reemplazalo y activalo con LibreLink.")
         }
+    }
+}
+
+/// Salida de audio actual en silencio o con volumen 0 (la voz y el sonido no se oirían).
+enum SystemAudio {
+    static var isOutputMuted: Bool {
+        var device = AudioDeviceID(0)
+        var size = UInt32(MemoryLayout<AudioDeviceID>.size)
+        var address = AudioObjectPropertyAddress(
+            mSelector: kAudioHardwarePropertyDefaultOutputDevice,
+            mScope: kAudioObjectPropertyScopeGlobal,
+            mElement: kAudioObjectPropertyElementMain
+        )
+        guard AudioObjectGetPropertyData(AudioObjectID(kAudioObjectSystemObject), &address, 0, nil, &size, &device) == noErr
+        else { return false }
+
+        address.mScope = kAudioDevicePropertyScopeOutput
+        address.mSelector = kAudioDevicePropertyMute
+        var mute: UInt32 = 0
+        size = UInt32(MemoryLayout<UInt32>.size)
+        if AudioObjectHasProperty(device, &address),
+           AudioObjectGetPropertyData(device, &address, 0, nil, &size, &mute) == noErr, mute != 0 { return true }
+
+        address.mSelector = kAudioHardwareServiceDeviceProperty_VirtualMainVolume
+        var volume: Float32 = 1
+        size = UInt32(MemoryLayout<Float32>.size)
+        if AudioObjectHasProperty(device, &address),
+           AudioObjectGetPropertyData(device, &address, 0, nil, &size, &volume) == noErr { return volume < 0.01 }
+        return false
     }
 }
 

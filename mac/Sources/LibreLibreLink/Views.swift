@@ -22,6 +22,15 @@ struct ContentView: View {
                     ProgressView("Conectando con LibreLinkUp…")
                         .frame(maxWidth: .infinity, minHeight: 120)
                 case .ready:
+                    if store.alarmsBroken {
+                        HStack {
+                            Label("Las alarmas no pueden avisarte", systemImage: "bell.slash.fill")
+                                .font(.callout.weight(.semibold))
+                                .foregroundStyle(.orange)
+                            Spacer()
+                            Button("Ver") { showingSettings = true }.controlSize(.small)
+                        }
+                    }
                     ProblemsView(conditions: store.conditions)
                     ReadingView(store: store)
                 }
@@ -202,7 +211,6 @@ struct ReadingView: View {
 
 struct SettingsView: View {
     @Bindable var store: GlucoseStore
-    @State private var launchAtLogin = LaunchAtLogin.isEnabled
     @State private var launchError: String?
 
     private var unit: GlucoseUnit { store.display.unit }
@@ -210,12 +218,17 @@ struct SettingsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Alarmas").font(.headline)
+            AlarmDeliveryView(store: store, launchError: $launchError)
 
-            Toggle("Notificaciones de alarma", isOn: $store.settings.notificationsEnabled)
-                .onChange(of: store.settings.notificationsEnabled) { _, enabled in
-                    if enabled { Task { await store.notifier.requestAuthorization() } }
+            HStack {
+                Toggle("Notificaciones de alarma", isOn: $store.settings.notificationsEnabled)
+                    .onChange(of: store.settings.notificationsEnabled) { _, enabled in
+                        if enabled { Task { await store.notifier.requestAuthorization() } }
+                    }
+                if store.settings.notificationsEnabled, store.notifier.authorization == .allowed {
+                    Button("Probar notificación") { store.notifier.postTest() }.controlSize(.small)
                 }
-            notificationStatus
+            }
 
             Toggle(isOn: $store.settings.lowEnabled) {
                 Stepper(value: $store.settings.lowThreshold, in: AlarmSettings.lowRange, step: 5) {
@@ -265,12 +278,14 @@ struct SettingsView: View {
 
             Divider()
             Text("General").font(.headline)
-            Toggle("Abrir al iniciar sesión", isOn: $launchAtLogin)
-                .disabled(!AlarmNotifier.isBundled)
-                .onChange(of: launchAtLogin) { _, enabled in
-                    do { try LaunchAtLogin.set(enabled); launchError = nil }
-                    catch { launchError = error.localizedDescription; launchAtLogin = LaunchAtLogin.isEnabled }
+            Toggle("Abrir al iniciar sesión", isOn: Binding(
+                get: { store.launchAtLogin },
+                set: { enabled in
+                    do { try store.setLaunchAtLogin(enabled); launchError = nil }
+                    catch { launchError = error.localizedDescription }
                 }
+            ))
+            .disabled(!AlarmNotifier.isBundled)
             if let launchError {
                 Text(launchError).font(.caption).foregroundStyle(.orange)
             }
@@ -280,28 +295,78 @@ struct SettingsView: View {
             }
         }
         .toggleStyle(.checkbox)
-        .task { await store.notifier.refreshAuthorization() }
+        .task { await store.refreshDeliveryChecks() }
+        // Al volver de Ajustes del Sistema, revisar de nuevo.
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+            Task { await store.refreshDeliveryChecks() }
+        }
     }
+}
 
-    @ViewBuilder private var notificationStatus: some View {
-        switch store.notifier.authorization {
-        case .unavailable:
-            hint("Las notificaciones y el inicio automático requieren abrir LibreLibreLink.app (scripts/make-app.sh), no `swift run`.")
-        case .denied:
-            hint("macOS tiene bloqueadas las notificaciones de LibreLibreLink: Ajustes del Sistema ▸ Notificaciones.")
-        case .notDetermined:
-            EmptyView()
-        case .allowed:
-            if store.settings.notificationsEnabled {
-                Button("Probar notificación") { store.notifier.postTest() }.controlSize(.small)
+/// "¿Por qué no me llegan las alarmas?": lo que impide que avisen, con el arreglo a mano.
+private struct AlarmDeliveryView: View {
+    let store: GlucoseStore
+    @Binding var launchError: String?
+
+    var body: some View {
+        let issues = store.deliveryIssues
+        if issues.isEmpty {
+            Label("Las alarmas pueden avisarte mientras la Mac esté encendida y despierta.", systemImage: "checkmark.circle.fill")
+                .font(.caption)
+                .foregroundStyle(.green)
+                .fixedSize(horizontal: false, vertical: true)
+        } else {
+            VStack(alignment: .leading, spacing: 6) {
+                ForEach(issues, id: \.self) { issue in
+                    HStack(alignment: .firstTextBaseline) {
+                        Label(issue.text, systemImage: "exclamationmark.triangle.fill")
+                            .font(.caption)
+                            .foregroundStyle(.orange)
+                            .fixedSize(horizontal: false, vertical: true)
+                        Spacer(minLength: 4)
+                        fix(for: issue)
+                    }
+                }
             }
+        }
+        if let launchError {
+            Text(launchError).font(.caption).foregroundStyle(.orange)
         }
     }
 
-    private func hint(_ text: LocalizedStringKey) -> some View {
-        Label(text, systemImage: "exclamationmark.triangle")
-            .font(.caption)
-            .foregroundStyle(.orange)
-            .fixedSize(horizontal: false, vertical: true)
+    @ViewBuilder private func fix(for issue: AlarmDeliveryIssue) -> some View {
+        switch issue {
+        case .permissionNotRequested:
+            Button("Permitir") { Task { await store.notifier.requestAuthorization() } }.controlSize(.mini)
+        case .permissionDenied, .bannersOff, .soundOff, .timeSensitiveOff:
+            Button("Abrir Ajustes") { AlarmNotifier.openNotificationSettings() }.controlSize(.mini)
+        case .muted:
+            Button("Abrir Sonido") { AlarmNotifier.openSoundSettings() }.controlSize(.mini)
+        case .launchAtLoginOff:
+            Button("Activar") {
+                do { try store.setLaunchAtLogin(true); launchError = nil }
+                catch { launchError = error.localizedDescription }
+            }
+            .controlSize(.mini)
+        case .nothingEnabled, .notBundled, .noData:
+            EmptyView()
+        }
+    }
+}
+
+private extension AlarmDeliveryIssue {
+    var text: String {
+        switch self {
+        case .nothingEnabled: String(localized: "Notificaciones y voz apagadas: nada te va a avisar.")
+        case .notBundled: String(localized: "Las notificaciones requieren abrir LibreLibreLink.app, no `swift run`.")
+        case .permissionNotRequested: String(localized: "macOS todavía no dio permiso para notificar.")
+        case .permissionDenied: String(localized: "macOS bloquea las notificaciones de LibreLibreLink.")
+        case .bannersOff: String(localized: "Las notificaciones no se muestran en pantalla (estilo «Ninguno»).")
+        case .soundOff: String(localized: "Las notificaciones no tienen sonido.")
+        case .timeSensitiveOff: String(localized: "Notificaciones urgentes desactivadas: Concentración puede silenciarlas.")
+        case .muted: String(localized: "La Mac está en silencio.")
+        case .launchAtLoginOff: String(localized: "No se abre al iniciar sesión: tras reiniciar no hay alarmas hasta abrirla.")
+        case .noData: String(localized: "Sin datos de LibreLinkUp: no hay lecturas que vigilar.")
+        }
     }
 }

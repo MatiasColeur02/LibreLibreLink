@@ -61,6 +61,13 @@ restantes del sensor y tiene **Ajustes**: notificaciones (apagadas por defecto),
 de baja (60–100) y alta (120–400), sin señal, abrir al iniciar sesión. Una notificación
 por episodio, repetida cada 5 min mientras dure.
 
+**Diagnóstico de alarmas** (arriba de Ajustes ▸ Alarmas): dice si las alarmas pueden avisarte o
+por qué no, con el arreglo a mano: notificaciones y voz apagadas, permiso de macOS pendiente o
+bloqueado, estilo «Ninguno», sin sonido, notificaciones urgentes desactivadas (Concentración),
+Mac en silencio, no se abre al iniciar sesión, sin datos de LibreLinkUp (`LibreKit/AlarmDelivery.swift`).
+Si activaste notificaciones o voz pero ninguna puede llegar, el panel lo muestra en naranja.
+No detecta si Concentración está activa (requiere un permiso de Apple) ni si la Mac va a dormir.
+
 **Baja en camino** (Ajustes, bajo el umbral de baja; activada): si la glucosa cae al menos
 1 mg/dL/min (recta sobre los últimos 15 min) y a ese ritmo cruzaría el umbral de baja en 15 min o
 menos, se marca en rojo y avisa como una alarma más (`LibreKit/Forecast.swift`). Es una estimación.

@@ -123,6 +123,26 @@
         }
       }
     },
+    "Abrir Ajustes": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Settings"
+          }
+        }
+      }
+    },
+    "Abrir Sonido": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Sound"
+          }
+        }
+      }
+    },
     "Abrir al iniciar sesión": {
       "localizations": {
         "en": {
@@ -139,6 +159,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Open window"
+          }
+        }
+      }
+    },
+    "Activar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn On"
           }
         }
       }
@@ -1021,6 +1051,16 @@
         }
       }
     },
+    "La Mac está en silencio.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Mac is muted."
+          }
+        }
+      }
+    },
     "La baja grave (< %@) siempre se muestra y avisa. Las alarmas se repiten cada 5 min mientras dura el problema.": {
       "localizations": {
         "en": {
@@ -1051,6 +1091,26 @@
         }
       }
     },
+    "Las alarmas no pueden avisarte": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alarms can't reach you"
+          }
+        }
+      }
+    },
+    "Las alarmas pueden avisarte mientras la Mac esté encendida y despierta.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alarms can reach you while the Mac is on and awake."
+          }
+        }
+      }
+    },
     "Las lecturas empiezan a las %@.": {
       "localizations": {
         "en": {
@@ -1061,7 +1121,38 @@
         }
       }
     },
+    "Las notificaciones no se muestran en pantalla (estilo «Ninguno»).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications aren't shown on screen (style “None”)."
+          }
+        }
+      }
+    },
+    "Las notificaciones no tienen sonido.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications have no sound."
+          }
+        }
+      }
+    },
+    "Las notificaciones requieren abrir LibreLibreLink.app, no `swift run`.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications require opening LibreLibreLink.app, not `swift run`."
+          }
+        }
+      }
+    },
     "Las notificaciones y el inicio automático requieren abrir LibreLibreLink.app (scripts/make-app.sh), no `swift run`.": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -1317,6 +1408,16 @@
         }
       }
     },
+    "No se abre al iniciar sesión: tras reiniciar no hay alarmas hasta abrirla.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doesn't open at login: after a restart there are no alarms until you open it."
+          }
+        }
+      }
+    },
     "No se entienden las fechas del archivo.": {
       "localizations": {
         "en": {
@@ -1343,6 +1444,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Alarm notifications"
+          }
+        }
+      }
+    },
+    "Notificaciones urgentes desactivadas: Concentración puede silenciarlas.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time-sensitive notifications are off: Focus may silence them."
+          }
+        }
+      }
+    },
+    "Notificaciones y voz apagadas: nada te va a avisar.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications and voice are off: nothing will alert you."
           }
         }
       }
@@ -1473,6 +1594,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Daily profiles"
+          }
+        }
+      }
+    },
+    "Permitir": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow"
           }
         }
       }
@@ -1835,6 +1966,16 @@
         }
       }
     },
+    "Sin datos de LibreLinkUp: no hay lecturas que vigilar.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No LibreLinkUp data: there are no readings to watch."
+          }
+        }
+      }
+    },
     "Sin datos del sensor": {
       "localizations": {
         "en": {
@@ -2145,6 +2286,16 @@
         }
       }
     },
+    "Ver": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show"
+          }
+        }
+      }
+    },
     "Visualización": {
       "localizations": {
         "en": {
@@ -2195,12 +2346,33 @@
         }
       }
     },
+    "macOS bloquea las notificaciones de LibreLibreLink.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS is blocking LibreLibreLink notifications."
+          }
+        }
+      }
+    },
     "macOS tiene bloqueadas las notificaciones de LibreLibreLink: Ajustes del Sistema ▸ Notificaciones.": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "macOS is blocking LibreLibreLink notifications: System Settings ▸ Notifications."
+          }
+        }
+      }
+    },
+    "macOS todavía no dio permiso para notificar.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS hasn't granted notification permission yet."
           }
         }
       }

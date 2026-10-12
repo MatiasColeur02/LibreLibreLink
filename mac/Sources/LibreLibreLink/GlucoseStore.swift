@@ -37,6 +37,9 @@ final class GlucoseStore {
     private(set) var isDemo = false
 
     let notifier = AlarmNotifier()
+    /// Estado del sistema que decide si las alarmas llegan (se revisa con el reloj).
+    private(set) var outputMuted = false
+    private(set) var launchAtLogin = LaunchAtLogin.isEnabled
 
     var settings: AlarmSettings {
         didSet {
@@ -315,6 +318,7 @@ final class GlucoseStore {
                 guard let self else { return }
                 self.now = Date()
                 self.evaluateAlarms()
+                await self.refreshDeliveryChecks()
             }
         }
     }
@@ -412,6 +416,39 @@ final class GlucoseStore {
     private static func savedSensorNotices() -> [String: SensorNoticeEngine] {
         UserDefaults.standard.data(forKey: Keys.sensorNotices)
             .flatMap { try? JSONDecoder().decode([String: SensorNoticeEngine].self, from: $0) } ?? [:]
+    }
+
+    // MARK: Diagnóstico de alarmas (R15)
+
+    var deliveryState: AlarmDeliveryState {
+        var state = AlarmDeliveryState(settings: settings, permission: notifier.authorization)
+        state.bannersEnabled = notifier.bannersEnabled
+        state.soundEnabled = notifier.soundEnabled
+        state.timeSensitiveEnabled = notifier.timeSensitiveEnabled
+        state.outputMuted = outputMuted
+        state.launchAtLogin = launchAtLogin
+        state.hasData = phase == .ready && connectionError == nil && needsAttention == nil
+        return state
+    }
+
+    /// Por qué una alarma podría no llegar, del más grave al más leve.
+    var deliveryIssues: [AlarmDeliveryIssue] { AlarmDelivery.issues(deliveryState) }
+
+    /// Se activó algún aviso (notificación o voz) pero ninguno puede llegar: se muestra en el panel.
+    var alarmsBroken: Bool {
+        let state = deliveryState
+        return (settings.notificationsEnabled || settings.speakAlarms) && state.hasData && !AlarmDelivery.canAlert(state)
+    }
+
+    func refreshDeliveryChecks() async {
+        await notifier.refreshAuthorization()
+        outputMuted = SystemAudio.isOutputMuted
+        launchAtLogin = LaunchAtLogin.isEnabled
+    }
+
+    func setLaunchAtLogin(_ enabled: Bool) throws {
+        defer { launchAtLogin = LaunchAtLogin.isEnabled }
+        try LaunchAtLogin.set(enabled)
     }
 
     private func withoutRefresh(_ body: () -> Void) {
