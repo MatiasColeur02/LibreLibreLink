@@ -31,6 +31,14 @@ los mismos. Las notificaciones del demo dicen "Demo ·". No se recuerda al reini
 
 ## Correr
 
+Para `make-app.sh` primero instalá **Xcode** (completo, de la App Store) y **xcodegen**:
+`brew install xcodegen`. Corrélo con `bash` (o directo, `scripts/make-app.sh`).
+
+**Sin Xcode:** `scripts/make-app-lite.sh --install` arma la app solo con SwiftPM (alcanzan las
+Command Line Tools, `xcode-select --install`). Queda sin widgets ni acciones de Atajos, porque
+son extensiones y necesitan Xcode; el resto (barra de menú, ventana, alarmas, notificaciones)
+anda igual.
+
 ```bash
 cd mac
 swift test                                       # tests de LibreKit (fixtures)

@@ -6,6 +6,19 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+if ! command -v xcodegen >/dev/null 2>&1; then
+    echo "Falta xcodegen. Instalalo con:  brew install xcodegen" >&2
+    echo "(si no tenés Homebrew: https://brew.sh)" >&2
+    echo "O, sin Xcode (sin widgets ni Atajos):  scripts/make-app-lite.sh ${1:-}" >&2
+    exit 1
+fi
+if ! xcodebuild -version >/dev/null 2>&1; then
+    echo "Falta Xcode completo (no alcanzan las Command Line Tools)." >&2
+    echo "Instalalo desde la App Store y después:  sudo xcode-select -s /Applications/Xcode.app" >&2
+    echo "O, sin Xcode (sin widgets ni Atajos):  scripts/make-app-lite.sh ${1:-}" >&2
+    exit 1
+fi
+
 xcodegen --quiet
 xcodebuild -project LibreLibreLink.xcodeproj -scheme LibreLibreLink -configuration Release \
     -derivedDataPath .build/xcode build -quiet
