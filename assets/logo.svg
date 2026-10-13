@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- Ícono de LibreLibreLink: gota dentro de un anillo, blanco sobre magenta oscuro.
+       Cuadrado redondeado de 824 px centrado (grilla de íconos de macOS). -->
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="#8A1263"/>
+  <g transform="translate(512 512) scale(0.4) translate(-800 -800)" fill="#FFFFFF">
+    <path fill-rule="evenodd" d="M800 100a700 700 0 1 0 0 1400a700 700 0 1 0 0-1400zM800 300a500 500 0 1 1 0 1000a500 500 0 1 1 0-1000z"/>
+    <path d="M800 457C605 727 600 876 600 936A200 200 0 0 0 1000 936C1000 876 995 727 800 457Z"/>
+  </g>
+</svg>

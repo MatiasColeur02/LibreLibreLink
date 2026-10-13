@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/logo.svg" alt="LibreLibreLink logo" width="160"></p>
+
 # LibreLibreLink
 
 A native **macOS menu bar app** that shows the glucose readings of a **FreeStyle Libre 2 Plus**
@@ -162,7 +164,9 @@ swift run llu --demo high                                  # demo scenario, no a
 | `mac/Sources/llu` | Diagnostic CLI. |
 | `mac/Tests/LibreKitTests` | Unit tests (`swift test`). |
 | `mac/Localization` | String Catalog (Spanish base, English translation). |
-| `mac/scripts` | `make-app.sh` (bundle), `sync-strings.sh` + `translations_en.py` (i18n). |
+| `mac/scripts` | `make-app.sh` (bundle), `make-icon.swift` (app icon from `assets/logo.svg`), `sync-strings.sh` + `translations_en.py` (i18n). |
+| `mac/Resources` | `AppIcon.icns`, generated from the logo. |
+| `assets/logo.svg` | App logo (source of the icon). |
 | `re/` | Reverse-engineering notes on LibreLink 2.13.1: NFC, BLE, native library, alarm/UI requirements, and `HANDOFF.md` with the project state. |
 | `ios/LibrePatchInfo` | Read-only iOS helper that reads a sensor's `patchInfo` over NFC to classify gen1/gen2 (needs a paid Apple Developer account for the NFC capability). |
 | `PLAN.md` | Project plan and phases (Spanish). |

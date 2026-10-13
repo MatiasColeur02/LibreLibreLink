@@ -20,6 +20,10 @@ xcrun xcstringstool compile Localization/Localizable.xcstrings --output-director
 mkdir -p "$APP/Contents/Resources/es.lproj"
 echo '/* Español: idioma base, las claves ya están en español. */' > "$APP/Contents/Resources/es.lproj/Localizable.strings"
 
+# Ícono de la app (Finder, Launchpad, Dock con la ventana abierta). Se regenera desde
+# ../assets/logo.svg con: swift scripts/make-icon.swift
+cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
+
 cat > "$APP/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -30,6 +34,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
     <key>CFBundleIdentifier</key><string>local.librelibrelink.LibreLibreLink</string>
     <key>CFBundleName</key><string>LibreLibreLink</string>
     <key>CFBundleExecutable</key><string>LibreLibreLink</string>
+    <key>CFBundleIconFile</key><string>AppIcon</string>
     <key>CFBundlePackageType</key><string>APPL</string>
     <key>CFBundleShortVersionString</key><string>0.3</string>
     <key>CFBundleVersion</key><string>3</string>
