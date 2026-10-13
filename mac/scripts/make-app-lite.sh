@@ -17,7 +17,11 @@ cp "$BIN" "$APP/Contents/MacOS/LibreLibreLink"
 # Textos en inglés y español (String Catalog → en.lproj / es.lproj). macOS elige según
 # el idioma del sistema; cualquier otro idioma cae en inglés (CFBundleDevelopmentRegion).
 mkdir -p "$APP/Contents/Resources"
-xcrun xcstringstool compile Localization/Localizable.xcstrings --output-directory "$APP/Contents/Resources"
+# xcstringstool viene con Xcode; sin Xcode se usa un conversor equivalente en Python.
+if ! xcrun --find xcstringstool >/dev/null 2>&1 \
+   || ! xcrun xcstringstool compile Localization/Localizable.xcstrings --output-directory "$APP/Contents/Resources"; then
+    /usr/bin/python3 -I scripts/xcstrings-to-strings.py Localization/Localizable.xcstrings "$APP/Contents/Resources"
+fi
 # El español es el idioma base (las claves): un es.lproj vacío alcanza para que macOS lo ofrezca.
 mkdir -p "$APP/Contents/Resources/es.lproj"
 echo '/* Español: idioma base, las claves ya están en español. */' > "$APP/Contents/Resources/es.lproj/Localizable.strings"
