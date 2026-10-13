@@ -115,6 +115,27 @@ final class GlucoseStore {
     @ObservationIgnored private var shortcutTrigger = ShortcutTrigger()
     @ObservationIgnored private var callTask: Task<Void, Never>?
     @ObservationIgnored private var lastSnapshot: GlucoseSnapshot?
+    @ObservationIgnored private var lastSnapshotInputs: SnapshotInputs?
+
+    /// Lo que decide el contenido de los widgets; si no cambia, `publishSnapshot` no hace nada.
+    private struct SnapshotInputs: Equatable {
+        var phase: Phase
+        var isDemo: Bool
+        var discreet: Bool
+        var patientID: String?
+        var patients: [Patient]
+        var display: DisplaySettings
+        var current: GlucoseMeasurement?
+        var history: [GlucoseMeasurement]
+        var historyRevision: Int
+        var conditions: [GlucoseCondition]
+        var sensorEnd: Date?
+        var day: Date
+        var window: Int
+    }
+
+    /// Cada cuánto se corre la ventana de 12 h de los widgets si no llegan lecturas nuevas.
+    private static let snapshotWindowStep: TimeInterval = 600
 
     private enum Keys {
         static let patient = "selectedPatientID"
@@ -208,6 +229,18 @@ final class GlucoseStore {
     /// Escribe lo que muestran los widgets y leen las acciones de Atajos, y recarga los
     /// widgets si algo cambió.
     private func publishSnapshot() {
+        // El reloj llama cada 30 s; si nada de lo que muestran los widgets cambió, no leer el historial.
+        let inputs = SnapshotInputs(
+            phase: phase, isDemo: isDemo, discreet: isDiscreet, patientID: selectedPatientID,
+            patients: patients, display: display, current: current, history: history,
+            historyRevision: historyRevision, conditions: conditions, sensorEnd: sensor?.expectedEnd,
+            day: Calendar.current.startOfDay(for: now),
+            // Corre la ventana de 12 h aunque no lleguen lecturas.
+            window: Int(now.timeIntervalSince1970 / Self.snapshotWindowStep)
+        )
+        guard inputs != lastSnapshotInputs else { return }
+        lastSnapshotInputs = inputs
+
         let patient = patients.first { $0.id == selectedPatientID }
         var readings: [GlucoseMeasurement] = []
         var today: GlucoseSnapshot.Today?
@@ -317,12 +350,14 @@ final class GlucoseStore {
     private func record(_ graph: GraphResult, patientID: String) {
         guard let database else { return }
         do {
-            try database.insert(graph.history + (graph.current.map { [$0] } ?? []), patientID: patientID)
+            let changed = try database.insert(graph.history + (graph.current.map { [$0] } ?? []), patientID: patientID)
             historyError = nil
+            // Sin lecturas nuevas no hace falta recalcular los informes.
+            if changed > 0 { historyRevision += 1 }
         } catch {
             historyError = error.localizedDescription
+            historyRevision += 1
         }
-        historyRevision += 1
     }
 
     private var pollInterval: TimeInterval { isDemo ? Self.demoPollInterval : Self.pollInterval }

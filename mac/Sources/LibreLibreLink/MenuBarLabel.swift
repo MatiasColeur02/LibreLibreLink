@@ -48,8 +48,25 @@ struct MenuBarLabel: View {
         ([store.isDiscreet ? String(localized: "Modo discreto") : text] + store.conditions.map(\.title)).joined(separator: ", ")
     }
 
+    private struct RenderKey: Equatable {
+        let symbol: String?
+        let text: String
+        let color: NSColor?
+    }
+
+    /// Última imagen dibujada: el reloj reevalúa el label cada 30 s, casi siempre sin cambios.
+    private static var lastRender: (key: RenderKey, image: NSImage)?
+
     /// Dibuja ícono + texto en una imagen. Sin color → plantilla (monocroma).
     static func render(symbol: String?, text: String, color: NSColor?) -> NSImage {
+        let key = RenderKey(symbol: symbol, text: text, color: color)
+        if let lastRender, lastRender.key == key { return lastRender.image }
+        let image = draw(symbol: symbol, text: text, color: color)
+        lastRender = (key, image)
+        return image
+    }
+
+    private static func draw(symbol: String?, text: String, color: NSColor?) -> NSImage {
         let font = NSFont.monospacedDigitSystemFont(ofSize: 13, weight: .medium)
         let tint = color ?? .black
         let attributed = NSAttributedString(string: text, attributes: [.font: font, .foregroundColor: tint])

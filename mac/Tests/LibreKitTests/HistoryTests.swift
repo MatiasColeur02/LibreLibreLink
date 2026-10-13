@@ -87,6 +87,18 @@ private func series(_ values: [Double], every minutes: Double = 5, from start: D
     #expect(try db.earliest(patientID: "nadie") == nil)
 }
 
+@Test func historyDatabaseCountsOnlyNewOrChangedReadings() throws {
+    let db = try HistoryDatabase(url: nil)
+    let readings = series([100, 110])
+    #expect(try db.insert(readings, patientID: "p") == 2)
+    #expect(try db.insert(readings, patientID: "p") == 0)
+    let corrected = GlucoseMeasurement(date: readings[1].date, mgdL: 112, trend: nil)
+    #expect(try db.insert([corrected], patientID: "p") == 1)
+    let withTrend = GlucoseMeasurement(date: readings[1].date, mgdL: 112, trend: .stable)
+    #expect(try db.insert([withTrend], patientID: "p") == 1)
+    #expect(try db.insert([corrected], patientID: "p") == 0)
+}
+
 @Test func historyDatabasePersistsToFile() throws {
     let url = FileManager.default.temporaryDirectory.appending(path: "librebar-\(UUID().uuidString)/h.sqlite")
     defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }

@@ -64,7 +64,12 @@ public final class HistoryDatabase {
         try execute("BEGIN")
         do {
             let onConflict = replacingExisting
-                ? "UPDATE SET mgdl = excluded.mgdl, trend = COALESCE(excluded.trend, readings.trend)"
+                // Solo si algo cambia: así `changed` cuenta lecturas nuevas o corregidas, no repetidas.
+                ? """
+                  UPDATE SET mgdl = excluded.mgdl, trend = COALESCE(excluded.trend, readings.trend)
+                  WHERE readings.mgdl IS NOT excluded.mgdl
+                     OR (excluded.trend IS NOT NULL AND readings.trend IS NOT excluded.trend)
+                  """
                 : "NOTHING"
             let statement = try prepare("""
                 INSERT INTO readings (patient, minute, mgdl, trend) VALUES (?, ?, ?, ?)
