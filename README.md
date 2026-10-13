@@ -61,10 +61,16 @@ The BLE/NFC findings are kept in `re/` in case a gen1 sensor ever turns up.
   Disturb silences notifications.
 - Adjustable thresholds (low 60–100, high 120–400 mg/dL), plus sensor notices: new sensor,
   warm-up finished, ending in 3 days / 1 day / 1 hour, ended.
+- **Smarter alarms**: *falling fast* (≥ 2 mg/dL per minute while still in range), *only alert
+  if the high lasts* 30 min to 3 h (so a short post-meal spike stays quiet), **night
+  thresholds** with an option to silence highs at night, and **escalation**: a low nobody
+  attends to for 10 min repeats every 2 min and is read aloud.
+- **Notification actions**: snooze 15 / 30 / 60 min, or on a low *I ate · remind me in 15 min*
+  (the 15-15 rule). Urgent low can only be snoozed by treating it, for at most 15 min.
 - **Alarm diagnostics** tell you whether alarms can actually reach you, or why not
   (permission denied, notification style "None", muted Mac, not launching at login, …).
 
-**Window**
+**Window** (Today, Logbook, Reports and Settings)
 - **Today**: big current value, time in range, daily average and an interactive chart
   (6 h / 12 h / 24 h / by day).
 - **Logbook**: log carbs, rapid and long-acting insulin, exercise, fingerstick readings
@@ -121,8 +127,8 @@ only appears while the main window is open). Run it without `--install` to only 
 1. Click the new item in the menu bar and sign in with your **LibreLinkUp** email and
    password. The region (US, EU, LA, …) is detected automatically through the API redirect.
 2. If macOS asks for Keychain access, choose **Always Allow**.
-3. Open **Settings** in the panel to turn on notifications, set thresholds and enable
-   **Open at login**.
+3. Click **Open window** in the panel and go to **Settings** to turn on notifications, set
+   thresholds and enable **Open at login**.
 
 > [!NOTE]
 > Notifications and *Open at login* only work from the packaged `LibreLibreLink.app`, not

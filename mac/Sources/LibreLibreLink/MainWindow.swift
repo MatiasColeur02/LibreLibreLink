@@ -3,27 +3,71 @@ import Charts
 import LibreKit
 import SwiftUI
 
-/// Ventana grande: "Hoy" (lectura + gráfico diario), "Registro" (anotaciones) e "Informes" (estadísticas del período).
+/// Ventana grande: "Hoy" (lectura + gráfico diario), "Registro" (anotaciones), "Informes"
+/// (estadísticas del período) y "Ajustes" (alarmas, visualización y cuenta).
 /// Mientras está abierta la app aparece en el Dock.
 struct MainWindow: View {
     static let id = "main"
 
     @Bindable var store: GlucoseStore
-    @State private var tab: Tab = .today
 
     enum Tab: String, CaseIterable, Identifiable {
-        case today, logbook, reports
+        case today, logbook, reports, settings
         var id: String { rawValue }
         var title: LocalizedStringKey {
             switch self {
             case .today: "Hoy"
             case .logbook: "Registro"
             case .reports: "Informes"
+            case .settings: "Ajustes"
             }
         }
     }
 
     var body: some View {
+        content
+            .background(Color(nsColor: .windowBackgroundColor))
+            .frame(minWidth: 720, minHeight: 560)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Picker("Sección", selection: $store.windowTab) {
+                        ForEach(Tab.allCases) { Text($0.title).tag($0) }
+                    }
+                    .pickerStyle(.segmented)
+                    .fixedSize()
+                }
+                if store.patients.count > 1 {
+                    ToolbarItem {
+                        Picker("Paciente", selection: Binding(
+                            get: { store.selectedPatientID ?? "" },
+                            set: { store.selectedPatientID = $0 }
+                        )) {
+                            ForEach(store.patients) { Text($0.displayName).tag($0.id) }
+                        }
+                    }
+                }
+                ToolbarItem {
+                    Button { store.refreshNow() } label: { Label("Actualizar", systemImage: "arrow.clockwise") }
+                }
+            }
+            .navigationTitle("LibreLibreLink")
+            .onAppear {
+                NSApp.setActivationPolicy(.regular)
+                NSApp.activate()
+            }
+            .onDisappear { NSApp.setActivationPolicy(.accessory) }
+    }
+
+    /// Ajustes se ve aunque no haya sesión (y trae su propio scroll, como todo `Form`).
+    @ViewBuilder private var content: some View {
+        if store.windowTab == .settings {
+            SettingsView(store: store)
+        } else {
+            readings
+        }
+    }
+
+    private var readings: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 if store.isDemo {
@@ -50,10 +94,10 @@ struct MainWindow: View {
                 case .loading:
                     ProgressView("Conectando con LibreLinkUp…").frame(maxWidth: .infinity, minHeight: 300)
                 case .ready:
-                    switch tab {
+                    switch store.windowTab {
                     case .today: TodayView(store: store)
                     case .logbook: LogbookView(store: store)
-                    case .reports: ReportsView(store: store)
+                    case .reports, .settings: ReportsView(store: store)
                     }
                 }
                 Text("No reemplaza las alarmas oficiales de LibreLink. Ante síntomas, medí con glucómetro. No usar para decidir dosis.")
@@ -64,36 +108,6 @@ struct MainWindow: View {
             .frame(maxWidth: 1000)
             .frame(maxWidth: .infinity)
         }
-        .background(Color(nsColor: .windowBackgroundColor))
-        .frame(minWidth: 720, minHeight: 560)
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Picker("Sección", selection: $tab) {
-                    ForEach(Tab.allCases) { Text($0.title).tag($0) }
-                }
-                .pickerStyle(.segmented)
-                .fixedSize()
-            }
-            if store.patients.count > 1 {
-                ToolbarItem {
-                    Picker("Paciente", selection: Binding(
-                        get: { store.selectedPatientID ?? "" },
-                        set: { store.selectedPatientID = $0 }
-                    )) {
-                        ForEach(store.patients) { Text($0.displayName).tag($0.id) }
-                    }
-                }
-            }
-            ToolbarItem {
-                Button { store.refreshNow() } label: { Label("Actualizar", systemImage: "arrow.clockwise") }
-            }
-        }
-        .navigationTitle("LibreLibreLink")
-        .onAppear {
-            NSApp.setActivationPolicy(.regular)
-            NSApp.activate()
-        }
-        .onDisappear { NSApp.setActivationPolicy(.accessory) }
     }
 }
 

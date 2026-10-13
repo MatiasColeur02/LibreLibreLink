@@ -5,14 +5,14 @@ import Testing
 // El servidor de demo pasa por el cliente real: login con redirección, pacientes y gráfico.
 // `.serialized` porque el escenario es global.
 @Suite(.serialized) struct DemoTests {
-    private func load(_ scenario: DemoScenario) async throws -> (GraphResult, [GlucoseCondition]) {
+    private func load(_ scenario: DemoScenario, settings: AlarmSettings = AlarmSettings()) async throws -> (GraphResult, [GlucoseCondition]) {
         DemoServer.scenario = scenario
         let client = DemoServer.makeClient()
         let patients = try await client.patients()
         #expect(await client.region.code == "la")
         let graph = try await client.graph(patientID: try #require(patients.first).id)
         let conditions = GlucoseStatus.conditions(
-            current: graph.current, recent: graph.history, sensor: graph.sensor, settings: AlarmSettings(),
+            current: graph.current, recent: graph.history, sensor: graph.sensor, settings: settings,
             fetched: true, connectionError: nil, needsAttention: nil, now: Date()
         )
         return (graph, conditions)
@@ -44,6 +44,13 @@ import Testing
         let (_, conditions) = try await load(.lowSoon)
         #expect(conditions.contains { if case .lowSoon = $0 { true } else { false } })
         #expect(try await load(.normal).1.allSatisfy { if case .lowSoon = $0 { false } else { true } })
+    }
+
+    @Test func fallingFastScenario() async throws {
+        var settings = AlarmSettings()
+        settings.fallingFastEnabled = true
+        #expect(try await load(.fallingFast, settings: settings).1.contains(.fallingFast))
+        #expect(try await load(.fallingFast).1.isEmpty)
     }
 
     @Test func outOfScaleValues() async throws {

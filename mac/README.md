@@ -56,16 +56,32 @@ elegí "Permitir siempre".
 | Sin conexión | wifi tachado + valor | falla la red o LibreLinkUp |
 | Revisar cuenta | persona + `LibreLink` | sin sesión, términos sin aceptar, nadie a quien seguir |
 
-`LO` < 40 y `HI` > 500. El panel lista cada problema con su explicación, muestra los días
-restantes del sensor y tiene **Ajustes**: notificaciones (apagadas por defecto), umbrales
+`LO` < 40 y `HI` > 500. El panel lista cada problema con su explicación y muestra los días
+restantes del sensor. Los **Ajustes** están en la ventana grande (**Abrir ventana ▸ Ajustes**,
+`Sources/LibreLibreLink/SettingsView.swift`): notificaciones (apagadas por defecto), umbrales
 de baja (60–100) y alta (120–400), sin señal, abrir al iniciar sesión. Una notificación
 por episodio, repetida cada 5 min mientras dure.
 
-**Diagnóstico de alarmas** (arriba de Ajustes ▸ Alarmas): dice si las alarmas pueden avisarte o
+**Alarmas más inteligentes** (`LibreKit/Status.swift`: `AlarmPolicy`, `AlarmSnoozes`, `AlarmEngine`):
+- **Bajando rápido** (desactivada): ≤ −2 mg/dL/min (flecha ↓ o recta de 15 min) estando en rango.
+- **Alta sostenida**: "Avisar: enseguida / si dura 30 min / 1–3 h". La barra muestra la alta
+  enseguida igual; una laguna de más de 30 min en los datos corta la racha.
+- **Noche** (desactivada; def. 23:00–7:00): umbrales propios (baja 80, alta 270) y opción de no
+  avisar la alta. La baja grave (< 55) no cambia.
+- **Acciones en la notificación**: posponer 15/30/60 min; en las bajas, «Ya comí · recordame en
+  15 min» (pospone las bajas 15 min y programa "Volvé a medir"). Posponer una baja también calla
+  "baja en camino" y "bajando rápido", pero no la baja grave; la baja grave solo se pospone
+  tratándola (máx. 15 min). Las pospuestas se ven en el panel ("Reactivar") y no sobreviven a un
+  reinicio (vuelven a sonar).
+- **Escalada** (activada): baja o baja grave sin atender 10 min (sin tocar la notificación) → se
+  repite cada 2 min y se lee en voz alta aunque la voz esté apagada.
+
+**Diagnóstico de alarmas** (arriba de Ajustes ▸ Cómo te avisa): dice si las alarmas pueden avisarte o
 por qué no, con el arreglo a mano: notificaciones y voz apagadas, permiso de macOS pendiente o
 bloqueado, estilo «Ninguno», sin sonido, notificaciones urgentes desactivadas (Concentración),
 Mac en silencio, no se abre al iniciar sesión, sin datos de LibreLinkUp (`LibreKit/AlarmDelivery.swift`).
-Si activaste notificaciones o voz pero ninguna puede llegar, el panel lo muestra en naranja.
+Si activaste notificaciones o voz pero ninguna puede llegar, el panel lo muestra en naranja
+con un botón que abre Ajustes.
 No detecta si Concentración está activa (requiere un permiso de Apple) ni si la Mac va a dormir.
 
 **Baja en camino** (Ajustes, bajo el umbral de baja; activada): si la glucosa cae al menos

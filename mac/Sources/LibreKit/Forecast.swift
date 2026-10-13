@@ -10,6 +10,8 @@ public enum GlucoseForecast {
     public static let horizon: TimeInterval = 15 * 60
     /// Solo con caída clara: la flecha "bajando" de LibreLink empieza en −1 mg/dL/min.
     public static let minimumFall = -1.0
+    /// "Bajando rápido": la flecha ↓ de LibreLink empieza en −2 mg/dL/min.
+    public static let fastFall = -2.0
 
     /// Pendiente en mg/dL por minuto, o `nil` si hay menos de 3 lecturas o abarcan < 10 min.
     public static func slope(_ readings: [GlucoseMeasurement], latest: GlucoseMeasurement) -> Double? {
@@ -38,5 +40,11 @@ public enum GlucoseForecast {
               let slope = slope(readings, latest: latest), slope <= minimumFall else { return nil }
         let crossing = max(latest.date.addingTimeInterval((latest.mgdL - threshold) / -slope * 60), now)
         return crossing.timeIntervalSince(now) <= horizon ? crossing : nil
+    }
+
+    /// Baja a −2 mg/dL/min o más rápido, según la flecha de LibreLinkUp o la pendiente reciente.
+    public static func isFallingFast(_ readings: [GlucoseMeasurement], latest: GlucoseMeasurement) -> Bool {
+        if latest.trend == .fallingQuickly { return true }
+        return slope(readings, latest: latest).map { $0 <= fastFall } ?? false
     }
 }

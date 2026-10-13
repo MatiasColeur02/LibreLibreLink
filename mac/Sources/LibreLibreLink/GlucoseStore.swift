@@ -37,6 +37,10 @@ final class GlucoseStore {
     private(set) var isDemo = false
 
     let notifier = AlarmNotifier()
+    /// Sección de la ventana grande (el panel la usa para abrir directo en Ajustes).
+    var windowTab: MainWindow.Tab = .today
+    /// Alarmas pospuestas desde la notificación. Solo en memoria: al reiniciar vuelven a sonar.
+    private(set) var snoozes = AlarmSnoozes()
     /// Estado del sistema que decide si las alarmas llegan (se revisa con el reloj).
     private(set) var outputMuted = false
     private(set) var launchAtLogin = LaunchAtLogin.isEnabled
@@ -111,6 +115,7 @@ final class GlucoseStore {
                 start(with: makeClient(credentials))
             }
         }
+        notifier.onResponse = { [weak self] kind, action in self?.handleAlarmResponse(kind, action) }
         startClock()
     }
 
@@ -312,6 +317,7 @@ final class GlucoseStore {
         connectionError = nil
         needsAttention = nil
         alarmEngine = AlarmEngine()
+        snoozes = AlarmSnoozes()
         phase = .needsLogin
     }
 
@@ -417,13 +423,38 @@ final class GlucoseStore {
             alarmEngine = AlarmEngine()
             return
         }
-        let active = Set(conditions.compactMap(\.alarm)).filter { kind in
-            kind != .signalLoss || settings.signalLossEnabled
+        let active = AlarmPolicy.alarms(conditions: conditions, readings: history + (current.map { [$0] } ?? []),
+                                        settings: settings, snoozes: snoozes, now: now)
+        let escalate = settings.escalationEnabled
+        for kind in alarmEngine.update(active: active, now: now, escalate: escalate) {
+            // Una baja sin atender también se lee en voz alta, aunque la voz esté apagada.
+            let escalated = escalate && alarmEngine.isEscalated(kind, now: now)
+            if settings.notificationsEnabled {
+                notifier.post(kind, reading: freshReading, unit: display.unit, escalated: escalated)
+            }
+            if settings.speakAlarms || escalated { notifier.speak(kind, reading: freshReading, unit: display.unit) }
         }
-        for kind in alarmEngine.update(active: active, now: now) {
-            if settings.notificationsEnabled { notifier.post(kind, reading: freshReading, unit: display.unit) }
-            if settings.speakAlarms { notifier.speak(kind, reading: freshReading, unit: display.unit) }
+    }
+
+    /// Lo que el usuario eligió en la notificación de una alarma.
+    private func handleAlarmResponse(_ kind: AlarmKind, _ action: AlarmAction) {
+        alarmEngine.acknowledge(kind)
+        switch action {
+        case .opened:
+            break
+        case .snooze(let duration):
+            snoozes.snooze(kind, for: duration, now: Date())
+        case .treated:
+            snoozes.snooze(kind, for: AlarmAction.treatedDelay, now: Date())
+            notifier.scheduleRecheck(after: AlarmAction.treatedDelay)
         }
+        evaluateAlarms()
+    }
+
+    /// Vuelve a activar las alarmas pospuestas.
+    func cancelSnoozes() {
+        snoozes.cancelAll()
+        evaluateAlarms()
     }
 
     /// Corre siempre (para seguir el sensor), pero solo notifica si los avisos están activados.

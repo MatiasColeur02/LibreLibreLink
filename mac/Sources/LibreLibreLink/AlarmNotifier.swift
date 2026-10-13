@@ -21,11 +21,19 @@ final class AlarmNotifier {
 
     nonisolated static var isBundled: Bool { Bundle.main.bundleIdentifier != nil }
 
-    private let delegate = ForegroundPresenter()
+    /// El usuario tocó una alarma o eligió una de sus acciones.
+    var onResponse: ((AlarmKind, AlarmAction) -> Void)?
+
+    private let delegate = NotificationDelegate()
     private let synthesizer = AVSpeechSynthesizer()
 
     init() {
-        if Self.isBundled { UNUserNotificationCenter.current().delegate = delegate }
+        if Self.isBundled {
+            let center = UNUserNotificationCenter.current()
+            center.delegate = delegate
+            center.setNotificationCategories(Set(AlarmCategory.allCases.map(\.category)))
+        }
+        delegate.handler = { [weak self] kind, action in self?.onResponse?(kind, action) }
         Task { await refreshAuthorization() }
     }
 
@@ -58,10 +66,12 @@ final class AlarmNotifier {
         await refreshAuthorization()
     }
 
-    func post(_ kind: AlarmKind, reading: GlucoseMeasurement?, unit: GlucoseUnit) {
+    /// - Parameter escalated: una baja sin atender (se marca en el título).
+    func post(_ kind: AlarmKind, reading: GlucoseMeasurement?, unit: GlucoseUnit, escalated: Bool = false) {
         guard Self.isBundled else { return }
         let content = UNMutableNotificationContent()
-        content.title = isDemo ? String(localized: "Demo · \(kind.title)") : kind.title
+        let title = escalated ? String(localized: "Sin atender · \(kind.title)") : kind.title
+        content.title = isDemo ? String(localized: "Demo · \(title)") : title
         if let reading {
             let value = unit.reading(reading.mgdL)
             content.body = "\(value) \(unit.symbol) \(reading.trend?.arrow ?? "") · \(kind.advice)"
@@ -70,9 +80,24 @@ final class AlarmNotifier {
         }
         content.sound = .default
         content.interruptionLevel = .timeSensitive
+        content.categoryIdentifier = AlarmCategory(kind).rawValue
+        content.userInfo = ["kind": kind.rawValue]
         // Mismo identificador por tipo: la nueva reemplaza a la anterior.
         let request = UNNotificationRequest(identifier: "alarm.\(kind.rawValue)", content: content, trigger: nil)
         UNUserNotificationCenter.current().add(request)
+    }
+
+    /// "Ya comí": recordatorio para volver a medir (regla 15-15).
+    func scheduleRecheck(after delay: TimeInterval) {
+        guard Self.isBundled else { return }
+        let content = UNMutableNotificationContent()
+        let title = String(localized: "Volvé a medir")
+        content.title = isDemo ? String(localized: "Demo · \(title)") : title
+        content.body = String(localized: "Pasaron \(Int(delay / 60)) min desde que trataste la baja. Medí con glucómetro; si sigue baja, repetí el tratamiento.")
+        content.sound = .default
+        content.interruptionLevel = .timeSensitive
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: delay, repeats: false)
+        UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: "recheck", content: content, trigger: trigger))
     }
 
     func post(_ notice: SensorNotice, sensor: SensorInfo) {
@@ -137,22 +162,78 @@ final class AlarmNotifier {
     }
 }
 
-/// Muestra el banner aunque el panel de LibreLibreLink esté abierto (app activa).
-private final class ForegroundPresenter: NSObject, UNUserNotificationCenterDelegate {
+/// Lo que el usuario hizo con una notificación de alarma.
+enum AlarmAction: Equatable {
+    /// Tocó la notificación: la vio.
+    case opened
+    case snooze(TimeInterval)
+    /// "Ya comí": posponer las bajas 15 min y recordar volver a medir.
+    case treated
+
+    static let treatedDelay: TimeInterval = 15 * 60
+
+    init?(identifier: String) {
+        switch identifier {
+        case UNNotificationDefaultActionIdentifier: self = .opened
+        case "treated": self = .treated
+        default:
+            guard identifier.hasPrefix("snooze."), let minutes = Double(identifier.dropFirst(7)) else { return nil }
+            self = .snooze(minutes * 60)
+        }
+    }
+}
+
+/// Botones de cada alarma. La baja grave solo se puede posponer tratándola.
+private enum AlarmCategory: String, CaseIterable {
+    case urgentLow = "alarm.urgentLow"
+    case low = "alarm.low"
+    case other = "alarm.other"
+
+    init(_ kind: AlarmKind) {
+        self = kind == .urgentLow ? .urgentLow : kind.isLow ? .low : .other
+    }
+
+    var category: UNNotificationCategory {
+        let treated = UNNotificationAction(identifier: "treated", title: String(localized: "Ya comí · recordame en 15 min"))
+        let snooze = { (minutes: Int) in
+            UNNotificationAction(identifier: "snooze.\(minutes)", title: String(localized: "Posponer \(minutes) min"))
+        }
+        let actions = switch self {
+        case .urgentLow: [treated]
+        case .low: [treated, snooze(15), snooze(30)]
+        case .other: [snooze(15), snooze(30), snooze(60)]
+        }
+        return UNNotificationCategory(identifier: rawValue, actions: actions, intentIdentifiers: [])
+    }
+}
+
+/// Muestra el banner aunque el panel de LibreLibreLink esté abierto (app activa) y
+/// pasa a la app lo que el usuario eligió en una alarma.
+private final class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate, @unchecked Sendable {
+    var handler: (@MainActor (AlarmKind, AlarmAction) -> Void)?
+
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
     ) async -> UNNotificationPresentationOptions {
         [.banner, .sound, .list]
     }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
+        guard let raw = response.notification.request.content.userInfo["kind"] as? String,
+              let kind = AlarmKind(rawValue: raw),
+              let action = AlarmAction(identifier: response.actionIdentifier) else { return }
+        await handler?(kind, action)
+    }
 }
 
-private extension AlarmKind {
+extension AlarmKind {
     var title: String {
         switch self {
         case .urgentLow: String(localized: "Glucosa muy baja")
         case .low: String(localized: "Glucosa baja")
         case .lowSoon: String(localized: "Baja en camino")
+        case .fallingFast: String(localized: "Bajando rápido")
         case .high: String(localized: "Glucosa alta")
         case .signalLoss: String(localized: "Sin señal del sensor")
         }
@@ -162,6 +243,7 @@ private extension AlarmKind {
         switch self {
         case .urgentLow, .low, .high: String(localized: "Comprobá con glucómetro.")
         case .lowSoon: String(localized: "A este ritmo cruza el umbral de baja en menos de 15 min (estimado). Comprobá con glucómetro.")
+        case .fallingFast: String(localized: "Baja más de 2 mg/dL por minuto. Comprobá con glucómetro.")
         case .signalLoss: String(localized: "No llegan lecturas hace más de 20 min.")
         }
     }

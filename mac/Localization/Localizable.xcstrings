@@ -285,6 +285,26 @@
         }
       }
     },
+    "Ahora rigen los umbrales de día. Las bajas siempre avisan.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daytime thresholds apply now. Lows always alert."
+          }
+        }
+      }
+    },
+    "Ahora rigen los umbrales de noche. Las bajas siempre avisan.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Night thresholds apply now. Lows always alert."
+          }
+        }
+      }
+    },
     "Ajustes": {
       "localizations": {
         "en": {
@@ -316,6 +336,7 @@
       }
     },
     "Alarmas": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -331,6 +352,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lunch"
+          }
+        }
+      }
+    },
+    "Alta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "High"
           }
         }
       }
@@ -355,7 +386,18 @@
         }
       }
     },
+    "Alta de noche: > %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "High at night: > %@"
+          }
+        }
+      }
+    },
     "Alta: > %@": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -435,6 +477,16 @@
         }
       }
     },
+    "Avisar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alert"
+          }
+        }
+      }
+    },
     "Avisos del sensor (nuevo, listo y fin)": {
       "localizations": {
         "en": {
@@ -445,12 +497,32 @@
         }
       }
     },
+    "Baja": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low"
+          }
+        }
+      }
+    },
     "Baja (≈ 64)": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Low (≈ 64)"
+          }
+        }
+      }
+    },
+    "Baja de noche: < %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low at night: < %@"
           }
         }
       }
@@ -475,7 +547,28 @@
         }
       }
     },
+    "Baja más de 2 mg/dL por minuto, aunque todavía está en rango. Comprobá con glucómetro.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dropping more than 2 mg/dL per minute, although still in range. Confirm with a blood glucose meter."
+          }
+        }
+      }
+    },
+    "Baja más de 2 mg/dL por minuto. Comprobá con glucómetro.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dropping more than 2 mg/dL per minute. Confirm with a blood glucose meter."
+          }
+        }
+      }
+    },
     "Baja: < %@": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -511,6 +604,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Falling quickly"
+          }
+        }
+      }
+    },
+    "Bajando rápido (más de %@ por minuto, aunque esté en rango)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falling fast (more than %@ per minute, even when in range)"
+          }
+        }
+      }
+    },
+    "Bajando rápido en rango (≈ 140 ↓)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falling fast in range (≈ 140 ↓)"
           }
         }
       }
@@ -661,6 +774,16 @@
         }
       }
     },
+    "Con una demora, un pico corto después de comer no avisa, pero una alta que no baja sí. La barra de menú muestra la alta enseguida igual.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With a delay, a short spike after a meal doesn't alert, but a high that doesn't come down does. The menu bar still shows the high right away."
+          }
+        }
+      }
+    },
     "Conectando con LibreLinkUp…": {
       "localizations": {
         "en": {
@@ -687,6 +810,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "LibreLinkUp account"
+          }
+        }
+      }
+    },
+    "Cómo te avisa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How you're alerted"
           }
         }
       }
@@ -753,6 +886,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Breakfast"
+          }
+        }
+      }
+    },
+    "Desde": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From"
           }
         }
       }
@@ -844,6 +987,7 @@
       }
     },
     "El rango objetivo pinta los gráficos y el tiempo en rango; no cambia las alarmas.": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -973,6 +1117,16 @@
         }
       }
     },
+    "Enseguida": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Right away"
+          }
+        }
+      }
+    },
     "Episodios de baja": {
       "localizations": {
         "en": {
@@ -1014,11 +1168,22 @@
       }
     },
     "Es muy importante elegir la misma unidad que usa tu medidor.": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "It is very important to pick the same unit your meter uses."
+          }
+        }
+      }
+    },
+    "Es muy importante elegir la misma unidad que usa tu medidor. El rango objetivo pinta los gráficos y el tiempo en rango; no cambia las alarmas.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It is very important to choose the same unit your meter uses. The target range colors the charts and time in range; it doesn't change the alarms."
           }
         }
       }
@@ -1243,6 +1408,16 @@
         }
       }
     },
+    "Hasta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To"
+          }
+        }
+      }
+    },
     "Hay que aceptar términos": {
       "localizations": {
         "en": {
@@ -1369,6 +1544,16 @@
         }
       }
     },
+    "Insistir si no se atiende una baja": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep insisting if a low is not attended"
+          }
+        }
+      }
+    },
     "Insulina lenta": {
       "localizations": {
         "en": {
@@ -1410,11 +1595,22 @@
       }
     },
     "La baja grave (< %@) siempre se muestra y avisa. Las alarmas se repiten cada 5 min mientras dura el problema.": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Urgent low (< %@) is always shown and alerted. Alarms repeat every 5 min while the problem lasts."
+          }
+        }
+      }
+    },
+    "La baja grave (< %@) siempre se muestra y avisa. Si una baja sigue 10 min sin que toques la notificación, se repite cada 2 min y se lee en voz alta aunque la voz esté apagada. «Baja en camino» es una estimación con las lecturas de los últimos 15 min.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Urgent low (< %@) is always shown and always alerts. If a low lasts 10 min without you touching the notification, it repeats every 2 min and is read aloud even if spoken alarms are off. “Low coming soon” is an estimate from the last 15 min of readings."
           }
         }
       }
@@ -1455,6 +1651,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Alarms can reach you while the Mac is on and awake."
+          }
+        }
+      }
+    },
+    "Las alarmas se repiten cada 5 min mientras dura el problema. Desde la notificación se pueden posponer, y en una baja, elegir «Ya comí» para que te recuerde volver a medir en 15 min.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alarms repeat every 5 min while the problem lasts. You can snooze them from the notification, and on a low choose “I ate” to be reminded to check again in 15 min."
           }
         }
       }
@@ -1706,6 +1912,16 @@
         }
       }
     },
+    "No avisar la alta de noche": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Don't alert for highs at night"
+          }
+        }
+      }
+    },
     "No había lecturas nuevas (%@).": {
       "localizations": {
         "en": {
@@ -1796,6 +2012,16 @@
         }
       }
     },
+    "Noche": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Night"
+          }
+        }
+      }
+    },
     "Nota": {
       "localizations": {
         "en": {
@@ -1852,6 +2078,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "New Entry"
+          }
+        }
+      }
+    },
+    "Otros avisos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other alerts"
           }
         }
       }
@@ -1922,6 +2158,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Patient"
+          }
+        }
+      }
+    },
+    "Pasaron %lld min desde que trataste la baja. Medí con glucómetro; si sigue baja, repetí el tratamiento.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min have passed since you treated the low. Check with a blood glucose meter; if it's still low, treat again."
           }
         }
       }
@@ -2026,6 +2272,16 @@
         }
       }
     },
+    "Por debajo de %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Below %@"
+          }
+        }
+      }
+    },
     "Por debajo de %lld mg/dL. Comprobá con glucómetro y tratá ya.": {
       "localizations": {
         "en": {
@@ -2066,12 +2322,58 @@
         }
       }
     },
+    "Por encima de %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Above %@"
+          }
+        }
+      }
+    },
     "Por encima del umbral de alta. Comprobá con glucómetro.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Above the high threshold. Confirm with a meter."
+          }
+        }
+      }
+    },
+    "Posponer %lld min": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snooze %lld min"
+          }
+        }
+      }
+    },
+    "Pospuestas": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snoozed"
+          }
+        }
+      }
+    },
+    "Pospuestas hasta las %@: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snoozed until %1$@: %2$@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Pospuestas hasta las %1$@: %2$@"
           }
         }
       }
@@ -2158,6 +2460,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Target range from %@"
+          }
+        }
+      }
+    },
+    "Reactivar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resume"
           }
         }
       }
@@ -2364,12 +2676,42 @@
         }
       }
     },
+    "Si dura %lld h": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If it lasts %lld h"
+          }
+        }
+      }
+    },
+    "Si dura %lld min": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If it lasts %lld min"
+          }
+        }
+      }
+    },
     "Sin anotaciones": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "No entries"
+          }
+        }
+      }
+    },
+    "Sin atender · %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unattended · %@"
           }
         }
       }
@@ -2714,6 +3056,16 @@
         }
       }
     },
+    "Usar otros umbrales de noche": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use different thresholds at night"
+          }
+        }
+      }
+    },
     "Uso del sensor": {
       "localizations": {
         "en": {
@@ -2764,12 +3116,32 @@
         }
       }
     },
+    "Volvé a medir": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check again"
+          }
+        }
+      }
+    },
     "Vuelve al rango": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Back in range"
+          }
+        }
+      }
+    },
+    "Ya comí · recordame en 15 min": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I ate · remind me in 15 min"
           }
         }
       }

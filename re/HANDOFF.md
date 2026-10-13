@@ -50,6 +50,10 @@ Fase 5 hecha: ventana Hoy/Informes, historial SQLite (`LibreKit/HistoryDatabase.
 estadísticas (`Statistics.swift`), unidades/rango objetivo (`Display.swift`). 32 tests.
 i18n: String Catalog `mac/Localization/Localizable.xcstrings` (base es, + en), sigue el idioma
 del sistema; flujo en `mac/README.md` (sync-strings.sh → translations_en.py → make-app.sh).
+Idea 2 de `docs/IDEAS.md` (alarmas más inteligentes) hecha: bajando rápido, alta sostenida,
+umbrales de noche, posponer / «Ya comí» desde la notificación, escalada (`AlarmPolicy`,
+`AlarmSnoozes`, `AlarmEngine` en `LibreKit/Status.swift`; tests en `AlarmRulesTests.swift`).
+Los Ajustes se mudaron del panel a la ventana (sección "Ajustes", `SettingsView.swift`).
 Paleta real de LibreLink extraída del APK (verde #8FCB3A, etc.) pero el usuario eligió
 mantener los colores propios de LibreLibreLink.
 
