@@ -37,8 +37,17 @@ struct ContentView: View {
                 if store.phase == .ready {
                     Button("Actualizar") { store.refreshNow() }
                     Button("Abrir ventana") { openMainWindow() }
+                    Spacer()
+                    Toggle(isOn: Binding(get: { store.preferences.discreet }, set: { store.preferences.discreet = $0 })) {
+                        Image(systemName: store.isDiscreet ? "eye.slash.fill" : "eye")
+                    }
+                    .toggleStyle(.button)
+                    .help(store.isDiscreet && !store.preferences.discreet
+                          ? String(localized: "Modo discreto automático: hay una llamada (cámara o micrófono en uso)")
+                          : String(localized: "Modo discreto: ocultar el valor en la barra y en los widgets"))
+                } else {
+                    Spacer()
                 }
-                Spacer()
                 Button("Salir") { NSApplication.shared.terminate(nil) }
             }
             .controlSize(.small)

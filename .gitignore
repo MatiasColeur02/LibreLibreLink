@@ -3,3 +3,5 @@ work/
 .build/
 .swiftpm/
 dist/
+mac/LibreLibreLink.xcodeproj/
+mac/Xcode/

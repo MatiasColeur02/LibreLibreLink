@@ -1,0 +1,119 @@
+# Proyecto de Xcode de LibreLibreLink.app con sus extensiones (widgets y acciones de Atajos).
+# Se genera con `xcodegen` (lo hace scripts/make-app.sh); el .xcodeproj y Xcode/ no se versionan.
+# LibreKit es una biblioteca estática enlazada en cada target. Los tests siguen con `swift test` (Package.swift).
+name: LibreLibreLink
+options:
+  deploymentTarget: { macOS: "15.0" }
+  developmentLanguage: es
+  createIntermediateGroups: true
+# El español es el idioma base (las claves): un es.lproj casi vacío alcanza para que macOS lo
+# ofrezca; cualquier otro idioma cae en inglés (CFBundleDevelopmentRegion).
+targetTemplates:
+  Bundle:
+    postBuildScripts:
+      - name: Español (idioma base)
+        basedOnDependencyAnalysis: false
+        script: |
+          dir="$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/es.lproj"
+          mkdir -p "$dir"
+          echo '/* Español: idioma base, las claves ya están en español. */' > "$dir/Localizable.strings"
+settings:
+  base:
+    # Firma local ("Sign to Run Locally"): sin cuenta de Apple Developer.
+    CODE_SIGN_IDENTITY: "-"
+    CODE_SIGN_STYLE: Manual
+    DEVELOPMENT_TEAM: ""
+    ENABLE_HARDENED_RUNTIME: NO
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "0.4"
+    CURRENT_PROJECT_VERSION: "4"
+    SWIFT_EMIT_LOC_STRINGS: YES
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+    DEAD_CODE_STRIPPING: YES
+targets:
+  LibreKit:
+    type: library.static
+    platform: macOS
+    sources: [Sources/LibreKit]
+  LibreLibreLink:
+    type: application
+    templates: [Bundle]
+    platform: macOS
+    sources:
+      - Sources/LibreLibreLink
+      - Localization/Localizable.xcstrings
+      - Resources/AppIcon.icns
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: local.librelibrelink.LibreLibreLink
+    info:
+      path: Xcode/App-Info.plist
+      properties:
+        CFBundleDevelopmentRegion: en
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        CFBundleLocalizations: [en, es]
+        CFBundleDisplayName: LibreLibreLink
+        CFBundleIconFile: AppIcon
+        LSUIElement: true
+        NSHumanReadableCopyright: Does not replace LibreLink's official alarms.
+        CFBundleURLTypes:
+          - CFBundleURLName: local.librelibrelink.command
+            CFBundleURLSchemes: [librelibrelink]
+    dependencies:
+      - target: LibreKit
+      - target: LibreLibreLinkWidgets
+      - target: LibreLibreLinkIntents
+  LibreLibreLinkWidgets:
+    type: app-extension
+    templates: [Bundle]
+    platform: macOS
+    sources:
+      - Widgets
+      - Localization/Localizable.xcstrings
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: local.librelibrelink.LibreLibreLink.Widgets
+    dependencies:
+      - target: LibreKit
+    info:
+      path: Xcode/Widgets-Info.plist
+      properties:
+        CFBundleDevelopmentRegion: en
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        CFBundleDisplayName: LibreLibreLink
+        NSExtension: { NSExtensionPointIdentifier: com.apple.widgetkit-extension }
+    entitlements:
+      path: Xcode/Widgets.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.temporary-exception.files.home-relative-path.read-only:
+          - /Library/Application Support/LibreLibreLink/
+  LibreLibreLinkIntents:
+    type: extensionkit-extension
+    templates: [Bundle]
+    platform: macOS
+    sources:
+      - Intents
+      - Localization/Localizable.xcstrings
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: local.librelibrelink.LibreLibreLink.Intents
+    dependencies:
+      - target: LibreKit
+    info:
+      path: Xcode/Intents-Info.plist
+      properties:
+        CFBundleDevelopmentRegion: en
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        CFBundleDisplayName: LibreLibreLink
+        EXAppExtensionAttributes: { EXExtensionPointIdentifier: com.apple.appintents-extension }
+    entitlements:
+      path: Xcode/Intents.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        # Anotar en el historial (SQLite) desde Atajos.
+        com.apple.security.temporary-exception.files.home-relative-path.read-write:
+          - /Library/Application Support/LibreLibreLink/

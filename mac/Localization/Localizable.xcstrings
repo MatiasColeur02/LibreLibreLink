@@ -1,6 +1,26 @@
 {
   "sourceLanguage": "es",
   "strings": {
+    "${mode} el modo discreto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${mode} discreet mode"
+          }
+        }
+      }
+    },
+    "%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@"
+          }
+        }
+      }
+    },
     "%@ %@ a los %@ · %@": {
       "localizations": {
         "en": {
@@ -215,12 +235,52 @@
         }
       }
     },
+    "Abre la ventana de LibreLibreLink en una sección.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opens the LibreLibreLink window in a section."
+          }
+        }
+      }
+    },
     "Abrir Ajustes": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Open Settings"
+          }
+        }
+      }
+    },
+    "Abrir Atajos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Shortcuts"
+          }
+        }
+      }
+    },
+    "Abrir LibreLibreLink": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open LibreLibreLink"
+          }
+        }
+      }
+    },
+    "Abrir LibreLibreLink en ${section}": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open LibreLibreLink in ${section}"
           }
         }
       }
@@ -255,6 +315,16 @@
         }
       }
     },
+    "Acción": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Action"
+          }
+        }
+      }
+    },
     "Activar": {
       "localizations": {
         "en": {
@@ -271,6 +341,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Refresh"
+          }
+        }
+      }
+    },
+    "Actualizar la lista": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh list"
           }
         }
       }
@@ -315,6 +395,46 @@
         }
       }
     },
+    "Al empezar una alta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When a high starts"
+          }
+        }
+      }
+    },
+    "Al empezar una baja": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When a low starts"
+          }
+        }
+      }
+    },
+    "Al perder la señal": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When the signal is lost"
+          }
+        }
+      }
+    },
+    "Al volver al rango": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When back in range"
+          }
+        }
+      }
+    },
     "Alarma de alta": {
       "localizations": {
         "en": {
@@ -342,6 +462,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Alarms"
+          }
+        }
+      }
+    },
+    "Alarmas pospuestas %lld min. La baja grave sigue avisando.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alarms snoozed for %lld min. Urgent low still alerts."
+          }
+        }
+      }
+    },
+    "Alarmas reactivadas.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alarms resumed."
           }
         }
       }
@@ -407,12 +547,32 @@
         }
       }
     },
+    "Alternar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toggle"
+          }
+        }
+      }
+    },
     "Alto": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "High"
+          }
+        }
+      }
+    },
+    "Anota carbohidratos, insulina, ejercicio, un pinchazo con glucómetro (en la unidad elegida) o una nota, con la hora actual.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Logs carbs, insulin, exercise, a fingerstick reading (in the chosen unit) or a note, at the current time."
           }
         }
       }
@@ -427,12 +587,42 @@
         }
       }
     },
+    "Anotado.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Logged."
+          }
+        }
+      }
+    },
     "Anotar": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Log"
+          }
+        }
+      }
+    },
+    "Anotar ${kind} ${value}": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log ${kind} ${value}"
+          }
+        }
+      }
+    },
+    "Anotar en el registro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add to logbook"
           }
         }
       }
@@ -473,6 +663,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "This is how alarms sound."
+          }
+        }
+      }
+    },
+    "Atajo de teclado para abrir el panel": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keyboard shortcut to open the panel"
+          }
+        }
+      }
+    },
+    "Atajos en alarmas": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shortcuts on alarms"
           }
         }
       }
@@ -638,6 +848,16 @@
         }
       }
     },
+    "Bajas": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lows"
+          }
+        }
+      }
+    },
     "Bajo": {
       "localizations": {
         "en": {
@@ -654,6 +874,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Band"
+          }
+        }
+      }
+    },
+    "Barra de menú": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menu bar"
           }
         }
       }
@@ -720,6 +950,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Amount"
+          }
+        }
+      }
+    },
+    "Carbohidratos (g)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carbs (g)"
           }
         }
       }
@@ -804,6 +1044,16 @@
         }
       }
     },
+    "Corre un atajo tuyo de la app Atajos una vez al empezar cada episodio, aunque las notificaciones estén apagadas o la alarma pospuesta. Recibe un texto como «Glucosa baja · 64 mg/dL ↘». Por ejemplo: pausar la música en una baja y reanudarla al volver al rango.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Runs one of your shortcuts from the Shortcuts app once when each episode starts, even if notifications are off or the alarm is snoozed. It receives text like “Low glucose · 64 mg/dL ↘”. For example: pause the music on a low and resume it when back in range."
+          }
+        }
+      }
+    },
     "Cuenta de LibreLinkUp": {
       "localizations": {
         "en": {
@@ -840,6 +1090,16 @@
         }
       }
     },
+    "De vuelta en rango": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back in range"
+          }
+        }
+      }
+    },
     "Demasiadas redirecciones de región.": {
       "localizations": {
         "en": {
@@ -870,12 +1130,32 @@
         }
       }
     },
+    "Demo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo"
+          }
+        }
+      }
+    },
     "Demo · %@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Demo · %@"
+          }
+        }
+      }
+    },
+    "Desactivar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn Off"
           }
         }
       }
@@ -906,6 +1186,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "After meals"
+          }
+        }
+      }
+    },
+    "Devuelve la última lectura en la unidad elegida en LibreLibreLink, para usarla en otros atajos (por ejemplo: si es menor que 70, pausar la música).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Returns the latest reading in the unit chosen in LibreLibreLink, to use in other shortcuts (for example: if it's below 70, pause the music)."
           }
         }
       }
@@ -966,6 +1256,16 @@
         }
       }
     },
+    "Ejercicio (min)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise (min)"
+          }
+        }
+      }
+    },
     "El archivo no es una exportación de glucosa de LibreView.": {
       "localizations": {
         "en": {
@@ -982,6 +1282,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "This file has no glucose readings."
+          }
+        }
+      }
+    },
+    "El modo discreto oculta el valor en la barra y en los widgets; si hay un problema, se sigue viendo su ícono. El automático se activa mientras alguna app usa la cámara o el micrófono (Zoom, Meet, Teams, FaceTime…); macOS no permite saber si se está compartiendo la pantalla. Los widgets se agregan con clic derecho en el escritorio ▸ Editar widgets.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discreet mode hides the value in the menu bar and in widgets; if there's a problem, its icon still shows. The automatic mode turns on while any app is using the camera or microphone (Zoom, Meet, Teams, FaceTime…); macOS doesn't let apps know whether the screen is being shared. Add widgets by right-clicking the desktop ▸ Edit Widgets."
           }
         }
       }
@@ -1238,6 +1548,16 @@
         }
       }
     },
+    "Falta el valor, está fuera de rango o la nota está vacía.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The value is missing or out of range, or the note is empty."
+          }
+        }
+      }
+    },
     "Faltan datos": {
       "localizations": {
         "en": {
@@ -1334,6 +1654,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Average glucose"
+          }
+        }
+      }
+    },
+    "Glucosa y gráfico": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glucose and chart"
           }
         }
       }
@@ -1448,6 +1778,22 @@
         }
       }
     },
+    "Hoy: %@ en rango, promedio %@, %lld bajas.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today: %1$@ in range, average %2$@, %3$lld lows."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hoy: %1$@ en rango, promedio %2$@, %3$lld bajas."
+          }
+        }
+      }
+    },
     "Importar": {
       "localizations": {
         "en": {
@@ -1544,6 +1890,16 @@
         }
       }
     },
+    "Iniciá sesión en LibreLibreLink": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to LibreLibreLink"
+          }
+        }
+      }
+    },
     "Insistir si no se atiende una baja": {
       "localizations": {
         "en": {
@@ -1564,12 +1920,32 @@
         }
       }
     },
+    "Insulina lenta (U)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Long-acting insulin (U)"
+          }
+        }
+      }
+    },
     "Insulina rápida": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Rapid-acting insulin"
+          }
+        }
+      }
+    },
+    "Insulina rápida (U)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rapid-acting insulin (U)"
           }
         }
       }
@@ -1766,6 +2142,16 @@
         }
       }
     },
+    "LibreLibreLink no tiene sesión de LibreLinkUp. Abrí la app e iniciá sesión.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LibreLibreLink isn't signed in to LibreLinkUp. Open the app and sign in."
+          }
+        }
+      }
+    },
     "LibreLinkUp pide un paso extra (%@); completalo en la app LibreLinkUp.": {
       "localizations": {
         "en": {
@@ -1872,12 +2258,62 @@
         }
       }
     },
+    "Minutos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minutes"
+          }
+        }
+      }
+    },
     "Modo demo · datos inventados": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Demo mode · made-up data"
+          }
+        }
+      }
+    },
+    "Modo discreto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discreet mode"
+          }
+        }
+      }
+    },
+    "Modo discreto automático en llamadas": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatic discreet mode during calls"
+          }
+        }
+      }
+    },
+    "Modo discreto automático: hay una llamada (cámara o micrófono en uso)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatic discreet mode: a call is in progress (camera or microphone in use)"
+          }
+        }
+      }
+    },
+    "Modo discreto: ocultar el valor en la barra y en los widgets": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discreet mode: hide the value in the menu bar and widgets"
           }
         }
       }
@@ -1912,6 +2348,16 @@
         }
       }
     },
+    "Ninguno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "None"
+          }
+        }
+      }
+    },
     "No avisar la alta de noche": {
       "localizations": {
         "en": {
@@ -1938,6 +2384,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "No new readings."
+          }
+        }
+      }
+    },
+    "No hay lecturas de los últimos 20 minutos.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There are no readings from the last 20 minutes."
           }
         }
       }
@@ -1998,6 +2454,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "The dates in this file can't be read."
+          }
+        }
+      }
+    },
+    "No se pudo anotar: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't log it: %@"
           }
         }
       }
@@ -2078,6 +2544,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "New Entry"
+          }
+        }
+      }
+    },
+    "Obtener glucosa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Get glucose"
+          }
+        }
+      }
+    },
+    "Oculta o vuelve a mostrar el valor en la barra de menú y en los widgets.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hides or shows the value in the menu bar and in widgets."
           }
         }
       }
@@ -2342,12 +2828,42 @@
         }
       }
     },
+    "Pospone las alarmas de LibreLibreLink. La baja grave sigue avisando.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snoozes LibreLibreLink alarms. Urgent low still alerts."
+          }
+        }
+      }
+    },
     "Posponer %lld min": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Snooze %lld min"
+          }
+        }
+      }
+    },
+    "Posponer alarmas": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snooze alarms"
+          }
+        }
+      }
+    },
+    "Posponer alarmas ${minutes} min": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snooze alarms for ${minutes} min"
           }
         }
       }
@@ -2404,6 +2920,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Test voice"
+          }
+        }
+      }
+    },
+    "Promedio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Average"
           }
         }
       }
@@ -2474,6 +3000,16 @@
         }
       }
     },
+    "Reactivar alarmas": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resume alarms"
+          }
+        }
+      }
+    },
     "Recorrido automático": {
       "localizations": {
         "en": {
@@ -2510,6 +3046,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Unexpected response from LibreLinkUp."
+          }
+        }
+      }
+    },
+    "Resumen de hoy": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's summary"
+          }
+        }
+      }
+    },
+    "Resumen del día": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daily summary"
           }
         }
       }
@@ -2660,6 +3216,16 @@
         }
       }
     },
+    "Sensor: termina %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sensor: ends %@"
+          }
+        }
+      }
+    },
     "Sensor: termina en %lld d %lld h (%@)": {
       "localizations": {
         "en": {
@@ -2762,6 +3328,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "No readings in this period"
+          }
+        }
+      }
+    },
+    "Sin lecturas recientes": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No recent readings"
           }
         }
       }
@@ -2976,6 +3552,16 @@
         }
       }
     },
+    "Tiempo en rango, promedio y bajas desde la medianoche.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time in range, average and lows since midnight."
+          }
+        }
+      }
+    },
     "Tiempo en rangos": {
       "localizations": {
         "en": {
@@ -2992,6 +3578,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Type"
+          }
+        }
+      }
+    },
+    "Tipo de anotación": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entry type"
           }
         }
       }
@@ -3086,6 +3682,36 @@
         }
       }
     },
+    "Valor actual y las últimas 3 horas.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current value and the last 3 hours."
+          }
+        }
+      }
+    },
+    "Valor, gráfico de 12 horas, tiempo en rango y promedio de hoy, y el sensor.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Value, 12-hour chart, today's time in range and average, and the sensor."
+          }
+        }
+      }
+    },
+    "Valor, tendencia y hace cuánto llegó la lectura.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Value, trend and how long ago the reading arrived."
+          }
+        }
+      }
+    },
     "Variabilidad (CV)": {
       "localizations": {
         "en": {
@@ -3122,6 +3748,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Check again"
+          }
+        }
+      }
+    },
+    "Vuelve a activar las alarmas pospuestas.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turns snoozed alarms back on."
           }
         }
       }
@@ -3303,6 +3939,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "back in range in %@"
+          }
+        }
+      }
+    },
+    "·": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "·"
+          }
+        }
+      }
+    },
+    "––": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "––"
+          }
+        }
+      }
+    },
+    "•••": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "•••"
           }
         }
       }

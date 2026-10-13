@@ -70,6 +70,20 @@ The BLE/NFC findings are kept in `re/` in case a gen1 sensor ever turns up.
 - **Alarm diagnostics** tell you whether alarms can actually reach you, or why not
   (permission denied, notification style "None", muted Mac, not launching at login, …).
 
+**Mac integration**
+- **Widgets** for the desktop and Notification Center: *current glucose* (small), *glucose and
+  chart* (medium, last 3 h) and *daily summary* (large: 12 h chart, today's time in range,
+  average, lows and sensor). Right-click the desktop ▸ Edit Widgets.
+- **Shortcuts / Siri / Spotlight** actions: *Get glucose* (returns the number, e.g. "if below
+  70, pause the music"), *Today's summary*, *Add to logbook*, *Snooze alarms* / *Resume
+  alarms*, *Discreet mode* and *Open LibreLibreLink*. Ask Siri "What's my glucose in
+  LibreLibreLink".
+- **Shortcuts on alarms**: run one of your own shortcuts when a low, a high or signal loss
+  starts, and when glucose is back in range.
+- **Global keyboard shortcut** to open the panel from any app (⌥⌘G by default).
+- **Discreet mode**: hides the value in the menu bar and widgets, by hand (the eye button in
+  the panel) or automatically while the camera or microphone is in use (calls and meetings).
+
 **Window** (Today, Logbook, Reports and Settings)
 - **Today**: big current value, time in range, daily average and an interactive chart
   (6 h / 12 h / 24 h / by day).
@@ -92,7 +106,9 @@ kept in the macOS **Keychain**. Nothing is sent anywhere except to Abbott's Libr
 ## Requirements
 
 - macOS 15 (Sequoia) or later.
-- Xcode or the Xcode Command Line Tools with **Swift 6** (`xcode-select --install`).
+- **Xcode** 16 or later (the Command Line Tools are not enough: widgets and Shortcuts actions
+  are app extensions) and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
+  (`brew install xcodegen`), which generates the Xcode project from `mac/project.yml`.
 - A FreeStyle Libre sensor used with the **LibreLink** phone app (iPhone or Android), and a
   **LibreLinkUp** account that follows it. You can skip this and try the app in
   [demo mode](#try-it-without-an-account-demo-mode).
@@ -117,8 +133,9 @@ scripts/make-app.sh --install   # builds dist/LibreLibreLink.app and copies it t
 open ~/Applications/LibreLibreLink.app
 ```
 
-`make-app.sh` builds in release mode, compiles the English/Spanish string catalog into the
-bundle and signs the app ad-hoc. It runs as a menu bar agent with no Dock icon (the icon
+`make-app.sh` generates the Xcode project, builds the app with its widget and Shortcuts
+extensions in release mode and signs everything to run locally (ad-hoc, no Apple Developer
+account). It runs as a menu bar agent with no Dock icon (the icon
 only appears while the main window is open). Run it without `--install` to only produce
 `mac/dist/LibreLibreLink.app`.
 
@@ -166,11 +183,14 @@ swift run llu --demo high                                  # demo scenario, no a
 | Path | Contents |
 | --- | --- |
 | `mac/Sources/LibreKit` | Core library: LibreLinkUp client, models, status and alarm logic, forecast, statistics, SQLite history, logbook, LibreView CSV import, demo server. |
-| `mac/Sources/LibreLibreLink` | SwiftUI app: `MenuBarExtra`, main window, AGP PDF, notifications, Keychain. |
+| `mac/Sources/LibreLibreLink` | SwiftUI app: `MenuBarExtra`, main window, settings, AGP PDF, notifications, Keychain, global hotkey, discreet mode. |
+| `mac/Widgets` | WidgetKit extension (small, medium and large widgets). |
+| `mac/Intents` | App Intents extension (Shortcuts, Siri and Spotlight actions). |
+| `mac/project.yml` | XcodeGen spec for the app and its extensions (the `.xcodeproj` is generated, not tracked). |
 | `mac/Sources/llu` | Diagnostic CLI. |
 | `mac/Tests/LibreKitTests` | Unit tests (`swift test`). |
 | `mac/Localization` | String Catalog (Spanish base, English translation). |
-| `mac/scripts` | `make-app.sh` (bundle), `make-icon.swift` (app icon from `assets/logo.svg`), `sync-strings.sh` + `translations_en.py` (i18n). |
+| `mac/scripts` | `make-app.sh` (Xcode build), `make-icon.swift` (app icon from `assets/logo.svg`), `sync-strings.sh` + `translations_en.py` (i18n). |
 | `mac/Resources` | `AppIcon.icns`, generated from the logo. |
 | `assets/logo.svg` | App logo (source of the icon). |
 | `re/` | Reverse-engineering notes on LibreLink 2.13.1: NFC, BLE, native library, alarm/UI requirements, and `HANDOFF.md` with the project state. |

@@ -53,9 +53,8 @@ public final class HistoryDatabase {
     deinit { sqlite3_close(db) }
 
     /// Archivo por defecto: ~/Library/Application Support/LibreLibreLink/history.sqlite
-    public static var defaultURL: URL {
-        URL.applicationSupportDirectory.appending(path: "LibreLibreLink/history.sqlite")
-    }
+    /// (La misma ruta desde la app y desde las extensiones con sandbox.)
+    public static var defaultURL: URL { SharedFiles.history }
 
     /// - Parameter replacingExisting: `false` = si ya hay una lectura en ese minuto, se deja (importación).
     /// - Returns: cuántas lecturas se agregaron o cambiaron.

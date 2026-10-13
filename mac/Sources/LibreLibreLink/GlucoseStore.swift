@@ -1,6 +1,7 @@
 import Foundation
 import LibreKit
 import Observation
+import WidgetKit
 
 /// Estado de la app: credenciales, paciente elegido, última lectura, problemas
 /// activos y alarmas. Consulta LibreLinkUp cada `pollInterval` mientras hay sesión.
@@ -41,6 +42,26 @@ final class GlucoseStore {
     var windowTab: MainWindow.Tab = .today
     /// Alarmas pospuestas desde la notificación. Solo en memoria: al reiniciar vuelven a sonar.
     private(set) var snoozes = AlarmSnoozes()
+    /// Pide abrir la ventana grande (lo atiende `MenuBarLabel`, que tiene `openWindow`).
+    private(set) var windowOpenRequest = 0
+    /// La cámara o el micrófono están en uso (se revisa solo si el modo discreto automático está activo).
+    private(set) var inCall = false
+
+    /// Atajo de teclado, modo discreto y atajos en alarma.
+    var preferences: MacPreferences {
+        didSet {
+            guard preferences != oldValue else { return }
+            if let data = try? JSONEncoder().encode(preferences) {
+                UserDefaults.standard.set(data, forKey: Keys.preferences)
+            }
+            if preferences.hotKey != oldValue.hotKey { GlobalHotKey.shared.register(preferences.hotKey) }
+            if preferences.discreetInCalls != oldValue.discreetInCalls { startCallMonitor() }
+            publishSnapshot()
+        }
+    }
+
+    /// No mostrar el valor en la barra ni en los widgets.
+    var isDiscreet: Bool { preferences.discreet || (preferences.discreetInCalls && inCall) }
     /// Estado del sistema que decide si las alarmas llegan (se revisa con el reloj).
     private(set) var outputMuted = false
     private(set) var launchAtLogin = LaunchAtLogin.isEnabled
@@ -62,6 +83,7 @@ final class GlucoseStore {
             if let data = try? JSONEncoder().encode(display) {
                 UserDefaults.standard.set(data, forKey: Keys.display)
             }
+            publishSnapshot()
         }
     }
 
@@ -90,6 +112,9 @@ final class GlucoseStore {
     @ObservationIgnored private var sensorNotices: [String: SensorNoticeEngine] = [:]
     @ObservationIgnored private var suppressRefresh = false
     @ObservationIgnored private var database: HistoryDatabase?
+    @ObservationIgnored private var shortcutTrigger = ShortcutTrigger()
+    @ObservationIgnored private var callTask: Task<Void, Never>?
+    @ObservationIgnored private var lastSnapshot: GlucoseSnapshot?
 
     private enum Keys {
         static let patient = "selectedPatientID"
@@ -97,6 +122,7 @@ final class GlucoseStore {
         static let settings = "alarmSettings"
         static let display = "displaySettings"
         static let sensorNotices = "sensorNotices"
+        static let preferences = "macPreferences"
     }
 
     init() {
@@ -104,6 +130,8 @@ final class GlucoseStore {
             .flatMap { try? JSONDecoder().decode(AlarmSettings.self, from: $0) } ?? AlarmSettings()
         display = UserDefaults.standard.data(forKey: Keys.display)
             .flatMap { try? JSONDecoder().decode(DisplaySettings.self, from: $0) } ?? DisplaySettings()
+        preferences = UserDefaults.standard.data(forKey: Keys.preferences)
+            .flatMap { try? JSONDecoder().decode(MacPreferences.self, from: $0) } ?? MacPreferences()
         selectedPatientID = UserDefaults.standard.string(forKey: Keys.patient)
         sensorNotices = Self.savedSensorNotices()
         let arguments = ProcessInfo.processInfo.arguments
@@ -117,6 +145,99 @@ final class GlucoseStore {
         }
         notifier.onResponse = { [weak self] kind, action in self?.handleAlarmResponse(kind, action) }
         startClock()
+        startCallMonitor()
+    }
+
+    /// Atajo de teclado global; se llama cuando la app ya terminó de abrir.
+    func startMacIntegration() {
+        GlobalHotKey.shared.action = { StatusItem.togglePanel() }
+        GlobalHotKey.shared.register(preferences.hotKey)
+        publishSnapshot()
+    }
+
+    // MARK: Comandos (Atajos y widgets)
+
+    func handle(_ command: AppCommand) {
+        switch command {
+        case .open(let section):
+            if let section { windowTab = MainWindow.Tab(section) }
+            windowOpenRequest += 1
+        case .snooze(let minutes):
+            // Igual que desde la notificación: la baja grave sigue avisando.
+            for kind in AlarmKind.allCases where kind != .urgentLow {
+                snoozes.snooze(kind, for: TimeInterval(minutes * 60), now: Date())
+            }
+            evaluateAlarms()
+        case .resumeAlarms:
+            cancelSnoozes()
+        case .discreet(let change):
+            switch change {
+            case .on: preferences.discreet = true
+            case .off: preferences.discreet = false
+            case .toggle: preferences.discreet.toggle()
+            }
+        case .logChanged:
+            historyRevision += 1
+        }
+    }
+
+    // MARK: Modo discreto
+
+    /// Mientras el modo discreto automático está activo, revisa cada 5 s si hay una llamada.
+    private func startCallMonitor() {
+        callTask?.cancel()
+        guard preferences.discreetInCalls else {
+            inCall = false
+            return
+        }
+        callTask = Task { [weak self] in
+            while !Task.isCancelled {
+                let inCall = CallDetector.isInCall
+                guard let self else { return }
+                if self.inCall != inCall {
+                    self.inCall = inCall
+                    self.publishSnapshot()
+                }
+                try? await Task.sleep(for: .seconds(5))
+            }
+        }
+    }
+
+    // MARK: Widgets y Atajos
+
+    /// Escribe lo que muestran los widgets y leen las acciones de Atajos, y recarga los
+    /// widgets si algo cambió.
+    private func publishSnapshot() {
+        let patient = patients.first { $0.id == selectedPatientID }
+        var readings: [GlucoseMeasurement] = []
+        var today: GlucoseSnapshot.Today?
+        if phase != .needsLogin {
+            readings = storedReadings(in: DateInterval(start: now.addingTimeInterval(-12 * 3600), end: now.addingTimeInterval(60)))
+            if readings.isEmpty { readings = history + (current.map { [$0] } ?? []) }
+            let day = DateInterval(start: Calendar.current.startOfDay(for: now), end: now)
+            if let stats = GlucoseStatistics.compute(readings.filter { day.contains($0.date) }, period: day, display: display) {
+                today = .init(
+                    inRange: stats.zoneFractions[.inTarget] ?? 0,
+                    below: stats.zoneFractions[.below] ?? 0,
+                    above: stats.zoneFractions[.above] ?? 0,
+                    mean: stats.mean,
+                    lowEvents: stats.lowEvents
+                )
+            }
+        }
+        let problem = conditions.first.map { condition in
+            GlucoseSnapshot.Problem(title: condition.title, symbol: condition.symbolName, tint: condition.snapshotTint)
+        }
+        let snapshot = GlucoseSnapshot(
+            updatedAt: now, signedIn: phase != .needsLogin, isDemo: isDemo, discreet: isDiscreet,
+            patientID: selectedPatientID, patientName: patient?.displayName, display: display,
+            current: phase == .needsLogin ? nil : current, readings: readings, problem: problem,
+            today: today, sensorEnd: sensor?.expectedEnd
+        )
+        guard !snapshot.sameContent(as: lastSnapshot) else { return }
+        lastSnapshot = snapshot
+        try? snapshot.save()
+        WidgetCenter.shared.reloadAllTimelines()
     }
 
     // MARK: Historial
@@ -318,7 +439,9 @@ final class GlucoseStore {
         needsAttention = nil
         alarmEngine = AlarmEngine()
         snoozes = AlarmSnoozes()
+        shortcutTrigger = ShortcutTrigger()
         phase = .needsLogin
+        publishSnapshot()
     }
 
     func refreshNow() {
@@ -352,6 +475,7 @@ final class GlucoseStore {
                 guard let self else { return }
                 self.now = Date()
                 self.evaluateAlarms()
+                self.publishSnapshot()
                 await self.refreshDeliveryChecks()
             }
         }
@@ -362,6 +486,7 @@ final class GlucoseStore {
         defer {
             now = Date()
             evaluateAlarms()
+            publishSnapshot()
         }
         do {
             let patients = try await client.patients()
@@ -419,6 +544,7 @@ final class GlucoseStore {
 
     private func evaluateAlarms() {
         evaluateSensorNotices()
+        runShortcuts()
         guard settings.notificationsEnabled || settings.speakAlarms, phase != .needsLogin else {
             alarmEngine = AlarmEngine()
             return
@@ -434,6 +560,25 @@ final class GlucoseStore {
             }
             if settings.speakAlarms || escalated { notifier.speak(kind, reading: freshReading, unit: display.unit) }
         }
+    }
+
+    /// Atajos del usuario al empezar una baja/alta/sin señal y al volver al rango. No dependen
+    /// de que las notificaciones estén activadas, ni de las pospuestas.
+    private func runShortcuts() {
+        guard phase == .ready else { return }
+        let alarms = AlarmPolicy.alarms(conditions: conditions, readings: history + (current.map { [$0] } ?? []),
+                                        settings: settings, snoozes: AlarmSnoozes(), now: now)
+        for event in shortcutTrigger.update(alarms: alarms, hasReading: freshReading != nil) {
+            guard let name = preferences.shortcut(for: event) else { continue }
+            UserShortcuts.run(name, input: shortcutInput(event))
+        }
+    }
+
+    /// Texto que recibe el atajo, p. ej. "Glucosa baja · 64 mg/dL ↘".
+    private func shortcutInput(_ event: ShortcutEvent) -> String {
+        let reading = freshReading.map { "\(display.unit.withSymbol($0.mgdL)) \($0.trend?.arrow ?? "")" } ?? ""
+        return [event.title, reading].filter { !$0.isEmpty }.joined(separator: " · ")
+            .trimmingCharacters(in: .whitespaces)
     }
 
     /// Lo que el usuario eligió en la notificación de una alarma.
@@ -514,5 +659,37 @@ final class GlucoseStore {
         suppressRefresh = true
         body()
         suppressRefresh = false
+    }
+}
+
+extension ShortcutEvent {
+    var title: String {
+        switch self {
+        case .low: String(localized: "Glucosa baja")
+        case .high: String(localized: "Glucosa alta")
+        case .signalLoss: String(localized: "Sin señal del sensor")
+        case .backInRange: String(localized: "De vuelta en rango")
+        }
+    }
+}
+
+extension GlucoseCondition {
+    var snapshotTint: GlucoseSnapshot.Tint {
+        switch self {
+        case .urgentLow, .low, .lowSoon, .fallingFast: .red
+        case .high: .orange
+        default: severity >= .warning ? .orange : .secondary
+        }
+    }
+}
+
+extension MainWindow.Tab {
+    init(_ section: AppCommand.Section) {
+        switch section {
+        case .today: self = .today
+        case .logbook: self = .logbook
+        case .reports: self = .reports
+        case .settings: self = .settings
+        }
     }
 }

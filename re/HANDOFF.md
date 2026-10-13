@@ -54,6 +54,9 @@ Idea 2 de `docs/IDEAS.md` (alarmas más inteligentes) hecha: bajando rápido, al
 umbrales de noche, posponer / «Ya comí» desde la notificación, escalada (`AlarmPolicy`,
 `AlarmSnoozes`, `AlarmEngine` en `LibreKit/Status.swift`; tests en `AlarmRulesTests.swift`).
 Los Ajustes se mudaron del panel a la ventana (sección "Ajustes", `SettingsView.swift`).
+Idea 3 (Mac) hecha salvo el modo mesa de luz: widgets (`mac/Widgets`), acciones de Atajos en
+extensión (`mac/Intents`; dentro de la app fallan con firma local), atajos propios en alarmas,
+atajo de teclado global y modo discreto. El build pasó a Xcode + xcodegen (`mac/project.yml`).
 Paleta real de LibreLink extraída del APK (verde #8FCB3A, etc.) pero el usuario eligió
 mantener los colores propios de LibreLibreLink.
 

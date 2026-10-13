@@ -4,18 +4,26 @@ import SwiftUI
 
 /// Lo que se ve arriba a la derecha. Sin problemas: valor + flecha en monocromo
 /// (se adapta a barra clara/oscura). Con un problema: ícono del problema y color.
+/// En modo discreto no muestra el valor: solo una gota, o el ícono del problema.
 struct MenuBarLabel: View {
     let store: GlucoseStore
+    @Environment(\.openWindow) private var openWindow
 
     var body: some View {
         Image(nsImage: Self.render(symbol: symbol, text: text, color: color))
             .accessibilityLabel(accessibilityText)
+            // Pedidos de abrir la ventana desde Atajos o un widget (este label siempre existe).
+            .onChange(of: store.windowOpenRequest) {
+                openWindow(id: MainWindow.id)
+                NSApp.activate()
+            }
     }
 
     private var worst: GlucoseCondition? { store.conditions.first }
 
     private var text: String {
         if store.phase == .needsLogin { return "LibreLink" }
+        if store.isDiscreet { return "" }
         guard let reading = store.freshReading else { return "––" }
         return "\(store.display.unit.reading(reading.mgdL)) \(reading.trend?.arrow ?? "")"
             .trimmingCharacters(in: .whitespaces)
@@ -23,6 +31,7 @@ struct MenuBarLabel: View {
 
     private var symbol: String? {
         if store.phase == .loading { return "arrow.triangle.2.circlepath" }
+        if store.isDiscreet, store.phase == .ready { return worst?.symbolName ?? "drop.fill" }
         return worst?.symbolName
     }
 
@@ -36,7 +45,7 @@ struct MenuBarLabel: View {
     }
 
     private var accessibilityText: String {
-        ([text] + store.conditions.map(\.title)).joined(separator: ", ")
+        ([store.isDiscreet ? String(localized: "Modo discreto") : text] + store.conditions.map(\.title)).joined(separator: ", ")
     }
 
     /// Dibuja ícono + texto en una imagen. Sin color → plantilla (monocroma).

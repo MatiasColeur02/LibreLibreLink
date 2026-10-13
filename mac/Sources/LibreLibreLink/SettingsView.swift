@@ -2,10 +2,12 @@ import AppKit
 import LibreKit
 import SwiftUI
 
-/// Sección "Ajustes" de la ventana: alarmas, horario de noche, visualización y cuenta.
+/// Sección "Ajustes" de la ventana: alarmas, horario de noche, atajos, visualización y cuenta.
 struct SettingsView: View {
     @Bindable var store: GlucoseStore
     @State private var launchError: String?
+    /// Atajos del usuario (app Atajos); `nil` mientras se cargan.
+    @State private var userShortcuts: [String]?
 
     private var unit: GlucoseUnit { store.display.unit }
 
@@ -21,6 +23,8 @@ struct SettingsView: View {
                 }
             }
             other
+            shortcuts
+            mac
             display
             general
         }
@@ -130,6 +134,46 @@ struct SettingsView: View {
         }
     }
 
+    private var shortcuts: some View {
+        Section {
+            ForEach(ShortcutEvent.allCases) { event in
+                Picker(event.settingsLabel, selection: shortcutBinding(event)) {
+                    Text("Ninguno").tag("")
+                    let current = store.preferences.shortcut(for: event)
+                    // El elegido aunque ya no exista (o mientras se carga la lista).
+                    if let current, !(userShortcuts ?? []).contains(current) {
+                        Text(current).tag(current)
+                    }
+                    ForEach(userShortcuts ?? [], id: \.self) { Text($0).tag($0) }
+                }
+            }
+            HStack {
+                Button("Abrir Atajos") { UserShortcuts.openApp() }
+                Button("Actualizar la lista") { Task { userShortcuts = await UserShortcuts.list() } }
+            }
+            .controlSize(.small)
+        } header: {
+            Text("Atajos en alarmas")
+        } footer: {
+            note("Corre un atajo tuyo de la app Atajos una vez al empezar cada episodio, aunque las notificaciones estén apagadas o la alarma pospuesta. Recibe un texto como «Glucosa baja · 64 mg/dL ↘». Por ejemplo: pausar la música en una baja y reanudarla al volver al rango.")
+        }
+        .task { userShortcuts = await UserShortcuts.list() }
+    }
+
+    private var mac: some View {
+        Section {
+            Picker("Atajo de teclado para abrir el panel", selection: $store.preferences.hotKey) {
+                ForEach(HotKeyChoice.allCases) { Text($0.label).tag($0) }
+            }
+            Toggle("Modo discreto", isOn: $store.preferences.discreet)
+            Toggle("Modo discreto automático en llamadas", isOn: $store.preferences.discreetInCalls)
+        } header: {
+            Text("Barra de menú")
+        } footer: {
+            note("El modo discreto oculta el valor en la barra y en los widgets; si hay un problema, se sigue viendo su ícono. El automático se activa mientras alguna app usa la cámara o el micrófono (Zoom, Meet, Teams, FaceTime…); macOS no permite saber si se está compartiendo la pantalla. Los widgets se agregan con clic derecho en el escritorio ▸ Editar widgets.")
+        }
+    }
+
     private var display: some View {
         Section {
             Picker("Unidad", selection: $store.display.unit) {
@@ -189,6 +233,13 @@ struct SettingsView: View {
             .font(.caption)
             .foregroundStyle(.secondary)
             .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private func shortcutBinding(_ event: ShortcutEvent) -> Binding<String> {
+        Binding(
+            get: { store.preferences.shortcut(for: event) ?? "" },
+            set: { store.preferences.shortcuts[event.rawValue] = $0.isEmpty ? nil : $0 }
+        )
     }
 
     /// Minutos desde la medianoche ↔ hora del día, para los `DatePicker`.
@@ -266,6 +317,17 @@ private extension AlarmDeliveryIssue {
         case .muted: String(localized: "La Mac está en silencio.")
         case .launchAtLoginOff: String(localized: "No se abre al iniciar sesión: tras reiniciar no hay alarmas hasta abrirla.")
         case .noData: String(localized: "Sin datos de LibreLinkUp: no hay lecturas que vigilar.")
+        }
+    }
+}
+
+private extension ShortcutEvent {
+    var settingsLabel: LocalizedStringKey {
+        switch self {
+        case .low: "Al empezar una baja"
+        case .high: "Al empezar una alta"
+        case .signalLoss: "Al perder la señal"
+        case .backInRange: "Al volver al rango"
         }
     }
 }

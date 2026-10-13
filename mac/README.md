@@ -35,9 +35,37 @@ los mismos. Las notificaciones del demo dicen "Demo ·". No se recuerda al reini
 cd mac
 swift test                                       # tests de LibreKit (fixtures)
 LLU_EMAIL=... LLU_PASSWORD=... swift run llu    # prueba rápida por terminal
-swift run LibreLibreLink                               # app de barra de menú (sin notificaciones)
+swift run LibreLibreLink                               # app de barra de menú (sin notificaciones ni widgets)
 scripts/make-app.sh --install                    # arma LibreLibreLink.app y la copia a ~/Applications
 ```
+
+`make-app.sh` usa **Xcode** y **xcodegen** (`brew install xcodegen`): genera
+`LibreLibreLink.xcodeproj` desde `project.yml` (no se versiona) y compila la app con dos
+extensiones, todo con firma local (sin cuenta de Apple Developer). `LibreKit` se compila como
+biblioteca estática para los tres; los tests siguen con `swift test` (`Package.swift`).
+
+## Integración con la Mac (Idea 3)
+
+- **Widgets** (`Widgets/`, extensión WidgetKit con sandbox): chico (valor), mediano (valor +
+  3 h) y grande (12 h, tiempo en rango, promedio y bajas de hoy, sensor). Leen
+  `~/Library/Application Support/LibreLibreLink/snapshot.json`, que escribe la app
+  (`GlucoseSnapshot`, `LibreKit/Shared.swift`) y los recarga con cada cambio; la excepción de
+  sandbox `temporary-exception.files.home-relative-path` les da acceso a esa carpeta.
+- **Atajos** (`Intents/`, extensión App Intents): obtener glucosa (devuelve el número en la
+  unidad elegida), resumen de hoy, anotar en el registro (escribe directo en el SQLite),
+  posponer / reactivar alarmas, modo discreto y abrir la ventana. Con firma local, macOS no
+  logra comunicarse con acciones que corren dentro de la app (probado), por eso van en una
+  extensión. Lo que necesita a la app se lo pide con URLs `librelibrelink://` (`AppCommand`),
+  que también la abren si estaba cerrada. Posponer desde Atajos no calla la baja grave.
+- **Atajos en alarmas** (Ajustes ▸ Atajos en alarmas): corre un atajo propio al empezar una baja,
+  una alta o sin señal, y al volver al rango (`ShortcutTrigger`), con `/usr/bin/shortcuts run`.
+  Recibe un texto como «Glucosa baja · 64 mg/dL ↘».
+- **Atajo de teclado global** (Ajustes ▸ Barra de menú; ⌥⌘G por defecto): abre el panel.
+  Usa `RegisterEventHotKey`, que no pide permiso de Accesibilidad.
+- **Modo discreto**: oculta el valor en la barra (queda una gota, o el ícono del problema) y en
+  los widgets. A mano con el ojo del panel o desde Atajos; automático mientras alguna app usa la
+  cámara o el micrófono (CoreMediaIO / CoreAudio, sin permisos). macOS no tiene una API pública
+  para saber si se comparte la pantalla.
 
 Para alarmas y "Abrir al iniciar sesión" hay que usar **`LibreLibreLink.app`**; con `swift run`
 macOS no permite notificaciones. Si la app pide acceso al llavero la primera vez,
@@ -112,7 +140,7 @@ en Xcode). El español es el idioma base: los textos del código son las claves.
 agregar o cambiar textos:
 
 ```bash
-scripts/sync-strings.sh             # extrae los textos del código al catálogo (como Xcode)
+scripts/sync-strings.sh             # compila con Xcode y extrae los textos (app, widgets, Atajos)
 python3 scripts/translations_en.py  # aplica el inglés; avisa si falta alguna traducción
 scripts/make-app.sh                 # compila el catálogo dentro de la .app
 ```
